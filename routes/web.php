@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoporateUser;
+use App\Http\Controllers\MasterAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +31,17 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth','MasterAdmin', 'verified'])->namespace('MasterAdmin')->group(function(){
+Route::middleware(['auth', 'verified'])->namespace('MasterAdmin')->group(function(){
     Route::get('/ma/home', 'HomeController@index');
+    Route::get('/ma/users', [MasterAdmin\UserController::class, 'index'])->name('users.index');
+    Route::get('/ma/users/add', [MasterAdmin\UserController::class, 'create'])->name('users.add');
+    Route::post('/ma/users', [MasterAdmin\UserController::class, 'store'])->name('user.store');
+    Route::get('/ma/users/{user}/edit', [MasterAdmin\UserController::class, 'edit'])->name('user.edit');
+    Route::patch('/ma/users/{user}', [MasterAdmin\UserController::class, 'update'])->name('user.update');
+    Route::delete('/ma/users/{user}', [MasterAdmin\UserController::class, 'destroy'])->name('user.destroy');
+    Route::get('/ma/user/enable/{user}', [MasterAdmin\UserController::class, 'enableUser'])->name('user.enable');
+    Route::get('/ma/user/disable/{user}', [MasterAdmin\UserController::class, 'disableUser'])->name('user.disable');
+
 });
 
 Route::middleware(['auth','SuperAdmin', 'verified'])->namespace('SuperAdmin')->group(function(){
