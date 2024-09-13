@@ -110,7 +110,7 @@
                                 </td>
                                 <td class="">
                                     {{-- @can('view users') --}}
-                                        <a href="{{ route('user.edit', $user) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        {{-- <a href="{{ route('user.edit', $user) }}" class="btn btn-sm btn-warning">Edit</a> --}}
                                         {{-- <a href="{{ route('users.assign-roles', $user) }}" class="btn btn-sm btn-info">Assign Roles</a> --}}
                                         @if($user->user_status == 'active')
                                             <a href="{{route('user.disable', $user)}}" class="btn btn-sm btn-warning">
