@@ -89,6 +89,15 @@ class TrackerController extends Controller
                 return redirect()->back()->withInput()->with('error', 'The selected appointment date and time are already booked. Please choose another date or time.');
             }
 
+            $existingPlateNumber = DB::connection('mysql_non_laravel')
+                ->table('tracker_bookings')
+                ->where('plate_num', $request->input('plate_num'))
+                ->exists();
+
+            if ($existingPlateNumber) {
+                // If the plate number is already booked, return with an error message
+                return redirect()->back()->withInput()->with('error', 'The inputted plate number is already booked.');
+            }
 
             // Insert the data into the non-Laravel database
             DB::connection('mysql_non_laravel')->table('tracker_bookings')->insert([
