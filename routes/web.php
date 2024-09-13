@@ -1,18 +1,29 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CoporateUser;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/get-chart-data', [DashboardController::class, 'getChartData'])->middleware(['auth', 'verified'])->name('getchartData');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/manage-profile', [ProfileController::class, 'manage'])->name('profile.manage');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
@@ -71,8 +82,18 @@ Route::middleware(['auth','GuestUser','verified'])->namespace('GuestUser')->grou
     Route::get('/gu/home', 'HomeController@index');
 });
 
-Route::middleware(['auth','CoporateUser','verified'])->namespace('CoporateUser')->group(function(){
+Route::middleware(['auth','verified'])->namespace('CoporateUser')->group(function(){
     Route::get('/cu/home', 'HomeController@index');
+    Route::get('/cu/test', [CoporateUser\HomeController::class, 'testNonLaravelDb'])->name('testdb');
+
+
+    //Trackers
+    Route::get('/cu/trackers', [CoporateUser\TrackerController::class, 'index'])->name('trackers.index');
+    Route::get('/cu/trackers/create', [CoporateUser\TrackerController::class, 'create'])->name('trackers.create');
+    Route::post('/cu/trackers', [CoporateUser\TrackerController::class,'store'])->name('trackers.store');
+    Route::get('/cu/trackers/{tracker}', [CoporateUser\TrackerController::class, 'show'])->name('trackers.show');
+    Route::get('/cu/trackers/{tracker}/edit', [CoporateUser\TrackerController::class, 'edit'])->name('trackers.edit');
+    Route::put('/cu/trackers/{tracker}', [CoporateUser\TrackerController::class, 'update'])->name('trackers.update');
 });
 
 

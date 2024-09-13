@@ -38,7 +38,8 @@ return new class extends Migration
             ]);
             $table->enum('user_station', ['HQ', 'Ojodu', 'Abuja', 'Asaba']);
             $table->integer('user_station_no');
-            $table->enum('user_status', ['active', 'blocked'])->default('active');
+            $table->enum('user_status', ['active', 'blocked', 'disabled'])->default('active');
+            $table->integer('login_attempts')->default(0);
             $table->timestamps();
         });
 

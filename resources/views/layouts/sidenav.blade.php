@@ -4,21 +4,58 @@
       <a class="navbar-brand m-0" href="./" target="_blank">
         <img src="{{asset('img/autowims_logo.png')}}" height="auto" width="50px" class="navbar-brand-img h-100" alt="main_logo">
         {{-- <img src="./assets/img/logo-ct-dark.png"> --}}
-        <span class="ms-1 font-weight-bold">AutoWIMS 2.0</span>
+        <span class="ms-1 font-weight-bold">{{ config('app.name') }} 2.0</span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" href="./pages/dashboard.html">
+          <a class="nav-link active" href="{{ route('dashboard') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item">
+        @if(Auth::user()->user_role == "MasterAdmin")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "SuperAdmin")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "AdminOne")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "AdminTwo")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "AdminThree")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "CustomerService")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "FrontDesk")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "Technician")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "ServiceAdvisor")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "JobController")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "AccountsAdmin")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "BusinessView")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "GuestUser")
+          Role: {{ Auth::user()->user_role }}
+        @elseif(Auth::user()->user_role == "CoporateUser")
+          {{-- Role: {{ Auth::user()->user_role }} --}}
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('trackers.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">SYC Trackers</span>
+            </a>
+          </li>
+        @endif
+        {{-- <li class="nav-item">
           <a class="nav-link " href="./pages/tables.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
@@ -49,37 +86,23 @@
             </div>
             <span class="nav-link-text ms-1">RTL</span>
           </a>
-        </li>
+        </li> --}}
+
+        {{-- All Users Route --}}
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./pages/profile.html">
+          <a class="nav-link " href="{{ route('profile.manage') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="./pages/sign-in.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Sign In</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="./pages/sign-up.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-collection text-info text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Sign Up</span>
-          </a>
-        </li>
       </ul>
     </div>
-    <div class="sidenav-footer mx-3 ">
+    {{-- <div class="sidenav-footer mx-3 ">
       <div class="card card-plain shadow-none" id="sidenavCard">
         <img class="w-50 mx-auto" src="./assets/img/illustrations/icon-documentation.svg" alt="sidebar_illustration">
         <div class="card-body text-center p-3 w-100 pt-0">
@@ -91,5 +114,5 @@
       </div>
       <a href="https://www.creative-tim.com/learning-lab/bootstrap/license/argon-dashboard" target="_blank" class="btn btn-dark btn-sm w-100 mb-3">Documentation</a>
       <a class="btn btn-primary btn-sm mb-0 w-100" href="https://www.creative-tim.com/product/argon-dashboard-pro?ref=sidebarfree" type="button">Upgrade to pro</a>
-    </div>
+    </div> --}}
   </aside>

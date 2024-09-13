@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
-use Log;
 
 class PasswordController extends Controller
 {
@@ -24,7 +24,7 @@ class PasswordController extends Controller
         ]);
 
         $request->user()->update([
-            'user_password' => Hash::make($validated['user_password']),
+            'password' => Hash::make($validated['password']),
         ]);
 
         return back()->with('status', 'password-updated');
