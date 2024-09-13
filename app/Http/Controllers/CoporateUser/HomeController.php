@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CoporateUser;
 use App\Http\Controllers\Controller;
 use App\Models\a;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -62,5 +63,11 @@ class HomeController extends Controller
     public function destroy(a $a)
     {
         //
+    }
+
+    public function testNonLaravelDb()
+    {
+        $data = DB::connection('mysql_non_laravel')->table('customers')->get();
+        return $data;
     }
 }

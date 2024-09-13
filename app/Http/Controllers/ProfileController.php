@@ -21,6 +21,13 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function manage(Request $request): View
+    {
+        return view('profile.manage', [
+            'user' => $request->user(),
+        ]);
+    }
+
     /**
      * Update the user's profile information.
      */
