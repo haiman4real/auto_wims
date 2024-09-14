@@ -77,7 +77,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <div class="input-group input-group-alternative">
                                         <span class="input-group-text"><i class="ni ni-bus-front-12"></i></span>
                                         <input class="form-control" placeholder="Vehicle Model" type="text" id="veh_model" name="veh_model" value="{{ old('veh_model') }}" required>
@@ -86,7 +86,7 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <div class="input-group input-group-alternative">
                                         <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                         <input class="form-control" placeholder="Vehicle Year" type="text" id="veh_year" name="veh_year" value="{{ old('veh_year') }}" minlength="4" maxlength="4" required oninput="validateDigits(this)">
@@ -95,7 +95,18 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4 mb-3">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group input-group-alternative">
+                                        <span class="input-group-text"><i class="ni ni-bus-front-12"></i></span>
+                                        <input class="form-control" placeholder="VIN" type="text" id="veh_vin" name="veh_vin" value="{{ old('veh_vin') }}">
+                                    </div>
+                                    @error('veh_vin')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
                                     <div class="input-group input-group-alternative">
                                         <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                         <input class="form-control" placeholder="Plate Number" type="text" id="plate_num" name="plate_num" value="{{ old('plate_num') }}" minlength="7" maxlength="8" required>

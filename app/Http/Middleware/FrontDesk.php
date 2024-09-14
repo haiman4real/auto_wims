@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class FrontDesk
@@ -16,8 +16,8 @@ class FrontDesk
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role !== "FrontDesk"){
-			return abort('403', 'You do not have access to the Event Admin routes');
+        if (Auth::check() && !in_array(Auth::user()->user_role, ['FrontDesk', 'SuperAdmin', 'MasterAdmin'])) {
+			return abort('403', 'You do not have access to the Front Desk routes');
 		}
         return $next($request);
     }
