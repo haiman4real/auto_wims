@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,8 +16,8 @@ class SuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role !== "SuperAdmin"){
-			return abort('403', 'You do not have access to the Event Admin routes');
+        if(Auth::check() && Auth::user()->user_role !== "SuperAdmin"){
+			return abort('403', 'You do not have access to the Super Admin routes');
 		}
         return $next($request);
     }

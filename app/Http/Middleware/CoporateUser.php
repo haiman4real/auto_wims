@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,8 +16,8 @@ class CoporateUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role !== "CoporateUser"){
-			return abort('403', 'You do not have access to the Event Admin routes');
+        if (Auth::check() && !in_array(Auth::user()->user_role, ['CoporateUser', 'SuperAdmin', 'MasterAdmin'])) {
+         	return abort('403', 'You do not have access to the Corporate User routes');
 		}
         return $next($request);
     }

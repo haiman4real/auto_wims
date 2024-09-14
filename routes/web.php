@@ -5,6 +5,8 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoporateUser;
 use App\Http\Controllers\MasterAdmin;
+use App\Http\Controllers\FrontDesk;
+use App\Http\Middleware\MasterAdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth', 'verified'])->namespace('MasterAdmin')->group(function(){
+Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class)->namespace('MasterAdmin')->group(function(){
     Route::get('/ma/home', 'HomeController@index');
     Route::get('/ma/users', [MasterAdmin\UserController::class, 'index'])->name('users.index');
     Route::get('/ma/users/add', [MasterAdmin\UserController::class, 'create'])->name('users.add');
@@ -64,8 +66,11 @@ Route::middleware(['auth','CustomerService','verified'])->namespace('CustomerSer
     Route::get('/cs/home', 'HomeController@index');
 });
 
-Route::middleware(['auth','FrontDesk','verified'])->namespace('FrontDesk')->group(function(){
+Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDesk::class)->namespace('FrontDesk')->group(function(){
     Route::get('/fd/home', 'HomeController@index');
+    Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
+    Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
+    Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
 });
 
 Route::middleware(['auth','Technician', 'verified'])->namespace('Technician')->group(function(){
@@ -92,18 +97,18 @@ Route::middleware(['auth','GuestUser','verified'])->namespace('GuestUser')->grou
     Route::get('/gu/home', 'HomeController@index');
 });
 
-Route::middleware(['auth','verified'])->namespace('CoporateUser')->group(function(){
+Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\CoporateUser::class)->namespace('CoporateUser')->group(function(){
     Route::get('/cu/home', 'HomeController@index');
     Route::get('/cu/test', [CoporateUser\HomeController::class, 'testNonLaravelDb'])->name('testdb');
 
 
     //Trackers
-    Route::get('/cu/trackers', [CoporateUser\TrackerController::class, 'index'])->name('trackers.index');
-    Route::get('/cu/trackers/create', [CoporateUser\TrackerController::class, 'create'])->name('trackers.create');
-    Route::post('/cu/trackers', [CoporateUser\TrackerController::class,'store'])->name('trackers.store');
-    Route::get('/cu/trackers/{tracker}', [CoporateUser\TrackerController::class, 'show'])->name('trackers.show');
-    Route::get('/cu/trackers/{tracker}/edit', [CoporateUser\TrackerController::class, 'edit'])->name('trackers.edit');
-    Route::put('/cu/trackers/{tracker}', [CoporateUser\TrackerController::class, 'update'])->name('trackers.update');
+    Route::get('/product/trackers', [CoporateUser\TrackerController::class, 'index'])->name('trackers.index');
+    Route::get('/product/trackers/create', [CoporateUser\TrackerController::class, 'create'])->name('trackers.create');
+    Route::post('/product/trackers', [CoporateUser\TrackerController::class,'store'])->name('trackers.store');
+    Route::get('/product/trackers/{tracker}', [CoporateUser\TrackerController::class, 'show'])->name('trackers.show');
+    Route::get('/product/trackers/{tracker}/edit', [CoporateUser\TrackerController::class, 'edit'])->name('trackers.edit');
+    Route::put('/product/trackers/{tracker}', [CoporateUser\TrackerController::class, 'update'])->name('trackers.update');
 });
 
 

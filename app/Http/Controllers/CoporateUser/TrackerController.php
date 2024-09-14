@@ -20,12 +20,21 @@ class TrackerController extends Controller
         try {
             // Get the logged-in user's ID
             $agentId = Auth::id();
+            $userRole = Auth::user()->user_role;
 
-            // Retrieve all records from the tracker_bookings table where agent_id matches the logged-in user
-            $appointments = DB::connection('mysql_non_laravel')
-                ->table('tracker_bookings')
-                ->where('agent_id', $agentId)
-                ->get();
+            // If the user is SuperAdmin or MasterAdmin, retrieve all entries
+            if (in_array($userRole, ['SuperAdmin', 'MasterAdmin'])) {
+                // Retrieve all records from the tracker_bookings table
+                $appointments = DB::connection('mysql_non_laravel')
+                    ->table('tracker_bookings')
+                    ->get();
+            } else {
+                // Otherwise, retrieve only the records where agent_id matches the logged-in user
+                $appointments = DB::connection('mysql_non_laravel')
+                    ->table('tracker_bookings')
+                    ->where('agent_id', $agentId)
+                    ->get();
+            }
 
             // return $appointments;
             // Return the view with the appointments data
@@ -57,6 +66,7 @@ class TrackerController extends Controller
             'veh_make' => 'required|string|max:255',
             'veh_model' => 'required|string|max:255',
             'veh_year' => 'required|string|min:4|max:4',
+            'veh_vin' => 'nullable|string|max:17',
             'plate_num' => 'required|string|min:7|max:8',
             'appointment_date' => 'required|date',
             'time' => 'required|string',
@@ -99,6 +109,8 @@ class TrackerController extends Controller
                 return redirect()->back()->withInput()->with('error', 'The inputted plate number is already booked.');
             }
 
+            $metadata = [];
+
             // Insert the data into the non-Laravel database
             DB::connection('mysql_non_laravel')->table('tracker_bookings')->insert([
                 'agent_id' => auth()->id(), // Assuming you're using Laravel's auth to get the logged-in user
@@ -111,6 +123,7 @@ class TrackerController extends Controller
                 'plate_num' => $request->input('plate_num'),
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('time'),
+                'metadata' => json_encode(['veh_vin' => $request->input('veh_vin')]),
                 'comments' => $request->input('comments'),
                 'referral_code' => $request->input('referral_code'),
                 'status' => 'booked', // Assuming new entries have a status of 'pending'

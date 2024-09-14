@@ -14,6 +14,8 @@ class DashboardController extends Controller
     public function index()
     {
         if(Auth::user()->user_role === 'CoporateUser'){
+            $agentId = Auth::id();
+
             $trackerAppt = DB::connection('mysql_non_laravel')
                                 ->table('tracker_bookings')
                                 ->where('agent_id', Auth::id())
@@ -34,6 +36,7 @@ class DashboardController extends Controller
 
             $recentActivities = DB::connection('mysql_non_laravel')->table('tracker_bookings')
                                     ->select('created_at', 'appointment_date', 'appointment_time', 'fullname') // Replace 'tracking_info' with the actual column name
+                                    ->where('agent_id', Auth::id())
                                     ->orderBy('created_at', 'desc')
                                     ->limit(6) // Limit to the latest 6 activities
                                     ->get();
@@ -52,6 +55,7 @@ class DashboardController extends Controller
         // Get the total number of transactions per month
         $transactions = DB::connection('mysql_non_laravel')->table('tracker_bookings')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as total'))
+            ->where('agent_id', Auth::id())
             ->groupBy('month')
             ->get();
 
