@@ -323,17 +323,17 @@
                                         <span class="text-secondary text-xs font-weight-bold">{{date("M j, Y h:i A", strtotime($appointment->created_at ))}}</span>
                                     </td>
                                     <td class="align-middle">
-                                        {{-- @if($question->status == 'active')
-                                            <a href="{{route('inspectionquestions.disable', $question)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Disable Question">
-                                                <i class="fa fa-ban" style="color: rgb(239, 167, 0); font-size:14px;" aria-hidden="true"></i>
-                                            </a>
-                                        @elseif ($question->status == 'disabled')
-                                            <a href="{{route('inspectionquestions.enable', $question)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Enable Question">
+                                        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                            <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs complete-btn" data-id="{{ $appointment->id }}" data-toggle="modal" data-target="#completeJobModal" data-original-title="Complete Job">
                                                 <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
                                             </a>
-                                        @endif --}}
-
-                                        &nbsp;
+                                            &nbsp;
+                                            @if($appointment->status !== 'completed')
+                                                <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn" data-id="{{ $appointment->id }}" data-toggle="modal" data-target="#editAppointmentModal" data-original-title="Edit Appointment">
+                                                    <i class="fa fa-edit" style="color: rgb(255, 179, 0); font-size:14px;" aria-hidden="true"></i>
+                                                </a>
+                                            @endif
+                                        @endif
                                         {{-- <a href="{{route('inspectionquestions.delete', $question)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete Question">
                                            <i class="fa fa-trash" style="color: red; font-size:14px;" aria-hidden="true"></i>
                                         </a> --}}
@@ -354,6 +354,91 @@
             </div>
         </div>
     </div>
+
+    <!-- Complete Job Modal -->
+    <div class="modal fade" id="completeJobModal" tabindex="-1" role="dialog" aria-labelledby="completeJobModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeJobModalLabel">Complete Job</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="completeJobForm" method="POST" action="{{ route('trackers.complete') }}">
+                        @csrf
+                        <input type="hidden" id="complete_appointment_id" name="id">
+
+                        <div class="form-group">
+                            <label for="complete_comments">Comments</label>
+                            <textarea class="form-control" id="complete_comments" name="comments" rows="3" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Complete Job</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Appointment Modal -->
+    <div class="modal fade" id="editAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="editAppointmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAppointmentModalLabel">Edit Appointment</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAppointmentForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_appointment_id" name="id">
+
+                        <!-- Form inputs -->
+                        <div class="form-group">
+                            <label for="edit_fullname">Full Name</label>
+                            <input type="text" class="form-control" id="edit_fullname" name="fullname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_email">Email</label>
+                            <input type="email" class="form-control" id="edit_email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_phone">Phone</label>
+                            <input type="text" class="form-control" id="edit_phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_veh_make">Vehicle Make</label>
+                            <input type="text" class="form-control" id="edit_veh_make" name="veh_make" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_veh_model">Vehicle Model</label>
+                            <input type="text" class="form-control" id="edit_veh_model" name="veh_model" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_veh_year">Vehicle Year</label>
+                            <input type="text" class="form-control" id="edit_veh_year" name="veh_year" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_veh_vin">Vehicle VIN</label>
+                            <input type="text" class="form-control" id="edit_veh_vin" name="veh_vin">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_plate_num">Plate Number</label>
+                            <input type="text" class="form-control" id="edit_plate_num" name="plate_num" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             // Initialize DataTable with responsive features and export buttons
@@ -411,6 +496,50 @@
             // Disable past dates from being selected
             const today = new Date().toISOString().split('T')[0];
             dateInput.setAttribute('min', today);
+
+            // Complete Job button click handler
+            $('.complete-btn').on('click', function () {
+                const appointmentId = $(this).data('id');
+                $('#complete_appointment_id').val(appointmentId); // Set the appointment ID in the modal
+                $('#completeJobModal').modal('show'); // Open the modal
+            });
+
+            // Handle Edit button click
+            $('.edit-btn').on('click', function () {
+                const appointmentId = $(this).data('id');
+
+                // AJAX request to fetch the appointment details
+                $.ajax({
+                    url: '/product/trackers/' + appointmentId + '/edit', // Adjust this URL to your route
+                    method: 'GET',
+                    success: function (data) {
+                        // Populate the edit form with fetched appointment data
+                        $('#edit_appointment_id').val(data.id);
+                        $('#edit_fullname').val(data.fullname);
+                        $('#edit_email').val(data.email);
+                        $('#edit_phone').val(data.phone);
+                        $('#edit_veh_make').val(data.veh_make);
+                        $('#edit_veh_model').val(data.veh_model);
+                        $('#edit_veh_year').val(data.veh_year);
+                        $('#edit_plate_num').val(data.plate_num);
+
+                        // // Decode the metadata to retrieve veh_vin
+                        // let metadata = JSON.parse(data.metadata);
+                        // $('#edit_veh_vin').val(metadata.veh_vin);
+
+                        // Decode the metadata to retrieve veh_vin, handling null metadata
+                        let metadata = data.metadata ? JSON.parse(data.metadata) : {}; // Handle null metadata
+                        $('#edit_veh_vin').val(metadata.veh_vin || ''); // Set veh_vin, or leave empty if not present
+
+
+                        // Dynamically set the form action
+                        $('#editAppointmentForm').attr('action', '/product/trackers/update/' + data.id);
+
+                        // Show the Edit Modal
+                        $('#editAppointmentModal').modal('show');
+                    }
+                });
+            });
 
         });
 

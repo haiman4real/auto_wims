@@ -167,15 +167,76 @@ class TrackerController extends Controller
         return view('trackers.show');
     }
     public function edit($id){
-        return view('trackers.edit');
+        $appointment = DB::connection('mysql_non_laravel')->table('tracker_bookings')->find($id);
+        return response()->json($appointment); // Return appointment data as JSON for the modal form
+        // return view('trackers.edit');
     }
     public function update(Request $request, $id){
         //update tracker data
-        return redirect()->route('trackers.index')->with('success', 'Tracker updated successfully');
+
+        // Validate request inputs
+        $validatedData = $request->validate([
+            'fullname' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'veh_make' => 'required',
+            'veh_model' => 'required',
+            'veh_year' => 'required',
+            'plate_num' => 'required',
+        ]);
+
+        // Retrieve the existing metadata for the appointment
+        $appointment = DB::connection('mysql_non_laravel')->table('tracker_bookings')->find($id);
+        $metadata = json_decode($appointment->metadata, true); // Decode metadata into array
+
+        // Update the veh_vin in the metadata
+        $metadata['veh_vin'] = $request->input('veh_vin');
+
+        // Prepare the data for update
+        $updateData = [
+            'fullname' => $request->input('fullname'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'veh_make' => $request->input('veh_make'),
+            'veh_model' => $request->input('veh_model'),
+            'veh_year' => $request->input('veh_year'),
+            'plate_num' => $request->input('plate_num'),
+            'metadata' => json_encode($metadata), // Save updated metadata as JSON string
+        ];
+
+        // Update the appointment record
+        DB::connection('mysql_non_laravel')->table('tracker_bookings')
+            ->where('id', $id)
+            ->update($updateData);
+
+
+        return redirect()->back()->with('success', 'Tracker updated successfully!');
+        // return redirect()->route('trackers.index')->with('success', 'Tracker updated successfully');
     }
     public function destroy($id){
         //delete tracker data
         return redirect()->route('trackers.index')->with('success', 'Tracker deleted successfully');
     }
 
+    public function complete(Request $request)
+    {
+        $id = $request->input('id');
+        $comments = $request->input('comments');
+
+        // Retrieve the existing metadata and update with comments
+        $appointment = DB::connection('mysql_non_laravel')->table('tracker_bookings')->find($id);
+        $metadata = json_decode($appointment->metadata, true);
+        $metadata['completion_comments'] = $comments;
+
+        // Update the status and metadata
+        DB::connection('mysql_non_laravel')->table('tracker_bookings')
+            ->where('id', $id)
+            ->update([
+                'status' => 'completed',
+                'metadata' => json_encode($metadata),
+                'comments' => $comments,
+            ]);
+
+        return redirect()->back()->with('success', 'Job completed successfully!');
+    }
 }

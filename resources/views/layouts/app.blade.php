@@ -76,25 +76,27 @@
         {{ $slot }}
 
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="row p-4 py-4 text-primary">
-            <div class="col-xl-6">
-                <div class="copyright text-xl-left text-muted">
+    <!-- Footer -->
+    <footer class="footer pt-3 ">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+                <div class="copyright text-center text-sm text-muted text-lg-start">
                 &copy; {{ date('Y') }} <a href="#" class="font-weight-bold ml-1" target="_blank">{{ config('app.name') ?? "AMS" }}</a>
                 </div>
             </div>
-            <div class="col-xl-6">
-                <ul class="nav nav-footer justify-content-center justify-content-xl-end">
-                    <li class="nav-item">
-                        <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('profile.manage') }}" class="nav-link">Settings</a>
-                    </li>
+            <div class="col-lg-6">
+                <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('profile.manage') }}" class="nav-link">Settings</a>
+                </li>
                 </ul>
             </div>
             </div>
+        </div>
         </footer>
   </main>
     @include('layouts.sideconfig')
@@ -104,7 +106,7 @@
   <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
   <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
   <script src="{{ asset('assets/js/plugins/chartjs.min.js')}}"></script>
-  <script>
+  {{-- <script>
     var ctx1 = document.getElementById("chart-line").getContext("2d");
 
     var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
@@ -186,7 +188,7 @@
         },
       },
     });
-  </script>
+  </script> --}}
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

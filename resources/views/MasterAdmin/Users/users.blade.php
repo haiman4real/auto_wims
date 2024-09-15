@@ -109,28 +109,15 @@
                                     <span class="text-secondary text-xs font-weight-bold">{{date("M j, Y h:i A", strtotime($user->created_at ))}}</span>
                                 </td>
                                 <td class="">
-                                    {{-- @can('view users') --}}
-                                        {{-- <a href="{{ route('user.edit', $user) }}" class="btn btn-sm btn-warning">Edit</a> --}}
-                                        {{-- <a href="{{ route('users.assign-roles', $user) }}" class="btn btn-sm btn-info">Assign Roles</a> --}}
-                                        @if($user->user_status == 'active')
-                                            <a href="{{route('user.disable', $user)}}" class="btn btn-sm btn-warning">
-                                                {{-- <i class="fa fa-ban" style="color: red; font-size:14px;" aria-hidden="true"></i> --}}
-                                                Disable
-                                            </a>
-                                        @elseif ($user->user_status == 'disabled')
-                                            <a href="{{route('user.enable', $user)}}" class="btn btn-sm btn-primary">
-                                                {{-- <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i> --}}
-                                                Enable
-                                            </a>
-                                        @else
-                                            {{-- @can('unblock users') --}}
-                                                <a href="{{route('user.enable', $user)}}" class="btn btn-sm btn-primary">
-                                                    {{-- <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i> --}}
-                                                    Unblock
-                                                </a>
-                                            {{-- @endcan --}}
-                                        @endif
-                                    {{-- @endcan --}}
+                                    @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                        <a href="#" class="text-secondary font-weight-bold text-xs complete-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#completeJobModal" data-original-title="Delete Customer">
+                                            <i class="fa fa-ban" style="color: green; font-size:14px;" aria-hidden="true"></i>delete
+                                        </a>
+                                        &nbsp;
+                                        <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#editCustomerModal" data-original-title="Edit Customer">
+                                            <i class="fa fa-edit" style="color: rgb(255, 179, 0); font-size:14px;" aria-hidden="true"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
