@@ -18,7 +18,7 @@
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
-        @if(Auth::user()->user_role == "MasterAdmin")
+        @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['masteradmin']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
             <a class="nav-link " href="{{ route('users.index') }}">
@@ -28,16 +28,10 @@
               <span class="nav-link-text ms-1">Users</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('trackers.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">SYC Trackers</span>
-            </a>
-          </li>
-        @elseif(Auth::user()->user_role == "SuperAdmin")
-          Role: {{ Auth::user()->user_role }}
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+          {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
             <a class="nav-link " href="{{ route('customers.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -54,37 +48,53 @@
               <span class="nav-link-text ms-1">Vehicles</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('trackers.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-calendar-grid-58 text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">SYC Trackers</span>
-            </a>
-          </li>
-        @elseif(Auth::user()->user_role == "AdminOne")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminone', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "AdminTwo")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['admintwo', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "AdminThree")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminthree', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "CustomerService")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['customerservice', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "FrontDesk")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['frontdesk', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "Technician")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['technician', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "ServiceAdvisor")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['serviceadvisor', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "JobController")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['jobcontroller', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "AccountsAdmin")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['accountsadmin', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "BusinessView")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['businessview', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "GuestUser")
+        @endif
+
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['guestuser', 'superadmin', 'masteradmin']))
           Role: {{ Auth::user()->user_role }}
-        @elseif(Auth::user()->user_role == "CoporateUser")
+        @endif
+
+        @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['coporateuser', 'superadmin', 'masteradmin']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
             <a class="nav-link " href="{{ route('trackers.index') }}">
@@ -95,38 +105,7 @@
             </a>
           </li>
         @endif
-        {{-- <li class="nav-item">
-          <a class="nav-link " href="./pages/tables.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Tables</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="./pages/billing.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Billing</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="./pages/virtual-reality.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-app text-info text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Virtual Reality</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="./pages/rtl.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">RTL</span>
-          </a>
-        </li> --}}
+
 
         {{-- All Users Route --}}
         <li class="nav-item mt-3">
@@ -142,17 +121,5 @@
         </li>
       </ul>
     </div>
-    {{-- <div class="sidenav-footer mx-3 ">
-      <div class="card card-plain shadow-none" id="sidenavCard">
-        <img class="w-50 mx-auto" src="./assets/img/illustrations/icon-documentation.svg" alt="sidebar_illustration">
-        <div class="card-body text-center p-3 w-100 pt-0">
-          <div class="docs-info">
-            <h6 class="mb-0">Need help?</h6>
-            <p class="text-xs font-weight-bold mb-0">Please check our docs</p>
-          </div>
-        </div>
-      </div>
-      <a href="https://www.creative-tim.com/learning-lab/bootstrap/license/argon-dashboard" target="_blank" class="btn btn-dark btn-sm w-100 mb-3">Documentation</a>
-      <a class="btn btn-primary btn-sm mb-0 w-100" href="https://www.creative-tim.com/product/argon-dashboard-pro?ref=sidebarfree" type="button">Upgrade to pro</a>
-    </div> --}}
+    
   </aside>

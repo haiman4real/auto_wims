@@ -21,6 +21,7 @@ class CustomersController extends Controller
         // Retrieve all records from the customers table
         $customers = DB::connection('mysql_non_laravel')
                                 ->table('customers')
+                                ->where('cust_view', '!=', 'hidden')
                                 ->get();
 
 
@@ -65,9 +66,9 @@ class CustomersController extends Controller
                 'cust_lga' => $validatedData['lga'],                    // Storing LGA as cust_lga
                 'cust_mode' => $validatedData['mode_of_contact'],       // Storing mode of contact as cust_mode
                 'cust_type' => $validatedData['account_type'],          // Storing account type as cust_type
-                'cust_reg_time' => now(),                               // Storing current time as cust_reg_time
-                'cust_asset' => null,                                   // Default null value for cust_asset
-                'cust_view' => 'default_value',                         // Adjust according to your logic
+                'cust_reg_time' => time(),                               // Storing current time as cust_reg_time
+                'cust_asset' => 0,                                   // Default null value for cust_asset
+                'cust_view' => 'visible',                         // Adjust according to your logic
             ]);
 
             // Log the successful database insertion
@@ -87,6 +88,87 @@ class CustomersController extends Controller
             Log::error('Failed to add customer: ' . $e->getMessage(), ['request_data' => $request->all()]);
 
             return redirect()->back()->with('error', 'Failed to add customer. Please try again.');
+        }
+    }
+
+    public function deleteCustomer($customerId) {
+        // Retrieve the customer
+        $customer = DB::connection('mysql_non_laravel')
+                    ->table('customers')
+                    ->where('cust_id', $customerId)
+                    ->first();
+
+        if ($customer) {
+            // Update the cust_view to 'hidden'
+            DB::connection('mysql_non_laravel')
+                    ->table('customers')
+                    ->where('cust_id', $customerId)
+                    ->update(['cust_view' => 'hidden']);
+
+            // Log the successful update
+            Log::info('Customer view updated to hidden', ['customer_id' => $customerId]);
+
+            return redirect()->back()->with('success', 'Customer deleted successfully!');
+        } else {
+            // Customer not found, log an error
+            Log::warning('Customer not found', ['customer_id' => $customerId]);
+
+            return redirect()->back()->with('error', 'Customer not found!');
+        }
+    }
+
+    public function edit($id)
+    {
+        try {
+            // Fetch customer details
+            $customer = DB::connection('mysql_non_laravel')->table('customers')->where('cust_id', $id)->first();
+
+            if (!$customer) {
+                return response()->json(['error' => 'Customer not found'], 404);
+            }
+
+            // Log the event
+            Log::info('Customer data retrieved for editing', ['customer_id' => $id]);
+
+            return response()->json($customer);
+        } catch (\Exception $e) {
+            Log::error('Error retrieving customer data', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'An error occurred while fetching the customer data'], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:11',
+            'address' => 'required|string|max:255',
+            'lga' => 'required|string|max:255',
+        ]);
+
+        try {
+            // Update the customer in the database
+            DB::connection('mysql_non_laravel')->table('customers')
+                ->where('cust_id', $id)
+                ->update([
+                    'cust_name' => $request->input('full_name'),
+                    'cust_email' => $request->input('email'),
+                    'cust_mobile' => $request->input('phone_number'),
+                    'cust_address' => $request->input('address'),
+                    'cust_lga' => $request->input('lga'),
+                ]);
+
+            // Log the successful update
+            Log::info('Customer updated successfully', ['customer_id' => $id]);
+
+            return redirect()->back()->with('success', 'Customer updated successfully!');
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error updating customer', ['error' => $e->getMessage()]);
+
+            return redirect()->back()->with('error', 'An error occurred while updating the customer.');
         }
     }
 

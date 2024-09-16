@@ -23,6 +23,8 @@ use App\Http\Middleware\MasterAdminMiddleware;
 // })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/get-chart-data', [DashboardController::class, 'getChartData'])->middleware(['auth', 'verified'])->name('getchartData');
+Route::get('/get-transaction-data', [DashboardController::class, 'getTransactionData'])->middleware(['auth', 'verified'])->name('getTransactionData');
+Route::get('/customer-lga-data', [DashboardController::class, 'getCustomerLgaData'])->middleware(['auth', 'verified'])->name('getCustomerLgaData');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -71,6 +73,10 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
     Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
     Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
+    Route::get('/workshop/customers/{customer}/edit', [FrontDesk\CustomersController::class, 'edit'])->name('customers.edit');
+    Route::put('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'update'])->name('customers.update');
+    Route::delete('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'destroy'])->name('customers.destroy');
+    Route::get('/workshop/customers/{customer}/delete', [FrontDesk\CustomersController::class, 'deleteCustomer'])->name('customers.delete');
 });
 
 Route::middleware(['auth','Technician', 'verified'])->namespace('Technician')->group(function(){
@@ -108,7 +114,9 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\Coporate
     Route::post('/product/trackers', [CoporateUser\TrackerController::class,'store'])->name('trackers.store');
     Route::get('/product/trackers/{tracker}', [CoporateUser\TrackerController::class, 'show'])->name('trackers.show');
     Route::get('/product/trackers/{tracker}/edit', [CoporateUser\TrackerController::class, 'edit'])->name('trackers.edit');
-    Route::put('/product/trackers/{tracker}', [CoporateUser\TrackerController::class, 'update'])->name('trackers.update');
+    Route::put('/product/trackers/update/{tracker}', [CoporateUser\TrackerController::class, 'update'])->name('trackers.update');
+    Route::get('/product/trackers/completed/{tracker}', [CoporateUser\TrackerController::class, 'completed'])->name('trackers.completed');
+    Route::post('/trackers/complete', [CoporateUser\TrackerController::class, 'complete'])->name('trackers.complete');
 });
 
 
