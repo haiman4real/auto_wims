@@ -16,9 +16,16 @@ class CoporateUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && !in_array(Auth::user()->user_role, ['CoporateUser', 'SuperAdmin', 'MasterAdmin'])) {
-         	return abort('403', 'You do not have access to the Corporate User routes');
-		}
+        if (!Auth::check()) {
+            // Redirect to login page if not authenticated
+            return redirect()->route('login'); // You can modify 'login' with the actual route name of your login page
+        }
+
+        // Check if the logged-in user's role is not MasterAdmin
+        if (!in_array(Auth::user()->user_role, ['CoporateUser', 'SuperAdmin', 'MasterAdmin'])) {
+            return abort(403, 'You do not have access to the Corporate User routes');
+        }
+
         return $next($request);
     }
 }
