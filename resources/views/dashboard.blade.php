@@ -235,21 +235,37 @@
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $bookingJob['advisor_note'] ?? "" }}</p>
+                                                <p class="text-xs mb-0" style="word-wrap: break-word; white-space: normal;">{{ $bookingJob['advisor_note'] ?? "" }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $bookingJob['bookings_status'] ?? ""}}</p>
+                                                @if ($bookingJob['bookings_status'] !== 'completed')
+                                                    <span class="badge badge-sm bg-gradient-info">
+                                                        <p class="text-xs mb-0">{{ $bookingJob['bookings_status'] ?? ""}}</p>
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-sm bg-gradient-success">
+                                                        <p class="text-xs mb-0">{{ $bookingJob['bookings_status'] ?? ""}}</p>
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $bookingJob['payment_status'] ?? ""}}</p>
+                                                @if ($bookingJob['payment_status'] !== 'completed')
+                                                    <span class="badge badge-sm bg-gradient-danger">
+                                                        <p class="text-xs mb-0">{{ $bookingJob['payment_status'] ?? ""}}</p>
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-sm bg-gradient-success">
+                                                        <p class="text-xs mb-0">{{ $bookingJob['payment_status'] ?? ""}}</p>
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>

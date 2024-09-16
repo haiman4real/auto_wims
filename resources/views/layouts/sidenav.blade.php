@@ -51,47 +51,47 @@
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminone', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['admintwo', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminthree', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['customerservice', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['frontdesk', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['technician', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['serviceadvisor', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['jobcontroller', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['accountsadmin', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['businessview', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['guestuser', 'superadmin', 'masteradmin']))
-          Role: {{ Auth::user()->user_role }}
+          {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
         @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['coporateuser', 'superadmin', 'masteradmin']))
@@ -121,5 +121,5 @@
         </li>
       </ul>
     </div>
-    
+
   </aside>
