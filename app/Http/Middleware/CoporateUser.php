@@ -16,6 +16,11 @@ class CoporateUser
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Exclude the login route (and other public routes) from the check
+        if ($request->routeIs('login', 'password.request', 'password.reset', 'register')) {
+            return $next($request);
+        }
+
         if (!Auth::check()) {
             // Redirect to login page if not authenticated
             return redirect()->route('login'); // You can modify 'login' with the actual route name of your login page
