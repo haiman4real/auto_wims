@@ -23,7 +23,7 @@ class SuperAdmin
 
 
         // Check if the user does not have the MasterAdmin role
-        if (Auth::check() && Auth::user()->user_role !== 'SuperAdmin') {
+        if (Auth::check() && !in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin'])) {
             Log::info('User does not have access to Super Admin routes.');
             return abort(403, 'You do not have access to the Super Admin routes');
         }

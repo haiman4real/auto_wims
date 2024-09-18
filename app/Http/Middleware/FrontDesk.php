@@ -22,7 +22,7 @@ class FrontDesk
        Log::info('User: ' . (Auth::check() ? Auth::user()->email : 'Guest'));
 
        // Check if the user does not have the MasterAdmin role
-       if (Auth::check() && Auth::user()->user_role !== 'FrontDesk') {
+       if (Auth::check() && !in_array(strtolower(trim(Auth::user()->user_role)), ['frontdesk', 'superadmin', 'masteradmin'])) {
            Log::info('User does not have access to Master Admin routes.');
            return abort(403, 'You do not have access to the Master Admin routes');
        }
