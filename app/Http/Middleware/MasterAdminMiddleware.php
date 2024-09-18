@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,18 +17,27 @@ class MasterAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Exclude the login route (and other public routes) from the check
-        if ($request->routeIs('login', 'password.request', 'password.reset', 'register')) {
-            return $next($request);
-        }
+        // Log the current route and user
+        Log::info('Route: ' . $request->url());
+        Log::info('User: ' . (Auth::check() ? Auth::user()->email : 'Guest'));
 
-        if (!Auth::check()) {
-            // Redirect to login page if not authenticated
-            return redirect()->route('login'); // You can modify 'login' with the actual route name of your login page
-        }
+        // Check if the route is a public route
+        // if ($request->routeIs('index', '/', 'login', 'register', 'password.request', 'password.reset')) {
+        // if($request->url() === $request->route('login')){
+        //     Log::info('Public route, skipping auth check.');
+        //     return $next($request);
+        // }
 
-        // Check if the logged-in user's role is not MasterAdmin
-        if (Auth::user()->user_role !== 'MasterAdmin') {
+        // // Check if the user is authenticated
+        // if (!Auth::check()) {
+        //     Log::info('Not authenticated, redirecting to login.');
+        //     Log::info($request->route('login'));
+        //     return redirect()->route('login');
+        // }
+
+        // Check if the user does not have the MasterAdmin role
+        if (Auth::check() && Auth::user()->user_role !== 'MasterAdmin') {
+            Log::info('User does not have access to Master Admin routes.');
             return abort(403, 'You do not have access to the Master Admin routes');
         }
 
