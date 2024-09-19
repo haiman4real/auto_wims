@@ -300,14 +300,14 @@
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
-                                            <div class="d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-column justify-content-center" style="word-wrap: break-word; white-space: normal;">
                                                 <p class="text-xs mb-0">{{ $appointment->comments ?? 'N/A' }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
-                                            <div class="d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-column justify-content-center" style="word-wrap: break-word; white-space: normal;">
                                                 <p class="text-xs mb-0 text-uppercase">{{ $appointment->referral_code ?? 'N/A' }}</p>
                                             </div>
                                         </div>
