@@ -480,13 +480,13 @@
                 const selectedDate = new Date(this.value);
                 const today = new Date();
 
-                
-                // Disable if selected date is in the past
-                if (selectedDate < today.setHours(0, 0, 0, 0)) {
-                    alert('Past dates are not allowed.');
-                    this.value = ''; // Clear the input
-                    return;
-                }
+
+                // // Disable if selected date is in the past
+                // if (selectedDate < today.setHours(0, 0, 0, 0)) {
+                //     alert('Past dates are not allowed.');
+                //     this.value = ''; // Clear the input
+                //     return;
+                // }
 
                 // Disable if the selected date is a Sunday
                 if (selectedDate.getDay() === 6) {
