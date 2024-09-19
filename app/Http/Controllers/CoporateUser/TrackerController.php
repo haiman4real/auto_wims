@@ -23,10 +23,16 @@ class TrackerController extends Controller
             $userRole = Auth::user()->user_role;
 
             // If the user is SuperAdmin or MasterAdmin, retrieve all entries
-            if (in_array($userRole, ['SuperAdmin', 'MasterAdmin'])) {
+            if (in_array($userRole, ['MasterAdmin'])) {
                 // Retrieve all records from the tracker_bookings table
                 $appointments = DB::connection('mysql_non_laravel')
                     ->table('tracker_bookings')
+                    ->get();
+            }elseif (in_array($userRole, ['SuperAdmin', 'MasterAdmin'])) {
+                // Retrieve all records from the tracker_bookings table
+                $appointments = DB::connection('mysql_non_laravel')
+                    ->table('tracker_bookings')
+                    ->where('status', '!=', 'deleted')
                     ->get();
             } else {
                 // Otherwise, retrieve only the records where agent_id matches the logged-in user
