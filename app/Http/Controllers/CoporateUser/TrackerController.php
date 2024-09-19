@@ -33,6 +33,7 @@ class TrackerController extends Controller
                 $appointments = DB::connection('mysql_non_laravel')
                     ->table('tracker_bookings')
                     ->where('agent_id', $agentId)
+                    ->where('status', '!=', 'deleted')
                     ->get();
             }
 
@@ -209,12 +210,38 @@ class TrackerController extends Controller
             ->where('id', $id)
             ->update($updateData);
 
+            // Log the action with user details
+        Log::info('Tracker updated', [
+            'tracker_id' => $id,
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->user_name,
+            'timestamp' => now()
+        ]);
+
 
         return redirect()->back()->with('success', 'Tracker updated successfully!');
         // return redirect()->route('trackers.index')->with('success', 'Tracker updated successfully');
     }
-    public function destroy($id){
-        //delete tracker data
+    public function destroy($id)
+    {
+        // Retrieve the current user
+        $user = Auth::user();
+
+        // Update the status to 'deleted' for the specified tracker
+        DB::connection('mysql_non_laravel')
+            ->table('tracker_bookings')
+            ->where('id', $id)
+            ->update(['status' => 'deleted']);
+
+        // Log the action with user details
+        Log::info('Tracker status set to deleted', [
+            'tracker_id' => $id,
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->user_name,
+            'timestamp' => now()
+        ]);
+
+        // Redirect back to the index page with a success message
         return redirect()->route('trackers.index')->with('success', 'Tracker deleted successfully');
     }
 
@@ -237,6 +264,13 @@ class TrackerController extends Controller
                 'comments' => $comments,
             ]);
 
+        // Log the action with user details
+        Log::info('Tracker status set to completed', [
+            'tracker_id' => $id,
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->user_name,
+            'timestamp' => now()
+        ]);
         return redirect()->back()->with('success', 'Job completed successfully!');
     }
 }
