@@ -59,7 +59,7 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="input-group input-group-alternative">
                                         <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
-                                        <input class="form-control" placeholder="Phone Number" maxlength="11" minlength="11" type="text" id="phone" name="phone" value="{{ old('phone') }}" required>
+                                        <input class="form-control" placeholder="Phone Number" maxlength="11" minlength="11" type="text" id="phone" name="phone" value="{{ old('phone') }}" required oninput="validateDigits(this)">
                                     </div>
                                     @error('phone')
                                         <div class="text-danger">{{ $message }}</div>
@@ -136,6 +136,25 @@
                                             <option value="10-12" {{ old('time') == '10-12' ? 'selected' : '' }}>10:00 AM - 12:00 PM</option>
                                             <option value="12-14" {{ old('time') == '12-14' ? 'selected' : '' }}>12:00 PM - 2:00 PM</option>
                                             <option value="14-16" {{ old('time') == '14-16' ? 'selected' : '' }}>2:00 PM - 4:00 PM</option>
+
+                                            @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                                <option disabled></option>
+                                                <option disabled>Super Time Access</option>
+                                                <option value="7-8" {{ old('time') == '7-8' ? 'selected' : '' }}>7:00 AM - 8:00 AM</option>
+                                                <option value="8-9" {{ old('time') == '8-9' ? 'selected' : '' }}>8:00 AM - 9:00 AM</option>
+                                                <option value="9-10" {{ old('time') == '9-10' ? 'selected' : '' }}>9:00 AM - 10:00 AM</option>
+                                                <option value="10-11" {{ old('time') == '10-11' ? 'selected' : '' }}>10:00 AM - 11:00 AM</option>
+                                                <option value="11-12" {{ old('time') == '11-12' ? 'selected' : '' }}>11:00 AM - 12:00 PM</option>
+                                                <option value="12-13" {{ old('time') == '12-13' ? 'selected' : '' }}>12:00 PM - 1:00 PM</option>
+                                                <option value="13-14" {{ old('time') == '13-14' ? 'selected' : '' }}>1:00 PM - 2:00 PM</option>
+                                                <option value="14-15" {{ old('time') == '14-15' ? 'selected' : '' }}>2:00 PM - 3:00 PM</option>
+                                                <option value="15-16" {{ old('time') == '15-16' ? 'selected' : '' }}>3:00 PM - 4:00 PM</option>
+                                                <option value="16-17" {{ old('time') == '16-17' ? 'selected' : '' }}>4:00 PM - 5:00 PM</option>
+                                                <option value="17-18" {{ old('time') == '17-18' ? 'selected' : '' }}>5:00 PM - 6:00 PM</option>
+                                                <option value="18-19" {{ old('time') == '18-19' ? 'selected' : '' }}>6:00 PM - 7:00 PM</option>
+                                            @endif
+
+
                                         </select>
                                     </div>
                                     @error('time')
@@ -461,6 +480,7 @@
                 const selectedDate = new Date(this.value);
                 const today = new Date();
 
+                
                 // Disable if selected date is in the past
                 if (selectedDate < today.setHours(0, 0, 0, 0)) {
                     alert('Past dates are not allowed.');
