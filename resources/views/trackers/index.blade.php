@@ -19,19 +19,7 @@
                             </h6>
                           </div>
                     <div class="card-body">
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
 
-                        @if(session('error'))
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {{ session('error') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
                         <form action="{{ route('trackers.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
@@ -246,6 +234,19 @@
                   </div>
                   <div class="card-body pt-0 pb-2">
                     <div class="table-responsive p-0">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
                       <table class="table align-items-center mb-0">
                         <thead>
                           <tr>
@@ -334,8 +335,10 @@
                                     <td class="align-middle text-center text-sm">
                                         @if ($appointment->status == 'completed')
                                             <span class="badge badge-sm bg-gradient-success">{{ucfirst($appointment->status)}}</span>
-                                        @else
+                                        @elseif ($appointment->status == 'deleted')
                                             <span class="badge badge-sm bg-gradient-danger">{{$appointment->status}}</span>
+                                        @else
+                                            <span class="badge badge-sm bg-gradient-warning">{{ucfirst($appointment->status)}}</
                                         @endif
                                     </td>
                                     <td class="align-middle text-center">
@@ -343,14 +346,19 @@
                                     </td>
                                     <td class="align-middle">
                                         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
-                                            <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs complete-btn" data-id="{{ $appointment->id }}" data-toggle="modal" data-target="#completeJobModal" data-original-title="Complete Job">
-                                                <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
-                                            </a>
-                                            &nbsp;
-                                            @if($appointment->status !== 'completed')
+
+                                            @if($appointment->status !== 'completed' && $appointment->status !== 'deleted')
                                                 <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn" data-id="{{ $appointment->id }}" data-toggle="modal" data-target="#editAppointmentModal" data-original-title="Edit Appointment">
                                                     <i class="fa fa-edit" style="color: rgb(255, 179, 0); font-size:14px;" aria-hidden="true"></i>
                                                 </a>
+                                                &nbsp;
+                                                <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs complete-btn" data-id="{{ $appointment->id }}" data-toggle="modal" data-target="#completeJobModal" data-original-title="Complete Job">
+                                                    <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="{{route('trackers.destroy', $appointment->id)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete Question">
+                                                    <i class="fa fa-trash" style="color: red; font-size:14px;" aria-hidden="true"></i>
+                                                 </a>
                                             @endif
                                         @endif
                                         {{-- <a href="{{route('inspectionquestions.delete', $question)}}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete Question">

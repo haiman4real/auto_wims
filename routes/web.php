@@ -117,6 +117,7 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\Coporate
     Route::put('/product/trackers/update/{tracker}', [CoporateUser\TrackerController::class, 'update'])->name('trackers.update');
     Route::get('/product/trackers/completed/{tracker}', [CoporateUser\TrackerController::class, 'completed'])->name('trackers.completed');
     Route::post('/trackers/complete', [CoporateUser\TrackerController::class, 'complete'])->name('trackers.complete');
+    Route::get('/product/trackers/delete/{tracker}', [CoporateUser\TrackerController::class, 'destroy'])->name('trackers.destroy');
 });
 
 
