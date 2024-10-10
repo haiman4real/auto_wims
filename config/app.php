@@ -105,6 +105,12 @@ return [
         ),
     ],
 
+    'domains' =>[
+        'operational' => env('OPERATION_DOMAIN'),
+        'corporate' => env('CORPORATE_DOMAIN'),
+        'public' => env('PUBLIC_DOMAIN'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
