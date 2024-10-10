@@ -4,14 +4,15 @@
       <a class="navbar-brand m-0" href="/" target="_blank">
         <img src="{{asset('img/autowims_logo.png')}}" height="auto" width="50px" class="navbar-brand-img h-100" alt="main_logo">
         {{-- <img src="./assets/img/logo-ct-dark.png"> --}}
-        <span class="ms-1 font-weight-bold">{{ config('app.name') }} 2.0</span>
-        <br/>
-        @if (request()->getHost() == config('app.domains.operational'))
-            Operational
-        @elseif (request()->getHost() == config('app.domains.corporate'))
-            Corporate
-        @elseif (request()->getHost() == config('app.domains.public'))
-        @endif
+        <span class="ms-1 font-weight-bold">{{ config('app.name') }} 2.0
+            <br/>
+            @if (request()->getHost() == config('app.domains.operational'))
+                Operations
+            @elseif (request()->getHost() == config('app.domains.corporate'))
+                Corporate
+            @elseif (request()->getHost() == config('app.domains.public'))
+            @endif
+        </span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
