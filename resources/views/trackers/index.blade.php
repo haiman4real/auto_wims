@@ -247,7 +247,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
-                      <table class="table align-items-center mb-0">
+                      <table class="table align-items-center mb-0" id="trackersTable">
                         <thead>
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -469,7 +469,7 @@
     <script>
         $(document).ready(function() {
             // Initialize DataTable with responsive features and export buttons
-            $('.table').DataTable({
+            var table = $('#trackersTable').DataTable({
                 responsive: true,
                 columnDefs: [
                     { responsivePriority: 1, targets: 0 },  // Keep the first column visible
@@ -481,6 +481,7 @@
                     'csvHtml5', 'excelHtml5', 'pdfHtml5'
                 ]
             });
+
 
             // Get the appointment date input and time select elements
             const dateInput = document.getElementById('appointment_date');
@@ -530,14 +531,16 @@
             dateInput.setAttribute('min', today);
 
             // Complete Job button click handler
-            $('.complete-btn').on('click', function () {
+            // Delegate event for Complete Job button click
+            $(document).on('click', '.complete-btn', function () {
                 const appointmentId = $(this).data('id');
                 $('#complete_appointment_id').val(appointmentId); // Set the appointment ID in the modal
                 $('#completeJobModal').modal('show'); // Open the modal
             });
 
             // Handle Edit button click
-            $('.edit-btn').on('click', function () {
+            // Delegate event for Edit button click
+            $(document).on('click', '.edit-btn', function () {
                 const appointmentId = $(this).data('id');
 
                 // AJAX request to fetch the appointment details
@@ -555,14 +558,9 @@
                         $('#edit_veh_year').val(data.veh_year);
                         $('#edit_plate_num').val(data.plate_num);
 
-                        // // Decode the metadata to retrieve veh_vin
-                        // let metadata = JSON.parse(data.metadata);
-                        // $('#edit_veh_vin').val(metadata.veh_vin);
-
                         // Decode the metadata to retrieve veh_vin, handling null metadata
-                        let metadata = data.metadata ? JSON.parse(data.metadata) : {}; // Handle null metadata
-                        $('#edit_veh_vin').val(metadata.veh_vin || ''); // Set veh_vin, or leave empty if not present
-
+                        let metadata = data.metadata ? JSON.parse(data.metadata) : {};
+                        $('#edit_veh_vin').val(metadata.veh_vin || '');
 
                         // Dynamically set the form action
                         $('#editAppointmentForm').attr('action', '/product/trackers/update/' + data.id);

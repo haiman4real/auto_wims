@@ -374,6 +374,10 @@
             // Initialize DataTable
             var table = $('#customersTable').DataTable({
                 responsive: true,
+                columnDefs: [
+                    { responsivePriority: 1, targets: 0 },  // Keep the first column visible
+                    { responsivePriority: 2, targets: -1 }  // Keep the buttons column visible
+                ],
                 pageLength: 25,
                 dom: 'Bfrtip',
                 buttons: [
