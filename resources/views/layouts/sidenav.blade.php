@@ -4,14 +4,15 @@
       <a class="navbar-brand m-0" href="/" target="_blank">
         <img src="{{asset('img/autowims_logo.png')}}" height="auto" width="50px" class="navbar-brand-img h-100" alt="main_logo">
         {{-- <img src="./assets/img/logo-ct-dark.png"> --}}
-        <span class="ms-1 font-weight-bold">{{ config('app.name') }} 2.0</span>
-        <br/>
-        @if (request()->getHost() == config('app.domains.operational'))
-            Operational
-        @elseif (request()->getHost() == config('app.domains.corporate'))
-            Corporate
-        @elseif (request()->getHost() == config('app.domains.public'))
-        @endif
+        <span class="ms-1 font-weight-bold">{{ config('app.name') }} 2.0
+            <br/>
+            @if (request()->getHost() == config('app.domains.operational'))
+                Operations
+            @elseif (request()->getHost() == config('app.domains.corporate'))
+                Corporate
+            @elseif (request()->getHost() == config('app.domains.public'))
+            @endif
+        </span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
@@ -48,7 +49,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="{{ route('users.index') }}">
+            <a class="nav-link " href="{{ route('vehicles.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
               </div>

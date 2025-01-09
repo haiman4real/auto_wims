@@ -77,6 +77,15 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     Route::put('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'update'])->name('customers.update');
     Route::delete('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'destroy'])->name('customers.destroy');
     Route::get('/workshop/customers/{customer}/delete', [FrontDesk\CustomersController::class, 'deleteCustomer'])->name('customers.delete');
+
+    Route::get('/workshop/vehicles', [FrontDesk\VehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/workshop/vehicles/add', [FrontDesk\VehicleController::class, 'create'])->name('vehicles.add');
+    Route::post('/workshop/vehicles', [FrontDesk\VehicleController::class,'store'])->name('vehicles.store');
+    Route::get('/workshop/vehicles/{customer}/edit', [FrontDesk\VehicleController::class, 'edit'])->name('vehicles.edit');
+    Route::put('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'update'])->name('vehicles.update');
+    Route::delete('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'destroy'])->name('vehicles.destroy');
+    Route::get('/workshop/vehicles/{customer}/delete', [FrontDesk\VehicleController::class, 'deleteCustomer'])->name('vehicles.delete');
+
 });
 
 Route::middleware(['auth','Technician', 'verified'])->namespace('Technician')->group(function(){
