@@ -11,7 +11,14 @@
       <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
         {{-- <div class="ms-md-auto pe-md-3 d-flex align-items-center"> --}}
         <div class="ms-md-auto px-md-3 align-items-center">
-            <h6 style="font-weight:900; color:white;">Hi {{ Auth::user()->user_name }}</h6>
+            <h6 style="font-weight:900; color:white;">
+                Hi
+                @if(Auth::check())
+                    {{ Auth::user()->user_name }}
+                @else
+                    <script>window.location.href = "{{ route('login') }}";</script>
+                @endif
+            </h6>
           <div class="input-group">
             {{-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
             <input type="text" class="form-control" placeholder="Type here..."> --}}
