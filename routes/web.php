@@ -86,6 +86,8 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     Route::delete('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'destroy'])->name('vehicles.destroy');
     Route::get('/workshop/vehicles/{customer}/delete', [FrontDesk\VehicleController::class, 'deleteCustomer'])->name('vehicles.delete');
 
+    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
+
 });
 
 Route::middleware(['auth','Technician', 'verified'])->namespace('Technician')->group(function(){
