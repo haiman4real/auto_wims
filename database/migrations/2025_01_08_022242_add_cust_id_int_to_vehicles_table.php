@@ -12,6 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection('mysql_non_laravel')->table('vehicles', function (Blueprint $table) {
+            if (!Schema::connection('mysql_non_laravel')->hasColumn('vehicles', 'cust_id')) {
+                $table->integer('cust_id')->default(1)->after('vec_id'); // Add column with a default value
+            }
             $table->integer('cust_id')->default(1)->change(); // Make cust_id unsigned and set default
         });
     }
