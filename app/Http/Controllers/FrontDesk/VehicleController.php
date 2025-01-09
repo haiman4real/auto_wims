@@ -21,7 +21,7 @@ class VehicleController extends Controller
         $customers = Customer::where('cust_view', '!=', 'hidden')->get();
 
         // Return the vehicles view
-        return view('Vehicles.index', compact('vehicles', 'customers'));
+        return view('vehicles.index', compact('vehicles', 'customers'));
     }
 
     public function store(Request $request)
