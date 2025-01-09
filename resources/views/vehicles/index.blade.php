@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <x-slot name="title">
-        Customers
+        Vehicles
     </x-slot>
     <div class="container-fluid py-4">
         <!-- Header -->
@@ -13,14 +13,16 @@
                     <div class="col-xl-6 col-lg-12">
                         <div class="card card-stats mb-4 mb-xl-0">
                             <div class="card-header pb-0">
-                                <h6>Add New Customer
-                                    <button id="toggleFormButton" class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;"> + Add new customer
+                                <h6>
+                                    Add New Vehicle
+                                    <button id="toggleFormButton" class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;">
+                                        + Add new vehicle
                                     </button>
                                 </h6>
                             </div>
 
                             <!-- Form starts here, initially hidden -->
-                            <div class="card-body" id="addNewCustomer" style="display: none;">
+                            <div class="card-body" id="addNewVehicle" style="display: none;">
                                 @if($errors->any())
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <ul>
@@ -32,100 +34,88 @@
                                     </div>
                                 @endif
 
-                                <form id="customerForm" action="{{ route('customers.store') }}" method="POST" enctype="multipart/form-data">
+                                <form id="vehicleForm" action="{{ route('vehicles.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-xl-8">
-                                                <div class="form-group">
-                                                    <label for="reg_mode" class="h6">Preferred Mode of Contact</label>
-                                                    <select class="form-control" name="mode_of_contact" id="reg_mode">
-                                                        <option value="email" {{ old('mode_of_contact') == 'email' ? 'selected' : '' }}>Email</option>
-                                                        <option value="sms" {{ old('mode_of_contact') == 'sms' ? 'selected' : '' }}>SMS</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="form-group">
-                                                    <label for="reg_type" class="h6">Account Type</label>
-                                                    <select class="form-control" name="account_type" id="reg_type">
-                                                        <option value="individual" {{ old('account_type') == 'individual' ? 'selected' : '' }}>Individual</option>
-                                                        <option value="corporate" {{ old('account_type') == 'corporate' ? 'selected' : '' }}>Corporate</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    {{-- <div class="container"> --}}
 
+                                        <!-- Customer Dropdown Section -->
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <div class="form-group">
-                                                    <label for="reg_name" class="h6">Full Name</label>
-                                                    <input class="form-control" type="text" name="full_name" id="reg_name" value="{{ old('full_name') }}" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_phone" class="h6">Phone Number</label>
-                                                    <input class="form-control" type="text" maxlength="11" name="phone_number" id="reg_phone" value="{{ old('phone_number') }}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_mail" class="h6">Email Address</label>
-                                                    <input class="form-control" type="email" name="email" id="reg_mail" value="{{ old('email') }}">
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="email_not_available" name="email_not_available">
-                                                        <label class="form-check-label" for="email_not_available">Email Not Available</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_address" class="h6">Address</label>
-                                                    <input class="form-control" type="text" name="address" id="reg_address" value="{{ old('address') }}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_lga" class="h6">Local Government Area</label>
-                                                    <select class="form-control" name="lga" id="reg_lga" required>
-                                                        <option value="Agege" {{ old('lga') == 'Agege' ? 'selected' : '' }}>Agege</option>
-                                                        <option value="Alimosho" {{ old('lga') == 'Alimosho' ? 'selected' : '' }}>Alimosho</option>
-                                                        <option value="Apapa" {{ old('lga') == 'Apapa' ? 'selected' : '' }}>Apapa</option>
-                                                        <option value="Ifako-Ijaye" {{ old('lga') == 'Ifako-Ijaye' ? 'selected' : '' }}>Ifako-Ijaye</option>
-                                                        <option value="Ikeja" {{ old('lga') == 'Ikeja' ? 'selected' : '' }}>Ikeja</option>
-                                                        <option value="Kosofe" {{ old('lga') == 'Kosofe' ? 'selected' : '' }}>Kosofe</option>
-                                                        <option value="Mushin" {{ old('lga') == 'Mushin' ? 'selected' : '' }}>Mushin</option>
-                                                        <option value="Oshodi-Isolo" {{ old('lga') == 'Oshodi-Isolo' ? 'selected' : '' }}>Oshodi-Isolo</option>
-                                                        <option value="Shomolu" {{ old('lga') == 'Shomolu' ? 'selected' : '' }}>Shomolu</option>
-                                                        <option value="Eti-Osa" {{ old('lga') == 'Eti-Osa' ? 'selected' : '' }}>Eti-Osa</option>
-                                                        <option value="Lagos Island" {{ old('lga') == 'Lagos Island' ? 'selected' : '' }}>Lagos Island</option>
-                                                        <option value="Lagos Mainland" {{ old('lga') == 'Lagos Mainland' ? 'selected' : '' }}>Lagos Mainland</option>
-                                                        <option value="Surulere" {{ old('lga') == 'Surulere' ? 'selected' : '' }}>Surulere</option>
-                                                        <option value="Ojo" {{ old('lga') == 'Ojo' ? 'selected' : '' }}>Ojo</option>
-                                                        <option value="Ajeromi-Ifelodun" {{ old('lga') == 'Ajeromi-Ifelodun' ? 'selected' : '' }}>Ajeromi-Ifelodun</option>
-                                                        <option value="Amuwo-Odofin" {{ old('lga') == 'Amuwo-Odofin' ? 'selected' : '' }}>Amuwo-Odofin</option>
-                                                        <option value="Badagry" {{ old('lga') == 'Badagry' ? 'selected' : '' }}>Badagry</option>
-                                                        <option value="Ikorodu" {{ old('lga') == 'Ikorodu' ? 'selected' : '' }}>Ikorodu</option>
-                                                        <option value="Ibeju-Lekki" {{ old('lga') == 'Ibeju-Lekki' ? 'selected' : '' }}>Ibeju-Lekki</option>
-                                                        <option value="Epe" {{ old('lga') == 'Epe' ? 'selected' : '' }}>Epe</option>
+                                                    <label for="customer_id" class="h6">Select Customer</label>
+                                                    <select class="form-control" name="customer_id" id="customer_id" required>
+                                                        <option value="">-- Select Customer --</option>
+                                                        @foreach($customers as $customer)
+                                                            <option value="{{ $customer->cust_id }}">{{ $customer->cust_name }} ({{ $customer->cust_email ?? 'No Email' }})</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Vehicle Details Section -->
+                                        <h5 class="mt-2">Vehicle Details</h5>
                                         <div class="row">
-                                            <div class="col text-right">
-                                                <button type="submit" class="btn btn-primary btn-lg">ADD NEW CUSTOMER</button>
+                                            <div class="col-xl-6">
+                                                <div class="form-group">
+                                                    <label for="vec_body" class="h6">Body Type</label>
+                                                    <select class="form-control" name="body_type" id="vec_body">
+                                                        <option>SUV</option>
+                                                        <option>Salon/Sedan</option>
+                                                        <option>Hatchback</option>
+                                                        <option>Crossover</option>
+                                                        <option>Sports Car</option>
+                                                        <option>Convertible</option>
+                                                        <option>Coupe</option>
+                                                        <option>Vans</option>
+                                                        <option>Trucks/Pick Up</option>
+                                                        <option>Wagons</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="form-group">
+                                                    <label for="vec_year" class="h6">Vehicle Year</label>
+                                                    <input class="form-control" type="text" name="vec_year" id="vec_year" value="{{ old('vec_year') }}" required>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <div class="form-group">
+                                                    <label for="vec_make" class="h6">Vehicle Make</label>
+                                                    <input class="form-control" type="text" name="vec_make" id="vec_make" value="{{ old('vec_make') }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="form-group">
+                                                    <label for="vec_model" class="h6">Vehicle Model</label>
+                                                    <input class="form-control" type="text" name="vec_model" id="vec_model" value="{{ old('vec_model') }}" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <div class="form-group">
+                                                    <label for="vec_plate" class="h6">Vehicle Plate</label>
+                                                    <input class="form-control" type="text" maxlength="8" name="vec_plate" id="vec_plate" value="{{ old('vec_plate') }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="form-group">
+                                                    <label for="vec_vin" class="h6">VIN/Chassis No</label>
+                                                    <input class="form-control" type="text" maxlength="17" name="vec_vin" id="vec_vin" value="{{ old('vec_vin') }}" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="row">
+                                            <div class="col text-right">
+                                                <button type="submit" class="btn btn-primary btn-lg">ADD NEW VEHICLE</button>
+                                            </div>
+                                        </div>
+                                    {{-- </div> --}}
                                 </form>
                             </div>
                         </div>
@@ -134,9 +124,9 @@
                     <div class="col-xl-6 col-lg-12">
                         <div class="card card-stats mb-4 mb-xl-0">
                             <div class="card-header pb-0">
-                                <h6>Search Customer
+                                <h6>Search Vehicles
                                     <button class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;">
-                                        <i class="fas fa-search"></i>
+                                        <i class="fa fa-search"></i>
                                     </button>
                                 </h6>
                             </div>
@@ -144,7 +134,7 @@
                             <div class="row" id="shuffleCustomer">
                                 <div class="col">
                                     <div class="input-group input-group-alternative">
-                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <span class="input-group-text"><i class="fa fa-search"></i></span>
                                         <input class="form-control" placeholder="Enter Keyword here" type="text" id="customSearch">
                                     </div>
                                 </div>
@@ -165,7 +155,7 @@
               <div class="col-12">
                 <div class="card mb-4">
                   <div class="card-header pb-0">
-                    <h6>Customer List
+                    <h6>Vehicle List
                         {{-- <a href="#schedule-new-tracking"><button class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;"> + Add new Item --}}
                         </button></a>
                     </h6>
@@ -186,89 +176,89 @@
                             </div>
                         @endif
 
-                      <table id="customersTable" class="table align-items-center mb-0">
+                      <table id="vehiclesTable" class="table align-items-center mb-0">
                         <thead>
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email Address</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone Number</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">LGA</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mode</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Visibility</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Category</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Added</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Customer Name</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Reg Number</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">VIN/Chassis No</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Make</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Model</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Year</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Body Type</th>
                             <th class="text-secondary opacity-7"></th>
                           </tr>
                         </thead>
                         <tbody>
-                            @forelse ($customers as $index => $customer)
+                            @forelse ($vehicles as $index => $vehicle)
                                 <tr>
                                     <td class="align-middle text-center">
                                         <p class="text-xs font-weight-bold mb-0">
                                             {{$index + 1}}
                                         </p>
                                     </td>
+
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <h6 class="mb-0 text-sm">{{  $vehicle->customer->cust_name  }}</h6>
+                                        </div>
+                                    </td>
                                     <td>
                                         <div class="d-flex flex-column justify-content-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $customer->cust_name  }}</p>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <h6 class="mb-0 text-sm">{{  $customer->cust_email  }}</h6>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $vehicle->vec_plate  }}</p>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs text-secondary mb-0">{{ $customer->cust_mobile }}</p>
+                                                <p class="text-xs mb-0">{{ $vehicle->vec_vin }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $customer->cust_address }}</p>
+                                                <p class="text-xs text-secondary mb-0">{{ $vehicle->vec_make }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $customer->cust_lga }}</p>
+                                                <p class="text-xs mb-0">{{ $vehicle->vec_model }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <p class="text-xs mb-0">{{ $vehicle->vec_year }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $customer->cust_mode }}</p>
+                                                <p class="text-xs mb-0">{{ $vehicle->vec_body ?? 'N/A' }}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ $customer->cust_view ?? 'N/A' }}</p>
+                                                <p class="text-xs mb-0 text-uppercase">{{ $vehicle->cust_type ?? 'N/A' }}</p>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
+                                    </td> --}}
+                                    {{-- <td>
                                         <div class="d-flex px-2 py-1">
                                             <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0 text-uppercase">{{ $customer->cust_type ?? 'N/A' }}</p>
+                                                <p class="text-xs mb-0">{{ \Carbon\Carbon::parse($vehicle->vec_reg_time)->toFormattedDateString() }}</p>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <p class="text-xs mb-0">{{ \Carbon\Carbon::parse($customer->cust_reg_time)->toFormattedDateString() }}</p>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    </td> --}}
 
                                     {{-- <td class="align-middle text-center text-sm">
                                         @if ($customer->status == 'completed')
@@ -282,11 +272,11 @@
                                     </td> --}}
                                     <td class="align-middle">
                                         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
-                                            <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn-customers" data-id="{{ $customer->cust_id }}" data-toggle="modal" data-target="#editCustomerModal" data-original-title="Edit Customer">
+                                            <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn-vehicles" data-id="{{ $vehicle->vec_id }}" data-toggle="modal" data-target="#editVehicleModal" data-original-title="Edit Vehicle">
                                                 <i class="fa fa-edit" style="color: rgb(255, 179, 0); font-size:14px;" aria-hidden="true"></i>
                                             </a>
                                             &nbsp;
-                                            <a href="{{ route('customers.delete', $customer->cust_id) }}" class="text-secondary font-weight-bold text-xs">
+                                            <a href="{{ route('vehicles.delete', $vehicle->vec_id) }}" class="text-secondary font-weight-bold text-xs">
                                                 <i class="fa fa-ban" style="color: red; font-size:14px;" aria-hidden="true"></i>
                                             </a>
                                         @endif
@@ -305,7 +295,7 @@
     </div>
 
     <!-- Edit Customer Modal -->
-    <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -328,7 +318,7 @@
                         {{-- <div class="form-group">
                             <label for="edit_email">Email Address</label>
                             <input type="email" class="form-control" id="edit_email" name="email" required>
-                        </div> --}}
+                        </div> -
                         <div class="form-group">
                             <label for="edit_email">Email Address</label>
                             <input type="email" class="form-control" id="edit_email" name="email">
@@ -379,12 +369,82 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVehicleModalLabel">Edit Vehicle</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editVehicleForm" method="POST" action="">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit_vehicle_id" name="vehicle_id">
+
+                        <!-- Body Type -->
+                        <div class="form-group">
+                            <label for="edit_vec_body" class="h6">Body Type</label>
+                            <select class="form-control" name="body_type" id="edit_vec_body" required>
+                                <option>SUV</option>
+                                <option>Salon/Sedan</option>
+                                <option>Hatchback</option>
+                                <option>Crossover</option>
+                                <option>Sports Car</option>
+                                <option>Convertible</option>
+                                <option>Coupe</option>
+                                <option>Vans</option>
+                                <option>Trucks/Pick Up</option>
+                                <option>Wagons</option>
+                            </select>
+                        </div>
+
+                        <!-- Vehicle Year -->
+                        <div class="form-group">
+                            <label for="edit_vec_year" class="h6">Vehicle Year</label>
+                            <input type="text" class="form-control" name="vec_year" id="edit_vec_year" required>
+                        </div>
+
+                        <!-- Vehicle Make -->
+                        <div class="form-group">
+                            <label for="edit_vec_make" class="h6">Vehicle Make</label>
+                            <input type="text" class="form-control" name="vec_make" id="edit_vec_make" required>
+                        </div>
+
+                        <!-- Vehicle Model -->
+                        <div class="form-group">
+                            <label for="edit_vec_model" class="h6">Vehicle Model</label>
+                            <input type="text" class="form-control" name="vec_model" id="edit_vec_model" required>
+                        </div>
+
+                        <!-- Vehicle Plate -->
+                        <div class="form-group">
+                            <label for="edit_vec_plate" class="h6">Vehicle Plate</label>
+                            <input type="text" class="form-control" maxlength="8" name="vec_plate" id="edit_vec_plate" required>
+                        </div>
+
+                        <!-- VIN/Chassis No -->
+                        <div class="form-group">
+                            <label for="edit_vec_vin" class="h6">VIN/Chassis No</label>
+                            <input type="text" class="form-control" maxlength="17" name="vec_vin" id="edit_vec_vin" required>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Update Vehicle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         $(document).ready(function() {
             // Initialize DataTable
-            var table = $('#customersTable').DataTable({
+            var table = $('#vehiclesTable').DataTable({
                 responsive: true,
                 columnDefs: [
                     { responsivePriority: 1, targets: 0 },  // Keep the first column visible
@@ -402,32 +462,62 @@
                 table.search(this.value).draw(); // Trigger DataTable search with the input value
             });
 
+            // // When the edit button is clicked, open the modal and fill the data
+            // $('#vehiclesTable').on('click', '.edit-btn-customers', function() {
+            // // $('.edit-btn-customers').on('click', function() {
+            //     var vehicleId = $(this).data('id');
+            //     // Fetch customer data via AJAX
+            //     $.ajax({
+            //         url: '/workshop/vehicles/' + vehicleId + '/edit',
+            //         method: 'GET',
+            //         success: function(response) {
+            //             // Populate the form fields with the retrieved data
+            //             $('#edit_customer_id').val(response.cust_id);
+            //             $('#edit_name').val(response.cust_name);
+            //             $('#edit_email').val(response.cust_email);
+            //             $('#edit_phone').val(response.cust_mobile);
+            //             $('#edit_address').val(response.cust_address);
+            //             $('#edit_lga').val(response.cust_lga);
+
+            //             // Set the form action dynamically
+            //             $('#editCustomerForm').attr('action', '/workshop/customers/' + customerId);
+
+            //             // Show the modal
+            //             $('#editCustomerModal').modal('show');
+            //         },
+            //         error: function(xhr) {
+            //             console.error('Error fetching customer data:', xhr);
+            //             alert('Error fetching customer data. Please try again.');
+            //         }
+            //     });
+            // });
             // When the edit button is clicked, open the modal and fill the data
-            $('#customersTable').on('click', '.edit-btn-customers', function() {
-            // $('.edit-btn-customers').on('click', function() {
-                var customerId = $(this).data('id');
-                // Fetch customer data via AJAX
+            $('#vehiclesTable').on('click', '.edit-btn-vehicles', function() {
+                var vehicleId = $(this).data('id');
+
+                // Fetch vehicle data via AJAX
                 $.ajax({
-                    url: '/workshop/customers/' + customerId + '/edit',
+                    url: '/workshop/vehicles/' + vehicleId + '/edit',
                     method: 'GET',
                     success: function(response) {
                         // Populate the form fields with the retrieved data
-                        $('#edit_customer_id').val(response.cust_id);
-                        $('#edit_name').val(response.cust_name);
-                        $('#edit_email').val(response.cust_email);
-                        $('#edit_phone').val(response.cust_mobile);
-                        $('#edit_address').val(response.cust_address);
-                        $('#edit_lga').val(response.cust_lga);
+                        $('#edit_vehicle_id').val(response.vec_id);
+                        $('#edit_vec_body').val(response.vec_body);
+                        $('#edit_vec_year').val(response.vec_year);
+                        $('#edit_vec_make').val(response.vec_make);
+                        $('#edit_vec_model').val(response.vec_model);
+                        $('#edit_vec_plate').val(response.vec_plate);
+                        $('#edit_vec_vin').val(response.vec_vin);
 
                         // Set the form action dynamically
-                        $('#editCustomerForm').attr('action', '/workshop/customers/' + customerId);
+                        $('#editVehicleForm').attr('action', '/workshop/vehicles/' + vehicleId);
 
                         // Show the modal
-                        $('#editCustomerModal').modal('show');
+                        $('#editVehicleModal').modal('show');
                     },
                     error: function(xhr) {
-                        console.error('Error fetching customer data:', xhr);
-                        alert('Error fetching customer data. Please try again.');
+                        console.error('Error fetching vehicle data:', xhr);
+                        alert('Error fetching vehicle data. Please try again.');
                     }
                 });
             });
@@ -443,8 +533,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Get the button and the form elements
             var toggleFormButton = document.getElementById('toggleFormButton');
-            var formContainer = document.getElementById('addNewCustomer');
-            var customerForm = document.getElementById('customerForm');
+            var formContainer = document.getElementById('addNewVehicle');
+            var customerForm = document.getElementById('vehicleForm');
 
             // Check if there are any validation errors and keep the form open if there are
             @if($errors->any())
@@ -461,32 +551,5 @@
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const emailField = document.getElementById('edit_email');
-            const emailCheckbox = document.getElementById('email_not_available');
-
-            emailCheckbox.addEventListener('change', function () {
-                if (this.checked) {
-                    emailField.value = '';
-                    emailField.disabled = true;
-                } else {
-                    emailField.disabled = false;
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const emailField = document.getElementById('reg_mail');
-            const emailCheckbox = document.getElementById('email_not_available');
-
-            emailCheckbox.addEventListener('change', function () {
-                if (this.checked) {
-                    emailField.value = '';
-                    emailField.disabled = true;
-                } else {
-                    emailField.disabled = false;
-                }
-            });
-        });
     </script>
 </x-app-layout>
