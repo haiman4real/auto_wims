@@ -195,7 +195,7 @@
                                 <div class="col-xl-12">
                                     <div class="input-group input-group-alternative">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <span class="input-group-text"><i class="fa fa-search"></i></span>
                                     </div>
                                     <input class="form-control" placeholder="Enter Keyword here" type="text" onchange="searchAppointment(this.value)" onkeyup="searchAppointment(this.value)" onfocus="searchAppointment(this.value)">
                                     </div>
@@ -207,7 +207,7 @@
                             </div>
                             <div class="col-auto">
                                 <div class="icon icon-shape bg-success text-white rounded-circle shadow">
-                                <i class="fas fa-search"></i>
+                                <i class="fa fa-search"></i>
                                 </div>
                             </div>
                             </div>

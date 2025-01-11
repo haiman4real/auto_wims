@@ -20,7 +20,7 @@
                 @endif
             </h6>
           <div class="input-group">
-            {{-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+            {{-- <span class="input-group-text text-body"><i class="fa fa-search" aria-hidden="true"></i></span>
             <input type="text" class="form-control" placeholder="Type here..."> --}}
           </div>
         </div>

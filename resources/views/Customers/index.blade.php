@@ -34,98 +34,90 @@
 
                                 <form id="customerForm" action="{{ route('customers.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-xl-8">
-                                                <div class="form-group">
-                                                    <label for="reg_mode" class="h6">Preferred Mode of Contact</label>
-                                                    <select class="form-control" name="mode_of_contact" id="reg_mode">
-                                                        <option value="email" {{ old('mode_of_contact') == 'email' ? 'selected' : '' }}>Email</option>
-                                                        <option value="sms" {{ old('mode_of_contact') == 'sms' ? 'selected' : '' }}>SMS</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="form-group">
-                                                    <label for="reg_type" class="h6">Account Type</label>
-                                                    <select class="form-control" name="account_type" id="reg_type">
-                                                        <option value="individual" {{ old('account_type') == 'individual' ? 'selected' : '' }}>Individual</option>
-                                                        <option value="corporate" {{ old('account_type') == 'corporate' ? 'selected' : '' }}>Corporate</option>
-                                                    </select>
-                                                </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-8">
+                                            <div class="form-group">
+                                                <label for="reg_mode" class="h6">Preferred Mode of Contact</label>
+                                                <select class="form-select" name="mode_of_contact" id="reg_mode">
+                                                    <option value="email" {{ old('mode_of_contact') == 'email' ? 'selected' : '' }}>Email</option>
+                                                    <option value="sms" {{ old('mode_of_contact') == 'sms' ? 'selected' : '' }}>SMS</option>
+                                                </select>
                                             </div>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-xl-12">
-                                                <div class="form-group">
-                                                    <label for="reg_name" class="h6">Full Name</label>
-                                                    <input class="form-control" type="text" name="full_name" id="reg_name" value="{{ old('full_name') }}" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_phone" class="h6">Phone Number</label>
-                                                    <input class="form-control" type="text" maxlength="11" name="phone_number" id="reg_phone" value="{{ old('phone_number') }}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_mail" class="h6">Email Address</label>
-                                                    <input class="form-control" type="email" name="email" id="reg_mail" value="{{ old('email') }}">
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="email_not_available" name="email_not_available">
-                                                        <label class="form-check-label" for="email_not_available">Email Not Available</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_address" class="h6">Address</label>
-                                                    <input class="form-control" type="text" name="address" id="reg_address" value="{{ old('address') }}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="form-group">
-                                                    <label for="reg_lga" class="h6">Local Government Area</label>
-                                                    <select class="form-control" name="lga" id="reg_lga" required>
-                                                        <option value="Agege" {{ old('lga') == 'Agege' ? 'selected' : '' }}>Agege</option>
-                                                        <option value="Alimosho" {{ old('lga') == 'Alimosho' ? 'selected' : '' }}>Alimosho</option>
-                                                        <option value="Apapa" {{ old('lga') == 'Apapa' ? 'selected' : '' }}>Apapa</option>
-                                                        <option value="Ifako-Ijaye" {{ old('lga') == 'Ifako-Ijaye' ? 'selected' : '' }}>Ifako-Ijaye</option>
-                                                        <option value="Ikeja" {{ old('lga') == 'Ikeja' ? 'selected' : '' }}>Ikeja</option>
-                                                        <option value="Kosofe" {{ old('lga') == 'Kosofe' ? 'selected' : '' }}>Kosofe</option>
-                                                        <option value="Mushin" {{ old('lga') == 'Mushin' ? 'selected' : '' }}>Mushin</option>
-                                                        <option value="Oshodi-Isolo" {{ old('lga') == 'Oshodi-Isolo' ? 'selected' : '' }}>Oshodi-Isolo</option>
-                                                        <option value="Shomolu" {{ old('lga') == 'Shomolu' ? 'selected' : '' }}>Shomolu</option>
-                                                        <option value="Eti-Osa" {{ old('lga') == 'Eti-Osa' ? 'selected' : '' }}>Eti-Osa</option>
-                                                        <option value="Lagos Island" {{ old('lga') == 'Lagos Island' ? 'selected' : '' }}>Lagos Island</option>
-                                                        <option value="Lagos Mainland" {{ old('lga') == 'Lagos Mainland' ? 'selected' : '' }}>Lagos Mainland</option>
-                                                        <option value="Surulere" {{ old('lga') == 'Surulere' ? 'selected' : '' }}>Surulere</option>
-                                                        <option value="Ojo" {{ old('lga') == 'Ojo' ? 'selected' : '' }}>Ojo</option>
-                                                        <option value="Ajeromi-Ifelodun" {{ old('lga') == 'Ajeromi-Ifelodun' ? 'selected' : '' }}>Ajeromi-Ifelodun</option>
-                                                        <option value="Amuwo-Odofin" {{ old('lga') == 'Amuwo-Odofin' ? 'selected' : '' }}>Amuwo-Odofin</option>
-                                                        <option value="Badagry" {{ old('lga') == 'Badagry' ? 'selected' : '' }}>Badagry</option>
-                                                        <option value="Ikorodu" {{ old('lga') == 'Ikorodu' ? 'selected' : '' }}>Ikorodu</option>
-                                                        <option value="Ibeju-Lekki" {{ old('lga') == 'Ibeju-Lekki' ? 'selected' : '' }}>Ibeju-Lekki</option>
-                                                        <option value="Epe" {{ old('lga') == 'Epe' ? 'selected' : '' }}>Epe</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col text-right">
-                                                <button type="submit" class="btn btn-primary btn-lg">ADD NEW CUSTOMER</button>
+                                        <div class="col-xl-4">
+                                            <div class="form-group">
+                                                <label for="reg_type" class="h6">Account Type</label>
+                                                <select class="form-select" name="account_type" id="reg_type">
+                                                    <option value="individual" {{ old('account_type') == 'individual' ? 'selected' : '' }}>Individual</option>
+                                                    <option value="corporate" {{ old('account_type') == 'corporate' ? 'selected' : '' }}>Corporate</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="form-group">
+                                                <label for="reg_name" class="h6">Full Name</label>
+                                                <input class="form-control" type="text" name="full_name" id="reg_name" value="{{ old('full_name') }}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <div class="form-group">
+                                                <label for="reg_phone" class="h6">Phone Number</label>
+                                                <input class="form-control" type="text" maxlength="11" name="phone_number" id="reg_phone" value="{{ old('phone_number') }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group">
+                                                <label for="reg_mail" class="h6">Email Address</label>
+                                                <input class="form-control" type="email" name="email" id="reg_mail" value="{{ old('email') }}">
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" id="email_not_available" name="email_not_available">
+                                                    <label class="form-check-label" for="email_not_available">Email Not Available</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <div class="form-group">
+                                                <label for="reg_address" class="h6">Address</label>
+                                                <input class="form-control" type="text" name="address" id="reg_address" value="{{ old('address') }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3">
+                                            <div class="form-group">
+                                                <label for="reg_state" class="h6">State</label>
+                                                <select class="form-select" name="state" id="reg_state" required>
+                                                    <option value="">-- Select State --</option>
+                                                    @foreach($states as $state)
+                                                        <option value="{{ $state }}">{{ $state }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3">
+                                            <div class="form-group">
+                                                <label for="reg_lga" class="h6">LGA</label>
+                                                <select class="form-select" name="lga" id="reg_lga" required>
+                                                    <option value="">-- Select LGA --</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col text-right">
+                                            <button type="submit" class="btn btn-primary btn-lg">ADD NEW CUSTOMER</button>
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -136,7 +128,7 @@
                             <div class="card-header pb-0">
                                 <h6>Search Customer
                                     <button class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;">
-                                        <i class="fas fa-search"></i>
+                                        <i class="fa fa-search"></i>
                                     </button>
                                 </h6>
                             </div>
@@ -144,7 +136,7 @@
                             <div class="row" id="shuffleCustomer">
                                 <div class="col">
                                     <div class="input-group input-group-alternative">
-                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <span class="input-group-text"><i class="fa fa-search"></i></span>
                                         <input class="form-control" placeholder="Enter Keyword here" type="text" id="customSearch">
                                     </div>
                                 </div>
@@ -485,6 +477,36 @@
                     emailField.disabled = true;
                 } else {
                     emailField.disabled = false;
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const stateSelect = document.getElementById('reg_state');
+            const lgaSelect = document.getElementById('reg_lga');
+
+            stateSelect.addEventListener('change', function () {
+                const selectedState = this.value;
+
+                // Clear existing LGA options
+                lgaSelect.innerHTML = '<option value="">-- Select LGA --</option>';
+
+                if (selectedState) {
+                    // Fetch LGAs dynamically
+                    fetch(`/api/lgas/${selectedState}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(lga => {
+                                const option = document.createElement('option');
+                                option.value = lga;
+                                option.textContent = lga;
+                                lgaSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching LGAs:', error);
+                            alert('Could not load LGAs. Please try again.');
+                        });
                 }
             });
         });
