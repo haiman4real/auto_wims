@@ -26,7 +26,7 @@
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
-        @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['masteradmin']))
+        @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
             <a class="nav-link " href="{{ route('users.index') }}">
