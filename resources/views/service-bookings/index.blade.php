@@ -280,7 +280,7 @@
                     <div class="card mb-4 mb-xl-0">
                         <div class="card-body">
                             <h6>Customer Details
-                                <button class="btn btn-primary btn-sm d-none d-sm-inline-block" id="deselectCustomerBtn" type="button" style="float: right; margin-left: -50%;">
+                                <button class="btn btn-danger btn-sm d-none d-sm-inline-block" id="deselectCustomerBtn" type="button" style="float: right; margin-left: -50%;">
                                         x
                                     </button>
                             </h6>
