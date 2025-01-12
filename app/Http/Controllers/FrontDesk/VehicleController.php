@@ -130,4 +130,58 @@ class VehicleController extends Controller
             return redirect()->back()->with('error', 'An error occurred while deleting the vehicle.');
         }
     }
+
+    public function addVehicle(Request $request)
+    {
+        // Validate the incoming request
+        $validated = $request->validate([
+            'plate' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+        ]);
+
+        // Create a new vehicle
+        $vehicle = Vehicle::create([
+            'number_plate' => $validated['plate'],
+            'model' => $validated['model'],
+            'customer_id' => $request->input('customer_id'), // Ensure this is passed from the front-end
+        ]);
+
+        return response()->json($vehicle, 201);
+    }
+
+    // public function getVehiclesByCustomer(Request $request)
+    // {
+    //     $customerId = $request->query('customer_id');
+
+    //     // Validate the customer ID
+    //     if (!$customerId) {
+    //         return response()->json(['error' => 'Customer ID is required'], 400);
+    //     }
+
+    //     // Fetch vehicles for the customer
+    //     $vehicles = Vehicle::where('cust_id', $customerId)->get();
+
+    //     return response()->json($vehicles);
+    // }
+
+    public function getVehiclesByCustomer(Request $request)
+    {
+        $customerId = $request->query('customer_id');
+        $search = $request->query('search');
+        $cust_id = $request->query('cust_id');
+
+        // Fetch vehicles by customer ID
+        if ($customerId) {
+            $vehicles = Vehicle::where('cust_id', $customerId)->get();
+            return response()->json($vehicles);
+        }
+
+        // Fetch vehicles by search query
+        if ($search) {
+            $vehicles = Vehicle::where('vec_plate', 'LIKE', '%' . $search . '%')->where('cust_id', $cust_id)->get();
+            return response()->json($vehicles);
+        }
+
+        return response()->json([], 400); // Bad request if no parameters are provided
+    }
 }

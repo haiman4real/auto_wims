@@ -88,6 +88,19 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 
     Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
 
+
+    Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
+    Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
+    Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
+
+    
+    Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
+    Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
+    Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
+    Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
+
+
+
 });
 
 Route::middleware(['auth','Technician', 'verified'])->namespace('Technician')->group(function(){
