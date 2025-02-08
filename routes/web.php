@@ -93,7 +93,10 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
     Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
 
-    
+
+    Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
+    Route::post('/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
+
     Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
     Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
     Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');

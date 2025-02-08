@@ -8,6 +8,7 @@ use App\Models\ServiceJobs;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class ServiceBookingController extends Controller
 {
@@ -125,6 +126,37 @@ class ServiceBookingController extends Controller
             return response()->json(['count' => $jobCount], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to fetch job count', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function returnJobController(){
+        // return "Return Job Page";
+        $jobs = ServiceJobs::get();
+        $technicians = User::where('user_role', 'technician')->get();
+        // return $jobs;
+
+        return view('service-bookings.job_controller', compact('jobs', 'technicians'));
+    }
+
+    public function assignTechnician(Request $request)
+    {
+        $request->validate([
+            'job_id' => 'required|exists:jobs,id',
+            'technician_id' => 'required|exists:users,id',
+        ]);
+
+        try {
+            $job = $this->updateWorkflow($request->job_id, [
+                'job_type' => 'assigned',
+                'details' => 'Technician assigned to job',
+            ]);
+
+            return $job;
+
+            return redirect()->back()->with('success', 'Technician assigned successfully!');
+        } catch (\Exception $e) {
+            Log::error('Error assigning technician: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to assign technician.');
         }
     }
 }
