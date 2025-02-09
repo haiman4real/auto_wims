@@ -48,7 +48,7 @@ class ServiceJobs extends Model
      */
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'cust_id');
+        return $this->belongsTo(Customer::class, 'customerId', 'cust_id', );
     }
 
     /**
@@ -56,7 +56,7 @@ class ServiceJobs extends Model
      */
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class, 'vec_id');
+        return $this->belongsTo(Vehicle::class, 'vehicleId', 'vec_id');
     }
 
     // /**
