@@ -95,7 +95,21 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 
 
     Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
-    Route::post('/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
+    Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
+    Route::get('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianAdmin'])->name('service_booking.technician.admin');
+    Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
+
+    Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
+    Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
+
+    Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
+
+
+    Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
+    Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
+    Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
+
+    Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
 
     Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
     Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');

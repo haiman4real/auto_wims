@@ -95,7 +95,7 @@
                                 <!-- Service Description -->
                                 <div class="col-12 mb-4">
                                     <label for="bookingsDesc" class="h6">Service Description/Complaints:</label>
-                                    <textarea class="form-control" name="bookingsDesc" id="bookingsDesc" rows="5"></textarea>
+                                    <textarea class="form-control" name="bookingsDesc" id="bookingsDesc" rows="5" required></textarea>
                                 </div>
 
                                 <!-- Other Details -->
@@ -580,6 +580,7 @@
                     body_damages: document.getElementById('bodydamages').value,
                     monograms: document.getElementById('monograms').value,
                     fire_extinguisher: document.getElementById('fire').value,
+                    bookingdriver: document.getElementById('bookingdriver').value,
                 };
 
                 fetch('/workshop/service-order', {

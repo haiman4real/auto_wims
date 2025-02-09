@@ -22540,7 +22540,7 @@ hr.horizontal.gray-light {
 
 .navbar-vertical.navbar-expand-xs .navbar-collapse {
   display: block;
-  overflow: auto;
+  /* overflow: auto; */
   height: calc(100vh - 360px);
 }
 
@@ -22569,8 +22569,8 @@ hr.horizontal.gray-light {
 }
 
 .navbar-vertical.navbar-expand-xs .navbar-nav .nav-link {
-  padding-top: 0.675rem;
-  padding-bottom: 0.675rem;
+  /* padding-top: 0.675rem;
+  padding-bottom: 0.675rem; */
   margin: 0 0.5rem;
 }
 
@@ -22586,7 +22586,7 @@ hr.horizontal.gray-light {
 }
 
 .navbar-vertical.navbar-expand-xs .navbar-nav>.nav-item {
-  margin-top: 0.125rem;
+  /* margin-top: 0.125rem; */
 }
 
 .navbar-vertical.navbar-expand-xs .navbar-nav>.nav-item .icon .ni {

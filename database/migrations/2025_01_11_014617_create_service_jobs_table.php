@@ -25,7 +25,7 @@ return new class extends Migration
             $table->json('other_details')->nullable(); // JSON for additional form fields
             $table->json('work_notes')->nullable(); // JSON for work notes fields
             $table->json('workflow')->nullable(); // JSON to track job workflow stages
-            $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled'])->default('pending'); // Job status
+            $table->enum('status', ['pending', 'in progress', 'estimate generated', 'completed', 'cancelled'])->default('pending'); // Job status
             $table->json('estimated_jobs')->nullable(); // JSON for spare parts and service charges
             $table->decimal('total_cost', 10, 2)->nullable(); // Total cost
             $table->json('comments')->nullable(); // JSON for comments
