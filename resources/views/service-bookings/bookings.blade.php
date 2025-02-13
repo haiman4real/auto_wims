@@ -14,32 +14,32 @@
                     </div>
                     <div class="card-body pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0" id="awaitingTechnicalReview">
+                            <table class="table align-items-center mb-0" id="bookingsList">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Customer</th>
-                                        <th>Job Description</th>
-                                        <th>Advisor Notes</th>
-                                        <th>Status</th>
-                                        <th>Job Date</th>
-                                        <th></th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Job Description</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Advisor Notes</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Job Date</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($jobs as $index => $job)
                                         <tr>
-                                            <td class="text-center">{{ $index + 1 }}</td>
-                                            <td>{{ $job->customer->cust_name }} | {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }} - {{ $job->vehicle->vec_plate }}</td>
-                                            <td>{{ $job->description ?? "N/A" }}</td>
-                                            <td>{{ data_get(collect($job->workflow)->firstWhere('job_type', 'service_advisor_comments'), 'details.service_advise', 'N/A') }}</td>
-                                            <td class="text-center">
+                                            <td class="text-xs text-center">{{ $index + 1 }}</td>
+                                            <td class="text-xs">{{ $job->customer->cust_name }} | {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }} - {{ $job->vehicle->vec_plate }}</td>
+                                            <td class="text-xs">{{ $job->description ?? "N/A" }}</td>
+                                            <td class="text-xs">{{ data_get(collect($job->workflow)->firstWhere('job_type', 'service_advisor_comments'), 'details.service_advise', 'N/A') }}</td>
+                                            <td class="text-xs text-center">
                                                 <span class="badge badge-sm bg-gradient-{{ $job->status == 'pending' ? 'danger' : ($job->status == 'completed' ? 'success' : 'info') }}">
                                                     {{ ucfirst($job->status) }}
                                                 </span>
                                             </td>
-                                            <td>{{ date("M j, Y h:i A", strtotime($job->created_at)) }}</td>
-                                            <td>
+                                            <td class="text-xs">{{ date("M j, Y h:i A", strtotime($job->created_at)) }}</td>
+                                            <td class="text-xs">
                                                 @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
                                                     @if($job->status !== 'estimate generated')
                                                         <a href="{{ route('service_booking.estimate.generate', ['job_id' => $job->id]) }}" class="btn btn-success">
@@ -133,7 +133,7 @@
     <!-- JavaScript -->
     <script>
         $(document).ready(function() {
-            $('#awaitingTechnicalReview').DataTable();
+            $('#bookingsList').DataTable();
 
             let markupRates = { "standard": 1.1, "premium": 1.2, "vip": 1.3 };
 
