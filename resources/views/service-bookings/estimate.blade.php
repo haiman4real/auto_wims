@@ -146,12 +146,12 @@
                         <table class="table align-items-center table-bordered">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>PRODUCTS</th>
-                                    <th>DESCRIPTION</th>
-                                    <th>UNIT PRICE</th>
-                                    <th>QUANTITY</th>
-                                    <th style="text-align:center;">TOTAL</th>
-                                    <th style="text-align:center;">ACTION</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">PRODUCTS</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DESCRIPTION</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">UNIT PRICE</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">QUANTITY</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align:center;">TOTAL</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align:center;">ACTION</th>
                                 </tr>
                             </thead>
                             <tbody id="estimateTable">

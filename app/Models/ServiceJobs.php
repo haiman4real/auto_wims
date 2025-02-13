@@ -29,6 +29,7 @@ class ServiceJobs extends Model
     protected $casts = [
         'other_details' => 'array',
         'workflow' => 'array',
+        'work_notes' => 'array',
     ];
 
     // Customer::on('mysql_non_laravel')->where('cust_id', $customerId)->exists();

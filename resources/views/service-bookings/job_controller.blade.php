@@ -174,14 +174,14 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                            {{-- @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
 
                                                 @if($job->status !== 'completed' && $job->status !== 'deleted')
                                                     <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs assign-btn" data-id="{{ $job->id }}" data-customer="{{ $job->customer->cust_name }}" data-vehicle="{{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }} - {{ $job->vehicle->vec_plate }}" data-job_description="{{ $job->description }}" data-toggle="modal" data-target="#assignTechnicianModal">
                                                             <i class="fa fa-user" style="color: blue; font-size:14px;" aria-hidden="true"></i> Assign Technician
                                                     </a>
                                                 @endif
-                                            @endif
+                                            @endif --}}
                                         </td>
                                     </tr>
                                 @empty
@@ -455,35 +455,6 @@
                 });
             });
 
-            // $('#assignTechnicianForm').submit(function(event) {
-            //     event.preventDefault();
-            //     let formData = $(this).serialize();
-
-            //     $.ajax({
-            //         url: "{{ route('service_booking.assign_technician') }}",
-            //         type: "POST",
-            //         data: formData,
-            //         success: function(response) {
-            //             $('#assignTechnicianModal').modal('hide');
-            //             showNotification("success", "Technician assigned successfully!");
-            //         },
-            //         error: function() {
-            //             showNotification("danger", "Failed to assign technician.");
-            //         }
-            //     });
-            // });
-
-
-            // function showNotification(type, message) {
-            //     let alert = `
-            //         <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            //             ${message}
-            //             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            //         </div>
-            //     `;
-            //     $("#alert-container").html(alert);
-            //     setTimeout(() => $(".alert").fadeOut(), 3000);
-            // }
 
             // Function to display popup notification
             function showNotification(type, message) {
