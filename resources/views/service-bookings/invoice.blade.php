@@ -116,6 +116,18 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="d-flex flex-row-reverse">
+                            <div class="py-1 px-5 text-right">
+                                <div class="mb-2">Service Total</div>
+                                <div class="h2 font-weight-bold">₦{{ number_format($serviceTotal, 2) }}</div>
+                            </div>
+                            &nbsp;
+                            <div class="py-1 px-5 text-right">
+                                <div class="mb-2">Spare Parts Total</div>
+                                <div class="h2 font-weight-bold">₦{{ number_format($sparePartsTotal, 2) }}</div>
+                            </div>
+                        </div>
+
 
                         <div class="d-flex flex-row-reverse bg-success text-black p-4">
                             <div class="py-3 px-5 text-right">
@@ -134,14 +146,7 @@
                                 <div class="mb-2">Sub Total</div>
                                 <div class="h2 font-weight-bold">₦{{ number_format($grandTotal, 2) }}</div>
                             </div>
-                            <div class="py-3 px-5 text-right">
-                                <div class="mb-2">Service Total</div>
-                                <div class="h2 font-weight-bold">₦{{ number_format($serviceTotal, 2) }}</div>
-                            </div>
-                            <div class="py-3 px-5 text-right">
-                                <div class="mb-2">Spare Parts Total</div>
-                                <div class="h2 font-weight-bold">₦{{ number_format($sparePartsTotal, 2) }}</div>
-                            </div>
+
 
                             @if($discountApplied > 0)
                             <div class="py-3 px-5 text-right">
@@ -198,13 +203,13 @@
                                 </div>
                             </div>
 
-                            <div class="row pb-5 p-5">
+                            {{-- <div class="row pb-5 p-5">
                                 <div class="col text-right">
                                     <button class="btn btn-success" data-toggle="modal" data-target="#makePayment" onclick="makePayment('{{ $job->order_number }}')">
                                         <i class="fa fa-file-pdf-o"></i> MAKE PAYMENT
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="text-center my-4">
                                 <button class="btn btn-primary" onclick="printInvoice()">

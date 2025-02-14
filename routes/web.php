@@ -108,6 +108,8 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
     Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
     Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
+    Route::get('/workshop/estimate/edit/{job_id}', [FrontDesk\ServiceBookingController::class, 'editEstimate'])->name('service_booking.estimate.edit');
+    Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
 
     Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
 

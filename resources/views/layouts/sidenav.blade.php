@@ -31,7 +31,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('users.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                <i class="fa fa-users text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Users</span>
             </a>
@@ -44,7 +44,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="fa fa-cart-arrow-down text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Service Order</span>
             </a>
@@ -52,7 +52,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.jobcontroller') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="fa fa-first-order text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Job Control</span>
             </a>
@@ -60,7 +60,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.technician.admin') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="fa fa-cogs text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Technician</span>
             </a>
@@ -68,7 +68,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.service_advisor.admin') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="ni ni-single-02 text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Service Advisor</span>
             </a>
@@ -76,7 +76,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.job_bank.admin') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="ni ni-bag-17 text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Job Bank</span>
             </a>
@@ -84,7 +84,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.bookings') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="ni ni-books text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Bookings</span>
             </a>
@@ -92,7 +92,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('customers.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-warning text-sm opacity-10"></i>
+                <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Customers</span>
             </a>
@@ -100,7 +100,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('vehicles.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                <i class="fa fa-car text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Vehicles</span>
             </a>
@@ -108,7 +108,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('self-service.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                <i class="ni ni-calendar-grid-58 text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">Self Service Bookings</span>
             </a>
@@ -164,7 +164,7 @@
           <li class="nav-item">
             <a class="nav-link " href="{{ route('trackers.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                <i class="ni ni-calendar-grid-58 text-primary text-sm opacity-10"></i>
               </div>
               <span class="nav-link-text ms-1">SYC Trackers</span>
             </a>

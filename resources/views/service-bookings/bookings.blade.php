@@ -29,22 +29,26 @@
                                 <tbody>
                                     @forelse ($jobs as $index => $job)
                                         <tr>
-                                            <td class="text-xs text-center">{{ $index + 1 }}</td>
-                                            <td class="text-xs">{{ $job->customer->cust_name }} | {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }} - {{ $job->vehicle->vec_plate }}</td>
-                                            <td class="text-xs">{{ $job->description ?? "N/A" }}</td>
-                                            <td class="text-xs">{{ data_get(collect($job->workflow)->firstWhere('job_type', 'service_advisor_comments'), 'details.service_advise', 'N/A') }}</td>
-                                            <td class="text-xs text-center">
-                                                <span class="badge badge-sm bg-gradient-{{ $job->status == 'pending' ? 'danger' : ($job->status == 'completed' ? 'success' : 'info') }}">
+                                            <td class="text-sm text-center">{{ $index + 1 }}</td>
+                                            <td class="text-sm">{{ $job->customer->cust_name }} | {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }} - {{ $job->vehicle->vec_plate }}</td>
+                                            <td class="text-sm">{{ $job->description ?? "N/A" }}</td>
+                                            <td class="text-sm">{{ data_get(collect($job->workflow)->firstWhere('job_type', 'service_advisor_comments'), 'details.service_advise', 'N/A') }}</td>
+                                            <td class="text-sm text-center">
+                                                <span class="badge badge-md bg-gradient-{{ $job->status == 'pending' ? 'danger' : ($job->status == 'completed' ? 'success' : 'info') }}">
                                                     {{ ucfirst($job->status) }}
                                                 </span>
                                             </td>
-                                            <td class="text-xs">{{ date("M j, Y h:i A", strtotime($job->created_at)) }}</td>
-                                            <td class="text-xs">
+                                            <td class="text-sm">{{ date("M j, Y h:i A", strtotime($job->created_at)) }}</td>
+                                            <td class="text-sm">
                                                 @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
                                                     @if($job->status !== 'estimate generated')
-                                                        <a href="{{ route('service_booking.estimate.generate', ['job_id' => $job->id]) }}" class="btn btn-success">
-                                                            <i class="fa fa-file-invoice-dollar"></i> Generate Estimate
+                                                        <a href="{{ route('service_booking.estimate.generate', ['job_id' => $job->id]) }}" class="btn btn-primary btn-sm">
+                                                            <i class="fa fa-plus"></i>
                                                         </a>
+                                                        @elseif ($job->status === 'estimate generated')
+                                                        <a href="{{ route('service_booking.estimate.edit', ['job_id' => $job->id]) }}" class="btn btn-info btn-sm">
+                                                            <i class="fa fa-pencil"></i>
+                                                            </a>
 
                                                         {{-- <a href="javascript:void(0);" class="text-success generate-estimate" data-job="{{ json_encode($job) }}">
                                                             <i class="fa fa-file-invoice-dollar"></i> Generate Estimate
