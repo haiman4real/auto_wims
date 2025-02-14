@@ -402,6 +402,7 @@
                     success: function(response) {
                         $('#awaitingEstimationModal').modal('hide'); // Close modal
                         showNotification("success", response.message); // Show success notification
+                        window.location.href = "{{ route('service_booking.bookings') }}";
                     },
                     error: function(xhr) {
                         let message = "Failed to approve job for estimation.";

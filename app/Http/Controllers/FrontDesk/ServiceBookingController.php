@@ -304,7 +304,7 @@ class ServiceBookingController extends Controller
 
     public function returnBookings(){
         // return "Return Bookings Page";
-        $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'service_advisor_comments']])->where('status', 'in progress')->get();
+        $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'service_advisor_comments']])->where('status', 'in progress')->orWhere('status', 'estimate generated')->get();
         return view('service-bookings.bookings', compact('jobs'));
     }
 
@@ -557,5 +557,110 @@ class ServiceBookingController extends Controller
         $job = ServiceJobs::findOrFail($jobId);
         // return $jobs;
         return view('service-bookings.invoice', compact('job'));
+    }
+
+
+    public function editEstimate($id)
+    {
+        $job = ServiceJobs::with('customer', 'vehicle')->findOrFail($id);
+        $estimatedJobs = json_decode($job->estimated_jobs, true);
+        $services = JobServices::all();
+        $spareParts = JobSpareParts::getSparePartsWithPrices();
+
+        // return $spareParts;
+
+        return view('service-bookings.estimate-edit', compact('job', 'estimatedJobs', 'services', 'spareParts'));
+    }
+
+    public function updateEstimate(Request $request)
+    {
+        // $request->validate([
+        //     'job_id' => 'required',
+        //     'items' => 'required|array|min:1',
+        //     'items.*.id' => 'required|integer',
+        //     'items.*.name' => 'required|string',
+        //     'items.*.type' => 'required|in:service,spare_parts',
+        //     'items.*.price' => 'required|numeric|min:0',
+        //     'items.*.quantity' => 'required|integer|min:1',
+        //     'items.*.discount' => 'nullable|numeric|min:0|max:100',
+        //     'grand_total' => 'required|numeric|min:0'
+        // ]);
+
+        try {
+            $job = ServiceJobs::findOrFail($request->job_id);
+
+            // Log::info('Job request: ' . $request);
+            // // Update the estimate
+
+
+            // $job->estimated_jobs = json_encode([
+            //     'services' => array_filter($request->items, fn($item) => $item['type'] === 'service'),
+            //     'spare_parts' => array_filter($request->items, fn($item) => $item['type'] === 'spare_parts'),
+            //     'grand_total' => $request->grand_total
+            // ]);
+            // $job->total_cost = $request->grand_total;
+            // $job->save();
+
+            // return response()->json(['message' => 'Estimate updated successfully!'], 200);
+
+            Log::info('Job request received for update: ', $request->all());
+
+            $services = [];
+            $spareParts = [];
+            $grandTotal = 0;
+            $vatRate = 7.5; // VAT rate is 7.5%
+
+            foreach ($request->items as $item) {
+                $quantity = $item['quantity'];
+                $price = $item['price'];
+                $discount = $item['discount'] ?? 0; // Default discount is 0%
+
+                // Calculate total price after applying discount
+                $discountAmount = ($price * $quantity) * ($discount / 100);
+                $totalPrice = ($price * $quantity) - $discountAmount;
+
+                $data = [
+                    'id' => $item['id'] ?? null, // If a new item, ID might be null
+                    'name' => $item['name'],
+                    'price' => $price,
+                    'quantity' => $quantity,
+                    'discount' => $discount,
+                    'total_price' => $totalPrice, // Price after discount
+                ];
+
+                if ($item['type'] === 'service') {
+                    $services[] = $data;
+                } else {
+                    $spareParts[] = $data;
+                }
+
+                // Add to grand total
+                $grandTotal += $totalPrice;
+            }
+
+            // Calculate VAT amount
+            $vatAmount = ($grandTotal * $vatRate) / 100;
+            $grandTotalWithVat = $grandTotal + $vatAmount;
+
+            // Store in the database with proper formatting
+            $job->estimated_jobs = json_encode([
+                'services' => $services,
+                'spare_parts' => $spareParts,
+                'vat' => $vatRate,
+                'vat_amount' => $vatAmount,
+                'grand_total' => $grandTotal,
+                'total_cost' => $grandTotalWithVat
+            ]);
+
+            // Update job status and total cost
+            $job->status = 'estimate generated';
+            $job->total_cost = $grandTotalWithVat;
+            $job->save();
+
+            Log::info('Estimate updated successfully for job ID: ' . $request->job_id);
+            return response()->json(['message' => 'Estimate updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating estimate: ' . $e->getMessage()], 500);
+        }
     }
 }

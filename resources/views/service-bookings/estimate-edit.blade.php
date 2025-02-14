@@ -1,13 +1,14 @@
 <x-app-layout>
     <x-slot name="title">
-        Generate Estimate
+        Edit Estimate for {{ $job->customer->cust_name }} - {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }}
     </x-slot>
 
     <div class="container-fluid py-6">
-        <!-- Header -->
         <div class="card mb-4">
             <div class="card-header pb-1">
-                <h5 style="font-weight:bold; text-transform:capitalize; margin-top:5px; padding-left:10px;">Bookings Informations for {{ $job->customer->cust_name }} | {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }}</h5>
+                <h5 style="font-weight:bold; text-transform:capitalize; margin-top:5px; padding-left:10px;">
+                    Editing Estimate for {{ $job->customer->cust_name }} | {{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }}
+                </h5>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -137,9 +138,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- Table Section -->
+                <!-- Estimate Form -->
                 <div class="table-responsive">
-                    <form id="estimateForm">
+                    <form id="editEstimateForm">
                         @csrf
                         <input type="hidden" name="job_id" id="job_id" value="{{ $job->id }}">
 
@@ -155,49 +156,87 @@
                                 </tr>
                             </thead>
                             <tbody id="estimateTable">
-                                <tr class="estimate-row">
-                                    <td>
-                                        <select class="form-select item-type">
-                                            <option value="service">SERVICE</option>
-                                            <option value="spare_parts">SPARE PARTS</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-select item-desc select2">
-                                            <option selected>---Select Item---</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control unit-price" readonly>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control quantity" min="1" value="1">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control total-price" readonly>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary add-row">+</button>
-                                    </td>
-                                </tr>
+                                <!-- Existing Services -->
+                                @foreach($estimatedJobs['services'] as $service)
+                                    <tr class="estimate-row">
+                                        <td>
+                                            <input type="text" class="form-control item-type" value="SERVICE" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control item-desc" value="{{ $service['name'] }}" data-id="{{ $service['id'] }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control unit-price" value="{{ $service['price'] }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control quantity" min="1" value="{{ $service['quantity'] }}">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control total-price" value="{{ $service['total_price'] }}" readonly>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger remove-row">-</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                <!-- Existing Spare Parts -->
+                                @foreach($estimatedJobs['spare_parts'] as $part)
+                                    <tr class="estimate-row">
+                                        <td>
+                                            <input type="text" class="form-control item-type" value="SPARE_PART" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control item-desc" value="{{ $part['name'] }}" data-id="{{ $part['id'] }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control unit-price" value="{{ $part['price'] }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control quantity" min="1" value="{{ $part['quantity'] }}">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control total-price" value="{{ $part['total_price'] }}" readonly>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger remove-row">-</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4" class="text-right"><strong>TOTAL</strong></td>
+                                    <td colspan="6" class="text-center">
+                                        <button type="button" class="btn btn-primary add-row">+ Add Item</button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="4" class="text-right"><strong>Discount (%)</strong></td>
                                     <td>
-                                        <input type="text" class="form-control" id="sumTotal" readonly>
+                                        <input type="number" class="form-control" id="discount"
+                                               value="{{ isset($estimatedJobs['discount']) ? $estimatedJobs['discount'] : 0 }}"
+                                               min="0" max="100">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="text-right"><strong>DISCOUNT</strong></td>
+                                    <td colspan="4" class="text-right"><strong>Discount Amount</strong></td>
                                     <td>
-                                        <input type="number" class="form-control" id="discount" placeholder="%" min="0" max="100">
+                                        <input type="text" class="form-control" id="discountAmount"
+                                               value="{{ isset($estimatedJobs['discount_amount']) ? number_format($estimatedJobs['discount_amount'], 2) : 0 }}"
+                                               readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-right"><strong>Grand Total</strong></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="grandTotal"
+                                               value="{{ number_format($estimatedJobs['grand_total'], 2) }}" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-center">
-                                        <button class="btn btn-primary" type="button" onclick="saveEstimate()">SAVE FOR LATER</button>
-                                        <button class="btn btn-success" type="submit">GENERATE ESTIMATE</button>
+                                        <button class="btn btn-success" type="submit">UPDATE ESTIMATE</button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -309,55 +348,10 @@
         }
     </style>
 
-    <!-- Include Select2 CSS & JS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
-
-    <!-- JavaScript -->
     <script>
         $(document).ready(function () {
             let services = @json($services);
             let spareParts = @json($spareParts);
-            let custType = "{{ strtolower($job->customer->cust_type) }}"; // "individual" or "corporate"
-
-            // Spare Part Markup Rules
-            let markupRules = [
-                { min: 5000, max: 50000, individual: 35, corporate: 25 },
-                { min: 60000, max: 90000, individual: 30, corporate: 25 },
-                { min: 91000, max: 200000, individual: 25, corporate: 25 },
-                { min: 210000, max: 990000, individual: 20, corporate: 20 },
-                { min: 1000000, max: 1500000, individual: 15, corporate: 15 },
-                { min: 1510000, max: 2000000, individual: 10, corporate: 15 }
-            ];
-
-            function getMarkup(price) {
-                let markup = 0;
-                markupRules.forEach(rule => {
-                    if (price >= rule.min && price <= rule.max) {
-                        markup = custType === "corporate" ? rule.corporate : rule.individual;
-                    }
-                });
-                return markup;
-            }
-
-            function updatePrice(row) {
-                let unitPrice = parseFloat(row.find(".item-desc option:selected").data("price")) || 0;
-                let quantity = parseInt(row.find(".quantity").val()) || 1;
-                let itemType = row.find(".item-type").val();
-
-                // Apply markup only for spare parts
-                if (itemType === "spare_parts") {
-                    let markup = getMarkup(unitPrice);
-                    unitPrice = unitPrice + (unitPrice * (markup / 100));
-                }
-
-                let totalPrice = unitPrice * quantity;
-                row.find(".unit-price").val(unitPrice.toFixed(2));
-                row.find(".total-price").val(totalPrice.toFixed(2));
-
-                updateGrandTotal();
-            }
 
             function updateGrandTotal() {
                 let sumTotal = 0;
@@ -365,10 +359,32 @@
                     sumTotal += parseFloat($(this).val()) || 0;
                 });
 
-                let discount = $("#discount").val() || 0;
-                sumTotal -= (sumTotal * (discount / 100));
+                let discountValue = parseFloat($("#discount").val()) || 0;
+                let discountAmount = sumTotal * (discountValue / 100);
+                let discountedTotal = sumTotal - discountAmount;
 
                 $("#sumTotal").val(sumTotal.toFixed(2));
+                $("#discountAmount").val(discountAmount.toFixed(2));
+                $("#grandTotal").val(discountedTotal.toFixed(2));
+            }
+
+            function updatePrice(row) {
+                let unitPrice;
+                let quantity = parseInt(row.find(".quantity").val()) || 1;
+                let descField = row.find(".item-desc");
+
+                if (descField.is("select")) {
+                    unitPrice = parseFloat(descField.find("option:selected").data("price")) || 0;
+                } else {
+                    unitPrice = parseFloat(row.find(".unit-price").val()) || 0;
+                }
+
+                let totalPrice = unitPrice * quantity;
+
+                row.find(".unit-price").val(unitPrice.toFixed(2));
+                row.find(".total-price").val(totalPrice.toFixed(2));
+
+                updateGrandTotal();
             }
 
             function loadItems(row) {
@@ -376,23 +392,38 @@
                 let descSelect = row.find(".item-desc");
 
                 descSelect.empty();
-                descSelect.append('<option disabled selected>--- Select Item ---</option>'); // Default option
+                descSelect.append('<option disabled selected>--- Select Item ---</option>');
 
                 let items = type === "service" ? services : spareParts;
-
                 items.forEach(item => {
-                    let id = type === "service" ? item.serv_id : item.ID;  // Ensure correct ID is used
+                    let id = type === "service" ? item.serv_id : item.ID;
                     let price = type === "service" ? item.serv_amount : item.price;
                     let title = type === "service" ? item.serv_name : item.post_title;
 
-                    // Ensure option contains data-id
                     descSelect.append(`<option value="${title}" data-id="${id}" data-price="${price}">${title}</option>`);
                 });
 
                 updatePrice(row);
             }
 
-            function addNewRow() {
+            $(document).on("input", "#discount", function () {
+                updateGrandTotal();
+            });
+
+            $(document).on("change", ".item-type", function () {
+                loadItems($(this).closest("tr"));
+            });
+
+            $(document).on("change", ".item-desc, .quantity", function () {
+                updatePrice($(this).closest("tr"));
+            });
+
+            $(document).on("click", ".remove-row", function () {
+                $(this).closest("tr").remove();
+                updateGrandTotal();
+            });
+
+            $(".add-row").click(function () {
                 let newRow = `
                     <tr class="estimate-row">
                         <td>
@@ -403,7 +434,7 @@
                         </td>
                         <td>
                             <select class="form-select item-desc select2">
-                                <option disabled selected>Select Item</option>
+                                <option disabled selected>---Select Item---</option>
                             </select>
                         </td>
                         <td>
@@ -422,98 +453,89 @@
                 `;
                 $("#estimateTable").append(newRow);
                 loadItems($("#estimateTable tr:last"));
-            }
-
-            $(document).on("change", ".item-type", function () {
-                loadItems($(this).closest("tr"));
             });
 
-            $(document).on("change", ".item-desc, .quantity", function () {
-                updatePrice($(this).closest("tr"));
-            });
-
-            $(document).on("click", ".add-row", function () {
-                addNewRow();
-            });
-
-            $(document).on("click", ".remove-row", function () {
-                $(this).closest("tr").remove();
-                updateGrandTotal();
-            });
-
-            $("#estimateForm").submit(function (e) {
+            $("#editEstimateForm").submit(function (e) {
                 e.preventDefault();
 
-                // let jobId = $("input[name='job_id']").val();
-                let jobId = $("#job_id").val(); // Ensure job ID is fetched correctly
-                if (!jobId) {
-                    alert("Error: Job ID is missing. Please refresh the page.");
-                    return;
-                }
-
+                let jobId = $("#job_id").val();
                 let items = [];
                 let grandTotal = 0;
+                let discountValue = parseFloat($("#discount").val()) || 0;
 
                 $(".estimate-row").each(function () {
-                    let type = $(this).find(".item-type").val();
-                    let id = $(this).find(".item-desc option:selected").data("id"); // Get data-id
-                    let name = $(this).find(".item-desc option:selected").text();
-                    let price = parseFloat($(this).find(".unit-price").val());
-                    let quantity = parseInt($(this).find(".quantity").val());
-                    let discount = parseFloat($(this).find(".discount").val()) || 0; // Default discount is 0%
+                    let row = $(this);
+                    let typeField = row.find(".item-type");
+                    let nameField = row.find(".item-desc");
 
-                    if (!id || !name || isNaN(price) || isNaN(quantity) || quantity <= 0) {
-                        return; // Skip if invalid item
+                    let id = nameField.is("select") ? nameField.find("option:selected").data("id") : nameField.data("id");
+                    let name = nameField.is("select") ? nameField.find("option:selected").text() : nameField.val();
+                    let type = typeField.is("select") ? typeField.val() : typeField.val().toLowerCase(); // ✅ Fix: Ensure correct type
+                    let price = parseFloat(row.find(".unit-price").val()) || 0;
+                    let quantity = parseInt(row.find(".quantity").val()) || 1;
+                    let total = parseFloat(row.find(".total-price").val()) || 0;
+
+                    if (name && !isNaN(price) && !isNaN(quantity)) {
+                        items.push({ id, name, type, price, quantity, total_price: total });
+                        grandTotal += total;
                     }
-
-                    let discountAmount = (price * quantity) * (discount / 100);
-                    let totalPrice = (price * quantity) - discountAmount;
-
-                    items.push({
-                        id,
-                        name,
-                        type,
-                        price,
-                        quantity,
-                        discount,
-                        total_price: totalPrice
-                    });
-
-                    grandTotal += totalPrice; // Add to grand total
                 });
 
-                if (items.length === 0) {
-                    alert("Please add at least one service or spare part.");
-                    return;
-                }
+                let discountAmount = grandTotal * (discountValue / 100);
+                let totalAfterDiscount = grandTotal - discountAmount;
 
-                // Send AJAX request using POST method
                 $.ajax({
-                    url: "{{ route('service_booking.estimate.save') }}",
+                    url: "{{ route('service_booking.estimate.update') }}",
                     type: "POST",
-                    contentType: "application/json",
-                    processData: false,
                     headers: {
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
+                    contentType: "application/json",
                     data: JSON.stringify({
                         job_id: jobId,
                         items: items,
-                        grand_total: grandTotal
+                        grand_total: totalAfterDiscount,
+                        discount: discountValue,
+                        discount_amount: discountAmount
                     }),
                     success: function (response) {
-                        console.log(response);
-                        alert(response.message + "\nGrand Total: ₦" + response.grand_total.toFixed(2));
+                        alert(response.message);
                         window.location.href = "{{ route('service_booking.job_bank.admin') }}";
                     },
                     error: function (xhr) {
-                        console.log("AJAX Error:", xhr.responseJSON);
-                        alert("Error: " + (xhr.responseJSON?.message || "An unknown error occurred."));
+                        alert("Error: " + xhr.responseJSON.message);
                     }
                 });
             });
 
-            loadItems($(".estimate-row")); // Load default row items
+
+            // let services = @json($services);
+            // let spareParts = @json($spareParts);
+
+            // Spare Part Markup Rules
+            let markupRules = [
+                { min: 5000, max: 50000, individual: 35, corporate: 25 },
+                { min: 60000, max: 90000, individual: 30, corporate: 25 },
+                { min: 91000, max: 200000, individual: 25, corporate: 25 },
+                { min: 210000, max: 990000, individual: 20, corporate: 20 },
+                { min: 1000000, max: 1500000, individual: 15, corporate: 15 },
+                { min: 1510000, max: 2000000, individual: 10, corporate: 15 }
+            ];
+
+            function getMarkup(price) {
+                let custType = "{{ strtolower($job->customer->cust_type) }}"; // "individual" or "corporate"
+                let markup = 0;
+
+                markupRules.forEach(rule => {
+                    if (price >= rule.min && price <= rule.max) {
+                        markup = custType === "corporate" ? rule.corporate : rule.individual;
+                    }
+                });
+
+                return markup;
+            }
+
+
         });
     </script>
 </x-app-layout>
