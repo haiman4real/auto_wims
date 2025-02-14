@@ -14,9 +14,9 @@
                         <div class="card card-stats mb-4 mb-xl-0">
                             <div class="card-header pb-0">
                                 <h6>Search Customer
-                                    <button class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;">
+                                    {{-- <button class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;">
                                         +
-                                    </button>
+                                    </button> --}}
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -33,7 +33,7 @@
                         <div class="card card-stats mb-4 mb-xl-0">
                             <div class="card-header pb-0">
                                 <h6>Search Vehicle
-                                    <button id="addVehicleBtn" class="btn btn-primary btn-sm float-end">+</button>
+                                    {{-- <button id="addVehicleBtn" class="btn btn-primary btn-sm float-end">+</button> --}}
                                 </h6>
                             </div>
                             <div class="card-body">
