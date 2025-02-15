@@ -113,6 +113,15 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 
     Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
 
+    Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
+    Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
+    Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
+    Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
+    Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
+    Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
+
+
+
     Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
     Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
     Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
