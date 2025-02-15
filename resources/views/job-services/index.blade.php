@@ -21,8 +21,10 @@
                 <div class="card mb-4">
                   <div class="card-header pb-0">
                     <h6>Job Services List
-                        {{-- <a href="#schedule-new-tracking"><button class="btn btn-primary btn-sm d-none d-sm-inline-block" type="button" style="float: right; margin-left: -50%;"> + Add new Item --}}
-                        </button></a>
+                        <!-- Add New Service Button -->
+                        <button class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+                            <i class="fa fa-plus"></i> Add New Service
+                        </button>
                     </h6>
                   </div>
                   <div class="card-body pt-0 pb-2">
@@ -115,6 +117,60 @@
         </div>
     </div>
 
+    <!-- Add Service Modal -->
+    <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addServiceModalLabel">Add New Service</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addServiceForm" method="POST" action="{{ route('job.services.store') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="serv_name">Service Name</label>
+                            <input type="text" class="form-control" id="serv_name" name="serv_name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serv_cat">Category</label>
+                            <select class="form-select" name="serv_cat" id="serv_cat" required>
+                                <option selected disabled>---Select One---</option>
+                                <option>Fuel System Cleaning</option>
+                                <option>Tyres Service</option>
+                                <option>Transmission Services</option>
+                                <option>Engine Service</option>
+                                <option>Suspension Service</option>
+                                <option>General Maintenance</option>
+                                <option>Balancing Services</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serv_duration">Duration</label>
+                            {{-- <input type="text" class="form-control" id="serv_duration" name="serv_duration" required> --}}
+                            <select class="form-select" name="serv_duration" id="serv_duration" required>
+                                <option>Select Time Frame</option>
+                                <option>Less than 30mins</option>
+                                <option>30mins - 1hour</option>
+                                <option>1-3hours</option>
+                                <option>More than 3hours</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serv_amount">Amount (₦)</label>
+                            <input type="number" class="form-control" id="serv_amount" name="serv_amount" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Add Service</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Service Modal -->
     <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -136,12 +192,27 @@
 
                         <div class="form-group">
                             <label for="edit_serv_cat">Category</label>
-                            <input type="text" class="form-control" id="edit_serv_cat" name="serv_cat" required>
+                            <select class="form-select" name="serv_cat" id="edit_serv_cat" required>
+                                <option selected disabled>---Select One---</option>
+                                <option>Fuel System Cleaning</option>
+                                <option>Tyres Service</option>
+                                <option>Transmission Services</option>
+                                <option>Engine Service</option>
+                                <option>Suspension Service</option>
+                                <option>General Maintenance</option>
+                                <option>Balancing Services</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
                             <label for="edit_serv_duration">Duration</label>
-                            <input type="text" class="form-control" id="edit_serv_duration" name="serv_duration" required>
+                            <select class="form-select" name="serv_duration" id="edit_serv_duration" required>
+                                <option>Select Time Frame</option>
+                                <option>Less than 30mins</option>
+                                <option>30mins - 1hour</option>
+                                <option>1-3hours</option>
+                                <option>More than 3hours</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -181,7 +252,7 @@
             });
 
             // Handle Edit Button Click
-            $('.edit-service-btn').on('click', function () {
+            $(document).on('click', '.edit-service-btn', function () {
                 let serviceId = $(this).data('id');
                 let serviceName = $(this).data('name');
                 let serviceCategory = $(this).data('category');
@@ -198,7 +269,7 @@
                 $('#edit_serv_status').val(serviceStatus);
 
                 // Set the form action dynamically
-                $('#editServiceForm').attr('action', `/services/${serviceId}`);
+                $('#editServiceForm').attr('action', `/workshop/services/${serviceId}`);
             });
 
             // Handle Form Submission
@@ -218,6 +289,27 @@
                     },
                     error: function (xhr) {
                         alert('Failed to update service. Please try again.');
+                    }
+                });
+            });
+
+            // Handle Add Service Form Submission
+            $('#addServiceForm').on('submit', function (e) {
+                e.preventDefault();
+
+                let form = $(this);
+                let formData = form.serialize();
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function () {
+                        alert('Service added successfully!');
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('Failed to add service. Please try again.');
                     }
                 });
             });
