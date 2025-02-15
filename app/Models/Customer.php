@@ -14,7 +14,7 @@ class Customer extends Model
     protected $primaryKey = 'cust_id';
     public $timestamps = false; // Set this if the table does not use timestamps
     protected $fillable = [
-        'cust_name', 'cust_email', 'cust_mobile', 'cust_address', 'cust_lga'
+        'cust_name', 'cust_email', 'cust_mobile', 'cust_address', 'cust_lga', 'cust_mode', 'cust_type', 'cust_reg_time',
     ];
 
     public function vehicles()
