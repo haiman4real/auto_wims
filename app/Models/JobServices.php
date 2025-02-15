@@ -14,7 +14,7 @@ class JobServices extends Model
     protected $primaryKey = 'serv_id';
     public $timestamps = false; // Set this if the table does not use timestamps
     protected $fillable = [
-        'serv_name', 'serv_cat', 'serv_duration', 'serv_amount', 'serv_status'
+        'serv_name', 'serv_cat', 'serv_duration', 'serv_amount', 'serv_status', 'serv_reg_time'
     ];
 
 
