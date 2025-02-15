@@ -26,35 +26,32 @@ class VehicleController extends Controller
 
     public function store(Request $request)
     {
-        $rules = [
-            'plate_number' => 'required|string|max:10|unique:vehicles,plate_number',
-            'vehicle_model' => 'required|string|max:255',
-            'vehicle_make' => 'required|string|max:255',
-            'owner_name' => 'required|string|max:255',
-            'owner_phone' => 'required|digits:11',
-        ];
-
-        $customMessages = [
-            'plate_number.unique' => 'This plate number is already registered.',
-            'owner_phone.digits' => 'Phone number must be exactly 11 digits.',
-        ];
+        $validatedData = $request->validate([
+            'customer_id' => 'required',
+            'body_type' => 'required|string',
+            'vec_year' => 'required|numeric',
+            'vec_make' => 'required|string',
+            'vec_model' => 'required|string',
+            'vec_plate' => 'required|string|max:8',
+            'vec_vin' => 'required|string|max:17',
+        ]);
 
         try {
-            // Validate the request
-            $validatedData = Validator::make($request->all(), $rules, $customMessages)->validate();
-
-            // Store the data in the database
-            Vehicle::create([
-                'plate_number' => $validatedData['plate_number'],
-                'vehicle_model' => $validatedData['vehicle_model'],
-                'vehicle_make' => $validatedData['vehicle_make'],
-                'owner_name' => $validatedData['owner_name'],
-                'owner_phone' => $validatedData['owner_phone'],
-                'status' => 'visible',
+            // Create a new vehicle with the correct column mappings
+            $vehicle = Vehicle::create([
+                'cust_id' => $validatedData['customer_id'],  // Foreign key reference to customers table
+                'vec_body' => $validatedData['body_type'],
+                'vec_year' => $validatedData['vec_year'],
+                'vec_make' => $validatedData['vec_make'],
+                'vec_model' => $validatedData['vec_model'],
+                'vec_plate' => $validatedData['vec_plate'],
+                'vec_vin' => $validatedData['vec_vin'],
+                'vec_view' => 'visible', // Default value
+                'vec_reg_time' => time(), // Storing current timestamp
             ]);
 
             // Log success
-            Log::info('Vehicle added successfully', ['plate_number' => $validatedData['plate_number']]);
+            Log::info('Vehicle added successfully', ['vec_plate' => $validatedData['vec_plate']]);
 
             return redirect()->back()->with('success', 'Vehicle added successfully!');
         } catch (\Exception $e) {
@@ -62,6 +59,7 @@ class VehicleController extends Controller
             return redirect()->back()->with('error', 'Failed to add vehicle. Please try again.');
         }
     }
+
 
     public function edit($id)
     {
@@ -148,21 +146,6 @@ class VehicleController extends Controller
 
         return response()->json($vehicle, 201);
     }
-
-    // public function getVehiclesByCustomer(Request $request)
-    // {
-    //     $customerId = $request->query('customer_id');
-
-    //     // Validate the customer ID
-    //     if (!$customerId) {
-    //         return response()->json(['error' => 'Customer ID is required'], 400);
-    //     }
-
-    //     // Fetch vehicles for the customer
-    //     $vehicles = Vehicle::where('cust_id', $customerId)->get();
-
-    //     return response()->json($vehicles);
-    // }
 
     public function getVehiclesByCustomer(Request $request)
     {

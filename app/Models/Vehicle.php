@@ -22,6 +22,7 @@ class Vehicle extends Model
 
     // Define the fillable fields
     protected $fillable = [
+        'cust_id',
         'vec_body',
         'vec_year',
         'vec_make',
