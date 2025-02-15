@@ -196,7 +196,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-center">
-                                        <button class="btn btn-primary" type="button" onclick="saveEstimate()">SAVE FOR LATER</button>
+                                        {{-- <button class="btn btn-primary" type="button" onclick="saveEstimate()">SAVE FOR LATER</button> --}}
                                         <button class="btn btn-success" type="submit">GENERATE ESTIMATE</button>
                                     </td>
                                 </tr>

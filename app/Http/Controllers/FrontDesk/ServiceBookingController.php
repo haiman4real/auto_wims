@@ -574,34 +574,10 @@ class ServiceBookingController extends Controller
 
     public function updateEstimate(Request $request)
     {
-        // $request->validate([
-        //     'job_id' => 'required',
-        //     'items' => 'required|array|min:1',
-        //     'items.*.id' => 'required|integer',
-        //     'items.*.name' => 'required|string',
-        //     'items.*.type' => 'required|in:service,spare_parts',
-        //     'items.*.price' => 'required|numeric|min:0',
-        //     'items.*.quantity' => 'required|integer|min:1',
-        //     'items.*.discount' => 'nullable|numeric|min:0|max:100',
-        //     'grand_total' => 'required|numeric|min:0'
-        // ]);
 
         try {
             $job = ServiceJobs::findOrFail($request->job_id);
 
-            // Log::info('Job request: ' . $request);
-            // // Update the estimate
-
-
-            // $job->estimated_jobs = json_encode([
-            //     'services' => array_filter($request->items, fn($item) => $item['type'] === 'service'),
-            //     'spare_parts' => array_filter($request->items, fn($item) => $item['type'] === 'spare_parts'),
-            //     'grand_total' => $request->grand_total
-            // ]);
-            // $job->total_cost = $request->grand_total;
-            // $job->save();
-
-            // return response()->json(['message' => 'Estimate updated successfully!'], 200);
 
             Log::info('Job request received for update: ', $request->all());
 
