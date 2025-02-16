@@ -514,12 +514,12 @@
 
             // Spare Part Markup Rules
             let markupRules = [
-                { min: 5000, max: 50000, individual: 35, corporate: 25 },
-                { min: 60000, max: 90000, individual: 30, corporate: 25 },
-                { min: 91000, max: 200000, individual: 25, corporate: 25 },
-                { min: 210000, max: 990000, individual: 20, corporate: 20 },
-                { min: 1000000, max: 1500000, individual: 15, corporate: 15 },
-                { min: 1510000, max: 2000000, individual: 10, corporate: 15 }
+                { min: 0, max: 59999, individual: 35, corporate: 25 },
+                { min: 60000, max: 90999, individual: 30, corporate: 25 },
+                { min: 91000, max: 209999, individual: 25, corporate: 25 },
+                { min: 210000, max: 999999, individual: 20, corporate: 20 },
+                { min: 1000000, max: 1509999, individual: 15, corporate: 15 },
+                { min: 1510000, max: 200000000, individual: 10, corporate: 15 }
             ];
 
             function getMarkup(price) {
