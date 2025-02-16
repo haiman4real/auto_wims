@@ -37,6 +37,12 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class)->namespace('MasterAdmin')->group(function(){
     Route::get('/ma/home', 'HomeController@index');
+
+
+});
+
+Route::middleware(['auth','SuperAdmin', 'verified'])->namespace('SuperAdmin')->group(function(){
+    Route::get('/sa/home', 'HomeController@index');
     Route::get('/ma/users', [MasterAdmin\UserController::class, 'index'])->name('users.index');
     Route::get('/ma/users/add', [MasterAdmin\UserController::class, 'create'])->name('users.add');
     Route::post('/ma/users', [MasterAdmin\UserController::class, 'store'])->name('user.store');
@@ -45,11 +51,6 @@ Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class
     Route::delete('/ma/users/{user}', [MasterAdmin\UserController::class, 'destroy'])->name('user.destroy');
     Route::get('/ma/user/enable/{user}', [MasterAdmin\UserController::class, 'enableUser'])->name('user.enable');
     Route::get('/ma/user/disable/{user}', [MasterAdmin\UserController::class, 'disableUser'])->name('user.disable');
-
-});
-
-Route::middleware(['auth','SuperAdmin', 'verified'])->namespace('SuperAdmin')->group(function(){
-    Route::get('/sa/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','AdminOne','verified'])->namespace('AdminOne')->group(function(){
