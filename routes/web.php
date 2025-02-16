@@ -7,6 +7,7 @@ use App\Http\Controllers\CoporateUser;
 use App\Http\Controllers\MasterAdmin;
 use App\Http\Controllers\FrontDesk;
 use App\Http\Middleware\MasterAdminMiddleware;
+use App\Http\Middleware\SuperAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,7 @@ Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class
 
 });
 
-Route::middleware(['auth','SuperAdmin', 'verified'])->namespace('SuperAdmin')->group(function(){
+Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespace('SuperAdmin')->group(function(){
     Route::get('/sa/home', 'HomeController@index');
     Route::get('/ma/users', [MasterAdmin\UserController::class, 'index'])->name('users.index');
     Route::get('/ma/users/add', [MasterAdmin\UserController::class, 'create'])->name('users.add');
