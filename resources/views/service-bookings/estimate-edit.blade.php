@@ -372,11 +372,19 @@
                 let unitPrice;
                 let quantity = parseInt(row.find(".quantity").val()) || 1;
                 let descField = row.find(".item-desc");
+                let itemType = row.find(".item-type").val();
+
 
                 if (descField.is("select")) {
                     unitPrice = parseFloat(descField.find("option:selected").data("price")) || 0;
                 } else {
                     unitPrice = parseFloat(row.find(".unit-price").val()) || 0;
+                }
+
+                // Apply markup only for spare parts
+                if (itemType === "spare_parts") {
+                    let markup = getMarkup(unitPrice);
+                    unitPrice = unitPrice + (unitPrice * (markup / 100));
                 }
 
                 let totalPrice = unitPrice * quantity;
