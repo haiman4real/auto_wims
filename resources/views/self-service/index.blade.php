@@ -151,6 +151,11 @@
                                             <span class="badge badge-sm bg-gradient-danger">{{$booking->status}}</span>
                                         @elseif ($booking->status == 'canceled')
                                             <span class="badge badge-sm bg-gradient-danger">{{$booking->status}}</span>
+                                        @elseif ($booking->status == 'initialized')
+                                            <span class="badge badge-sm bg-gradient-info">{{$booking->status}}</span>
+                                            @elseif ($booking->status == 'in progress')
+                                            <span class="badge badge-sm bg-gradient-info">{{$booking->status}}</span>
+
                                         @else
                                             <span class="badge badge-sm bg-gradient-warning">{{ucfirst($booking->status)}}</
                                         @endif
