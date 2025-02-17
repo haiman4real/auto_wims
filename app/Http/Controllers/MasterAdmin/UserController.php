@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -107,26 +108,60 @@ class UserController extends Controller
 
     }
 
-    public function edit(User $user)
+    public function edit(Request $request)
     {
         // $stations = Stations::all();
-        return view('users.edit', compact('user', 'stations'));
+        // return view('users.edit', compact('user', 'stations'));
+
+        $user = User::find($request->id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        return response()->json($user);
     }
 
     public function update(Request $request, User $user)
     {
         // return $request;
 
-        $user->user_name = $request->input('user_name');
-        $user->email = $request->input('email');
-        $user->user_station = $request->input('user_station');
-        $user->user_phone = $request->input('user_phone');
-        $user->save();
+        // $user->user_name = $request->input('user_name');
+        // $user->email = $request->input('email');
+        // $user->user_station = $request->input('user_station');
+        // $user->user_phone = $request->input('user_phone');
+        // $user->save();
 
-        // return $user;
-        // return $request->only(['user_name', 'email', 'user_station']);
-        // $user->update($request->only(['user_name', 'email', 'user_station']));
-        return redirect()->route('users.index')->with(["status" => true, "message" => "User Updated Successfully"]);
+        // // return $user;
+        // // return $request->only(['user_name', 'email', 'user_station']);
+        // // $user->update($request->only(['user_name', 'email', 'user_station']));
+        // return redirect()->route('users.index')->with(["status" => true, "message" => "User Updated Successfully"]);
+
+        // Validate request
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'user_name' => 'required|string|max:255',
+            'user_phone' => 'required|string|min:11|max:11',
+            'user_role' => 'required|string',
+            'user_station' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        // Find user and update
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        $user->update([
+            'user_name' => $request->user_name,
+            'user_phone' => $request->user_phone,
+            'user_role' => $request->user_role,
+            'user_station' => $request->user_station
+        ]);
+
+        return response()->json(['success' => 'User updated successfully']);
     }
 
     public function enableUser($id)
