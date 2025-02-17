@@ -117,6 +117,21 @@
                                         <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#editCustomerModal" data-original-title="Edit Customer">
                                             <i class="fa fa-edit" style="color: rgb(255, 179, 0); font-size:14px;" aria-hidden="true"></i>
                                         </a> --}}
+
+                                        @if($user->user_status == 'active')
+                                            <a href="{{route('user.disable', $user)}}" class="btn btn-sm btn-warning">
+                                                <i class="fa fa-ban" style="color: red; font-size:14px;" aria-hidden="true"></i>
+                                            </a>
+                                        @elseif ($user->user_status == 'disabled')
+                                            <a href="{{route('user.enable', $user)}}" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{route('user.enable', $user)}}" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
+                                                Unblock
+                                            </a>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>
