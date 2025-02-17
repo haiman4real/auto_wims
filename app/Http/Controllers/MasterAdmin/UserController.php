@@ -13,39 +13,9 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::all();
+        $users = User::where('user_role', '!=', 'MasterAdmin')->get();
 
         $loggedInUser = Auth::user();
-
-        // Check if the logged-in user has the "Global Admin" role
-        // if ($loggedInUser->roles->contains('name', 'Global Admin')) {
-        //     // Get all users and filter out those with the "Master Admin" role
-        //     $users = User::whereDoesntHave('roles', function ($query) {
-        //         $query->where('name', 'Master Admin');
-        //     })->get();
-        // } else {
-        //     // If the logged-in user is not a "Global Admin", get all users
-        //     $users = User::all();
-        // }
-
-        // Assume the logged-in user is obtained from the auth system
-        // $loggedInUser = Auth::user();
-
-        // // Check if the logged-in user has the "Global Admin" role
-        // $loggedInUserRoles = DB::table('user_roles')
-        //     ->join('roles', 'user_roles.role_id', '=', 'roles.id')
-        //     ->where('user_roles.user_id', $loggedInUser->id)
-        //     ->pluck('roles.name');
-
-        // if ($loggedInUserRoles->contains('Global Admin')) {
-        //     // Get all users and filter out those with the "Master Admin" role
-        //     $users = User::whereDoesntHave('roles', function ($query) {
-        //         $query->where('name', 'Master Admin');
-        //     })->get();
-        // } else {
-        //     // If the logged-in user is not a "Global Admin", get all users
-        //     $users = User::all();
-        // }
 
         // return $users;
         return view('MasterAdmin.Users.users', compact('users'));

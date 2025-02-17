@@ -109,7 +109,7 @@
                         <select id="user_role" class="form-select" type="text" name="user_role" :value="old('user_role')"
                             required autocomplete="user_role">
                             <option></option>
-                            <option value="MasterAdmin">Master Admin</option>
+                            {{-- <option value="MasterAdmin">Master Admin</option> --}}
                             <option value="SuperAdmin">Super Admin</option>
                             <option value="AdminOne">Admin One</option>
                             <option value="AdminTwo">Admin Two</option>
