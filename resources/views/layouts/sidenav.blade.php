@@ -123,30 +123,30 @@
           </li>
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminone', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminone']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['admintwo', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['admintwo']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminthree', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminthree']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['customerservice', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['customerservice']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['frontdesk', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['frontdesk']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['technician', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['technician']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.technician.admin') }}">
+            <a class="nav-link " href="{{ route('service_booking.technician.user') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa fa-cogs text-yellow text-primary text-sm opacity-10"></i>
               </div>
@@ -155,23 +155,23 @@
           </li>
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['serviceadvisor', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['serviceadvisor']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['jobcontroller', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['jobcontroller']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['accountsadmin', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['accountsadmin']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['businessview', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['businessview']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 
-        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['guestuser', 'superadmin', 'masteradmin']))
+        @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['guestuser']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
         @endif
 

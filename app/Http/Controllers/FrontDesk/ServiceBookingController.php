@@ -639,4 +639,73 @@ class ServiceBookingController extends Controller
             return response()->json(['message' => 'Error updating estimate: ' . $e->getMessage()], 500);
         }
     }
+
+
+
+    //Tehnicians Users
+    public function returnTechnicianUser(){
+        // return "Return Technician Page";
+        // $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'technician_assignment']])->whereJsonDoesntContain('workflow', [['job_type' => 'awaiting_job_advise']])->get();
+        $loggedInUserId = auth()->id(); // Get the logged-in user ID
+
+        $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'technician_assignment']])
+            ->whereJsonDoesntContain('workflow', [['job_type' => 'awaiting_job_advise']])
+            ->where(function ($query) use ($loggedInUserId) {
+                $query->whereJsonContains('workflow', [['job_type' => 'technician_assignment', 'performer' => $loggedInUserId]]);
+            })
+            ->get();
+
+        // $technicians = User::where('user_role', 'technician')->get();
+        // return $jobs;
+        return view('service-bookings.technician_user', compact( 'jobs'));
+    }
+
+
+    public function updateTechnicianJobUser(Request $request)
+    {
+        // Validate incoming request
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required',
+            'workshop_findings' => 'required|string',
+            'required_spare_parts' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+
+        try {
+            $this->updateWorkflow($request->job_id, [
+                'job_type' => 'awaiting_job_advise',
+                'performer_id' => Auth::id(),
+                'details' =>
+                    [
+                        'workshop_findings' => $request->workshop_findings,
+                        'required_spare_parts' => $request->required_spare_parts,
+                        'technician_id' => Auth::id(),
+                    ],
+            ]);
+
+            $this->updateWorkNote($request->job_id, [
+                'job_type' => 'technician_notes',
+                'details' =>
+                    [
+                        'workshop_findings' => $request->workshop_findings,
+                        'required_spare_parts' => $request->required_spare_parts,
+                    ],
+            ]);
+
+            // Log the update
+            Log::info("Job ID {$request->job_id} updated by user ID " . auth()->id(), [
+                'technician_id' => Auth::id(),
+                'workshop_findings' => $request->workshop_findings,
+                'required_spare_parts' => $request->required_spare_parts,
+            ]);
+
+            return response()->json(['message' => 'Job updated successfully!'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error updating job: ' . $e->getMessage());
+            return response()->json(['message' => 'Error updating job. Please try again.'], 500);
+        }
+    }
 }
