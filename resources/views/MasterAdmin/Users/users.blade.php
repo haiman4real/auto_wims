@@ -120,18 +120,27 @@
 
                                         @if($user->user_status == 'active')
                                             <a href="{{route('user.disable', $user)}}" class="btn btn-sm btn-warning">
-                                                <i class="fa fa-ban" style="color: red; font-size:14px;" aria-hidden="true"></i>
+                                                <i class="fa fa-ban" style="color: white; font-size:14px;" aria-hidden="true"></i>
                                             </a>
                                         @elseif ($user->user_status == 'disabled')
                                             <a href="{{route('user.enable', $user)}}" class="btn btn-sm btn-primary">
-                                                <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
+                                                <i class="fa fa-check" style="color: white; font-size:14px;" aria-hidden="true"></i>
                                             </a>
                                         @else
                                             <a href="{{route('user.enable', $user)}}" class="btn btn-sm btn-primary">
-                                                <i class="fa fa-check" style="color: green; font-size:14px;" aria-hidden="true"></i>
+                                                <i class="fa fa-check" style="color: white; font-size:14px;" aria-hidden="true"></i>
                                                 Unblock
                                             </a>
                                         @endif
+
+                                        {{-- <button class="btn btn-sm btn-warning editUser" data-id="{{ $user->id }}" data-toggle="modal" data-target="#editUserModal">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </button> --}}
+                                        &nbsp;
+
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-info text-secondary font-weight-bold text-xs edit-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#editUserModal" data-original-title="Edit User">
+                                            <i class="fa fa-edit" style="color: white; font-size:14px;" aria-hidden="true"></i>
+                                        </a>
                                     @endif
                                 </td>
                             </tr>
@@ -145,6 +154,72 @@
           </div>
         </div>
     </div>
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        @csrf
+                        <input type="hidden" id="edit_user_id" name="user_id">
+
+                        <!-- Name -->
+                        <div>
+                            <label for="edit_user_name" class="form-control-label">Name</label>
+                            <input id="edit_user_name" class="form-control" type="text" name="user_name" required>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="mt-3">
+                            <label for="edit_user_phone" class="form-control-label">Phone Number</label>
+                            <input id="edit_user_phone" class="form-control" type="text" name="user_phone" required minlength="11" maxlength="11">
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mt-3">
+                            <label for="edit_user_role" class="form-control-label">Role</label>
+                            <select id="edit_user_role" class="form-select" name="user_role" required>
+                                <option value="SuperAdmin">Super Admin</option>
+                                <option value="AdminOne">Admin One</option>
+                                <option value="AdminTwo">Admin Two</option>
+                                <option value="AdminThree">Admin Three</option>
+                                <option value="CustomerService">Customer Service</option>
+                                <option value="FrontDesk">Front Desk</option>
+                                <option value="Technician">Technician</option>
+                                <option value="ServiceAdvisor">Service Advisor</option>
+                                <option value="JobController">Job Controller</option>
+                                <option value="AccountsAdmin">Accounts Admin</option>
+                                <option value="BusinessView">Business View</option>
+                                <option value="GuestUser">Guest User</option>
+                                <option value="CoporateUser">Corporate User</option>
+                            </select>
+                        </div>
+
+                        <!-- Station -->
+                        <div class="mt-3">
+                            <label for="edit_user_station" class="form-control-label">Station</label>
+                            <select id="edit_user_station" class="form-select" name="user_station" required>
+                                <option value="HQ">HQ</option>
+                                <option value="Ojodu">Ojodu</option>
+                                <option value="Abuja">Abuja</option>
+                                <option value="Asaba">Asaba</option>
+                            </select>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn btn-primary">Update User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         $(document).ready(function() {
             $('.table').DataTable({
@@ -154,6 +229,55 @@
                 buttons: [
                     'csvHtml5', 'excelHtml5', 'pdfHtml5'
                 ]
+            });
+
+            // Load user data into modal
+            $(document).on('click', '.edit-btn', function () {
+            // $('.editUser').on('click', function() {
+                var userId = $(this).data('id');
+
+                $.ajax({
+                    url: "{{ route('user.edit', 'userId') }}",
+                    type: "GET",
+                    data: { id: userId },
+                    success: function(response) {
+                        $('#edit_user_id').val(response.id);
+                        $('#edit_user_name').val(response.user_name);
+                        $('#edit_user_phone').val(response.user_phone);
+                        $('#edit_user_role').val(response.user_role);
+                        $('#edit_user_station').val(response.user_station);
+
+                        $('#editUserModal').modal('show');
+                    },
+                    error: function(xhr) {
+                        alert("Error fetching user details!");
+                    }
+                });
+            });
+
+            // Submit updated user data
+            $('#editUserForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var userId = $('#edit_user_id').val(); // Get user ID
+                var formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: "/ma/users/" + userId, // Dynamic route
+                    type: "PATCH",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for security
+                    },
+                    success: function(response) {
+                        alert("User updated successfully!");
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert("Error updating user! Check console for details.");
+                    }
+                });
             });
         });
     </script>
