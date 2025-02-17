@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
             // return true to allow viewing the Log Viewer.
 
             return $request->user() && in_array($request->user()->email, [
-                'emma@autovin.com.ng', 'haiman4real@gmail.com', 'emma@emma.com'
+                'emma@gopodlab.com', 'haiman4real@gmail.com', 'emma@emma.com'
             ]);
         });
     }
