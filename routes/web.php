@@ -8,6 +8,7 @@ use App\Http\Controllers\MasterAdmin;
 use App\Http\Controllers\FrontDesk;
 use App\Http\Middleware\MasterAdminMiddleware;
 use App\Http\Middleware\SuperAdmin;
+use App\Http\Middleware\Technician;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,8 +134,10 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 
 });
 
-Route::middleware(['auth','Technician', 'verified'])->namespace('Technician')->group(function(){
+Route::middleware(['auth', 'verified'])->middleware(Technician::class)->namespace('Technician')->group(function(){
     Route::get('/tc/home', 'HomeController@index');
+    Route::get('/tc/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianUser'])->name('service_booking.technician.user');
+    Route::post('/tc/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobUser'])->name('service_booking.technician.user.updateJob');
 });
 
 Route::middleware(['auth','ServiceAdvisor', 'verified'])->namespace('ServiceAdvisor')->group(function(){

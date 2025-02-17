@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Opcodes\LogViewer\Facades\LogViewer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,5 +21,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        LogViewer::auth(function ($request) {
+            // return true to allow viewing the Log Viewer.
+
+            return $request->user() && in_array($request->user()->email, [
+                'emma@gopodlab.com', 'haiman4real@gmail.com', 'emma@emma.com'
+            ]);
+        });
     }
 }
