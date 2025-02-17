@@ -149,6 +149,13 @@
                                             <span class="badge badge-sm bg-gradient-success">{{ucfirst($booking->status)}}</span>
                                         @elseif ($booking->status == 'deleted')
                                             <span class="badge badge-sm bg-gradient-danger">{{$booking->status}}</span>
+                                        @elseif ($booking->status == 'canceled')
+                                            <span class="badge badge-sm bg-gradient-danger">{{$booking->status}}</span>
+                                        @elseif ($booking->status == 'initialized')
+                                            <span class="badge badge-sm bg-gradient-info">{{$booking->status}}</span>
+                                            @elseif ($booking->status == 'in progress')
+                                            <span class="badge badge-sm bg-gradient-info">{{$booking->status}}</span>
+
                                         @else
                                             <span class="badge badge-sm bg-gradient-warning">{{ucfirst($booking->status)}}</
                                         @endif
@@ -178,77 +185,6 @@
         </div>
     </div>
 
-    <!-- Edit Customer Modal -->
-    <div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editVehicleModalLabel">Edit Vehicle</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editVehicleForm" method="POST" action="">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" id="edit_vehicle_id" name="vehicle_id">
-
-                        <!-- Body Type -->
-                        <div class="form-group">
-                            <label for="edit_vec_body" class="h6">Body Type</label>
-                            <select class="form-control" name="body_type" id="edit_vec_body" required>
-                                <option>SUV</option>
-                                <option>Salon/Sedan</option>
-                                <option>Hatchback</option>
-                                <option>Crossover</option>
-                                <option>Sports Car</option>
-                                <option>Convertible</option>
-                                <option>Coupe</option>
-                                <option>Vans</option>
-                                <option>Trucks/Pick Up</option>
-                                <option>Wagons</option>
-                            </select>
-                        </div>
-
-                        <!-- Vehicle Year -->
-                        <div class="form-group">
-                            <label for="edit_vec_year" class="h6">Vehicle Year</label>
-                            <input type="text" class="form-control" name="vec_year" id="edit_vec_year" required>
-                        </div>
-
-                        <!-- Vehicle Make -->
-                        <div class="form-group">
-                            <label for="edit_vec_make" class="h6">Vehicle Make</label>
-                            <input type="text" class="form-control" name="vec_make" id="edit_vec_make" required>
-                        </div>
-
-                        <!-- Vehicle Model -->
-                        <div class="form-group">
-                            <label for="edit_vec_model" class="h6">Vehicle Model</label>
-                            <input type="text" class="form-control" name="vec_model" id="edit_vec_model" required>
-                        </div>
-
-                        <!-- Vehicle Plate -->
-                        <div class="form-group">
-                            <label for="edit_vec_plate" class="h6">Vehicle Plate</label>
-                            <input type="text" class="form-control" maxlength="8" name="vec_plate" id="edit_vec_plate" required>
-                        </div>
-
-                        <!-- VIN/Chassis No -->
-                        <div class="form-group">
-                            <label for="edit_vec_vin" class="h6">VIN/Chassis No</label>
-                            <input type="text" class="form-control" maxlength="17" name="vec_vin" id="edit_vec_vin" required>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary">Update Vehicle</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -270,44 +206,8 @@
                 table.search(this.value).draw(); // Trigger DataTable search with the input value
             });
 
-            // When the edit button is clicked, open the modal and fill the data
-            $('#vehiclesTable').on('click', '.edit-btn-vehicles', function() {
-                var vehicleId = $(this).data('id');
-
-                // Fetch vehicle data via AJAX
-                $.ajax({
-                    url: '/workshop/vehicles/' + vehicleId + '/edit',
-                    method: 'GET',
-                    success: function(response) {
-                        // Populate the form fields with the retrieved data
-                        $('#edit_vehicle_id').val(response.vec_id);
-                        $('#edit_vec_body').val(response.vec_body);
-                        $('#edit_vec_year').val(response.vec_year);
-                        $('#edit_vec_make').val(response.vec_make);
-                        $('#edit_vec_model').val(response.vec_model);
-                        $('#edit_vec_plate').val(response.vec_plate);
-                        $('#edit_vec_vin').val(response.vec_vin);
-
-                        // Set the form action dynamically
-                        $('#editVehicleForm').attr('action', '/workshop/vehicles/' + vehicleId);
-
-                        // Show the modal
-                        $('#editVehicleModal').modal('show');
-                    },
-                    error: function(xhr) {
-                        console.error('Error fetching vehicle data:', xhr);
-                        alert('Error fetching vehicle data. Please try again.');
-                    }
-                });
-            });
 
         });
-
-        // Function to validate digits only in an input field
-        function validateDigits(input) {
-            // Replace any non-digit character with an empty string
-            input.value = input.value.replace(/\D/g, '');
-        }
 
         document.addEventListener('DOMContentLoaded', function() {
             // Get the button and the form elements

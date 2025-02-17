@@ -113,6 +113,14 @@
               <span class="nav-link-text ms-1">Self Service Bookings</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('job.services') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-server text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Job Services</span>
+            </a>
+          </li>
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['adminone', 'superadmin', 'masteradmin']))
@@ -137,6 +145,14 @@
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['technician', 'superadmin', 'masteradmin']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('service_booking.technician.admin') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-cogs text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Technician</span>
+            </a>
+          </li>
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['serviceadvisor', 'superadmin', 'masteradmin']))

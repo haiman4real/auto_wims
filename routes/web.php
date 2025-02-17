@@ -7,6 +7,7 @@ use App\Http\Controllers\CoporateUser;
 use App\Http\Controllers\MasterAdmin;
 use App\Http\Controllers\FrontDesk;
 use App\Http\Middleware\MasterAdminMiddleware;
+use App\Http\Middleware\SuperAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,12 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class)->namespace('MasterAdmin')->group(function(){
     Route::get('/ma/home', 'HomeController@index');
+
+
+});
+
+Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespace('SuperAdmin')->group(function(){
+    Route::get('/sa/home', 'HomeController@index');
     Route::get('/ma/users', [MasterAdmin\UserController::class, 'index'])->name('users.index');
     Route::get('/ma/users/add', [MasterAdmin\UserController::class, 'create'])->name('users.add');
     Route::post('/ma/users', [MasterAdmin\UserController::class, 'store'])->name('user.store');
@@ -45,11 +52,6 @@ Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class
     Route::delete('/ma/users/{user}', [MasterAdmin\UserController::class, 'destroy'])->name('user.destroy');
     Route::get('/ma/user/enable/{user}', [MasterAdmin\UserController::class, 'enableUser'])->name('user.enable');
     Route::get('/ma/user/disable/{user}', [MasterAdmin\UserController::class, 'disableUser'])->name('user.disable');
-
-});
-
-Route::middleware(['auth','SuperAdmin', 'verified'])->namespace('SuperAdmin')->group(function(){
-    Route::get('/sa/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','AdminOne','verified'])->namespace('AdminOne')->group(function(){
@@ -112,6 +114,15 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
 
     Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
+
+    Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
+    Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
+    Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
+    Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
+    Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
+    Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
+
+
 
     Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
     Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');

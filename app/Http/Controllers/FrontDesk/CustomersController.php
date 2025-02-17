@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Customer; // Eloquent model for 'customers'
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
@@ -53,6 +54,8 @@ class CustomersController extends Controller
             'phone_number.digits' => 'Phone number must be exactly 11 digits.',
             'email.unique' => 'This email is already registered.',
         ];
+
+        // dd(DB::connection('mysql_non_laravel')->getDatabaseName());
 
         try {
             $validatedData = Validator::make($request->all(), $rules, $customMessages)->validate();

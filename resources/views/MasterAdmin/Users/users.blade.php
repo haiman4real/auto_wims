@@ -110,13 +110,13 @@
                                 </td>
                                 <td class="">
                                     @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
-                                        <a href="#" class="text-secondary font-weight-bold text-xs complete-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#completeJobModal" data-original-title="Delete Customer">
+                                        {{-- <a href="#" class="text-secondary font-weight-bold text-xs complete-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#completeJobModal" data-original-title="Delete Customer">
                                             <i class="fa fa-ban" style="color: green; font-size:14px;" aria-hidden="true"></i>delete
                                         </a>
                                         &nbsp;
                                         <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs edit-btn" data-id="{{ $user->id }}" data-toggle="modal" data-target="#editCustomerModal" data-original-title="Edit Customer">
                                             <i class="fa fa-edit" style="color: rgb(255, 179, 0); font-size:14px;" aria-hidden="true"></i>
-                                        </a>
+                                        </a> --}}
                                     @endif
                                 </td>
                             </tr>
