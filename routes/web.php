@@ -191,14 +191,12 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\Coporate
 
 Route::middleware(['auth','verified'])->group(function(){
 
-    Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
-    Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
 
 
 });
 
 
-Route::middleware(['auth','verified'])->group(function(){
+Route::middleware(['auth','verified'])->middleware(['role:SuperAdmin, Technician, CustomerService, JobController'])->group(function(){
     //CUSTOMERS
     Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
     Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
@@ -221,7 +219,9 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
     Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
     Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
+});
 
+Route::middleware(['auth','verified'])->middleware(['role:SuperAdmin, CustomerService'])->group(function(){
     //BOOKINGS
     Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
     Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
@@ -242,6 +242,9 @@ Route::middleware(['auth','verified'])->group(function(){
     //JOB BANK
     Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
 
+});
+
+Route::middleware(['auth','verified'])->middleware(['role:SuperAdmin, JobController'])->group(function(){
     //JOB CONTROLLER
     Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
     Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
@@ -251,8 +254,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
 
 });
-//frontdesk,
-//inspectionofficer
-//certificationofficer
-//globaladmin
-//admin_view_only
+
+
+Route::middleware(['auth','verified'])->middleware(['role:SuperAdmin, ServiceAdvisor'])->group(function(){
+    //SERVICE ADVISOR
+    Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
+    Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
+});
