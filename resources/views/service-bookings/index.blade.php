@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <x-slot name="title">
-        Customers
+        Service Order Booking
     </x-slot>
     <div class="container-fluid py-4">
         <!-- Header -->
