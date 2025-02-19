@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Expr\FuncCall;
 
 class ServiceBookingController extends Controller
 {
@@ -708,4 +709,16 @@ class ServiceBookingController extends Controller
             return response()->json(['message' => 'Error updating job. Please try again.'], 500);
         }
     }
+
+    public function returnServiceAdvisorUser(){
+        // return "Return Service Advisor Page";
+        $loggedInUserId = auth()->id(); // Get the logged-in user ID
+        
+        $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'awaiting_job_advise']])->whereJsonDoesntContain('workflow', [['job_type' => 'service_advisor_comments']])->where(function ($query) use ($loggedInUserId) {
+            $query->whereJsonContains('workflow', [['job_type' => 'technician_assignment', 'performer' => $loggedInUserId]]);
+        })
+        ->get();;
+        return view('service-bookings.advisor_user', compact('jobs'));
+    }
+
 }
