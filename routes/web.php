@@ -102,7 +102,7 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     // Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
 
 
-    Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
+    // Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
     // Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
     // Route::get('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianAdmin'])->name('service_booking.technician.admin');
     // Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
@@ -130,10 +130,10 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 
 
 
-    Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
-    Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
-    Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
-    Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
+    // Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
+    // Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
+    // Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
+    // Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
 
 
 
@@ -219,6 +219,10 @@ Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmi
     Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
     Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
     Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
+    Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
+    Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
+    Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
+    Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
 });
 
 Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmin, CustomerService'])->group(function(){
