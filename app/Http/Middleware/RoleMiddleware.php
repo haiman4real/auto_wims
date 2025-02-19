@@ -31,6 +31,6 @@ class RoleMiddleware
             return $next($request);
         }
 
-        return abort(403, 'Unauthorized. You do not have permission to access this page.');
+        return abort(403, 'Unauthorized. You do not have permission to access this page. To request access, please contact your administrator.');
     }
 }
