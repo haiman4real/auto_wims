@@ -56,6 +56,8 @@ Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespac
     Route::delete('/ma/users/{user}', [MasterAdmin\UserController::class, 'destroy'])->name('user.destroy');
     Route::get('/ma/user/enable/{user}', [MasterAdmin\UserController::class, 'enableUser'])->name('user.enable');
     Route::get('/ma/user/disable/{user}', [MasterAdmin\UserController::class, 'disableUser'])->name('user.disable');
+
+    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
 });
 
 Route::middleware(['auth','AdminOne','verified'])->namespace('AdminOne')->group(function(){
