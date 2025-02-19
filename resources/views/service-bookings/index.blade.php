@@ -61,9 +61,9 @@
                                 <div class="col">
                                     <h6 class="mb-0">Service Order Details</h6>
                                 </div>
-                                <div class="col text-right" style="float: right;">
+                                {{-- <div class="col text-right" style="float: right;">
                                     <div class="btn btn-sm btn-danger" id="clearBookingBtn">Clear Job Order</div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body pt-0">
