@@ -91,7 +91,7 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                            @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin', 'serviceadvisor', 'customerservice']))
 
                                                 @if($job->status !== 'completed' && $job->status !== 'deleted')
                                                     <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs assign-btn" data-id="{{ $job->id }}" data-customer="{{ $job->customer->cust_name }}" data-customer-phone="{{ $job->customer->cust_mobile }}" data-customer-email="{{ $job->customer->cust_email }}" data-customer-address="{{ $job->customer->cust_address }} {{ $job->customer->cust_lga }}" data-customer-type="{{ $job->customer->cust_type }}" data-vehicle-make-model="{{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }}" data-vehicle-plate="{{ $job->vehicle->vec_plate }}" data-vehicle-vin="{{ $job->vehicle->vec_vin }}" data-vehicle-year="{{ $job->vehicle->vec_year }}" data-job_description="{{ $job->description }}" data-booking_ref="{{ $job->order_number}}" data-booking_date="{{ date('M j, Y h:i A', strtotime($job->created_at ))}}" data-toggle="modal" data-target="#awaitingEstimationModal">
