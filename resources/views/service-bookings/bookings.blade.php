@@ -40,7 +40,7 @@
                                             </td>
                                             <td class="text-sm">{{ date("M j, Y h:i A", strtotime($job->created_at)) }}</td>
                                             <td class="text-sm">
-                                                @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                                @if(Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin', 'customerservice', 'serviceadvisor']))
                                                     @if($job->status !== 'estimate generated')
                                                         <a href="{{ route('service_booking.estimate.generate', ['job_id' => $job->id]) }}" class="btn btn-primary btn-sm">
                                                             <i class="fa fa-plus"></i>

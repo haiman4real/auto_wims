@@ -7,6 +7,7 @@ use App\Http\Controllers\CoporateUser;
 use App\Http\Controllers\MasterAdmin;
 use App\Http\Controllers\FrontDesk;
 use App\Http\Middleware\MasterAdminMiddleware;
+use App\Http\Middleware\ServiceAdvisor;
 use App\Http\Middleware\SuperAdmin;
 use App\Http\Middleware\Technician;
 
@@ -73,55 +74,55 @@ Route::middleware(['auth','CustomerService','verified'])->namespace('CustomerSer
 
 Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDesk::class)->namespace('FrontDesk')->group(function(){
     Route::get('/fd/home', 'HomeController@index');
-    Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
-    Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
-    Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
-    Route::get('/workshop/customers/{customer}/edit', [FrontDesk\CustomersController::class, 'edit'])->name('customers.edit');
-    Route::put('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'update'])->name('customers.update');
-    Route::delete('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'destroy'])->name('customers.destroy');
-    Route::get('/workshop/customers/{customer}/delete', [FrontDesk\CustomersController::class, 'deleteCustomer'])->name('customers.delete');
+    // Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
+    // Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
+    // Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
+    // Route::get('/workshop/customers/{customer}/edit', [FrontDesk\CustomersController::class, 'edit'])->name('customers.edit');
+    // Route::put('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'update'])->name('customers.update');
+    // Route::delete('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'destroy'])->name('customers.destroy');
+    // Route::get('/workshop/customers/{customer}/delete', [FrontDesk\CustomersController::class, 'deleteCustomer'])->name('customers.delete');
 
-    Route::get('/workshop/vehicles', [FrontDesk\VehicleController::class, 'index'])->name('vehicles.index');
-    Route::get('/workshop/vehicles/add', [FrontDesk\VehicleController::class, 'create'])->name('vehicles.add');
-    Route::post('/workshop/vehicles', [FrontDesk\VehicleController::class,'store'])->name('vehicles.store');
-    Route::get('/workshop/vehicles/{customer}/edit', [FrontDesk\VehicleController::class, 'edit'])->name('vehicles.edit');
-    Route::put('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'update'])->name('vehicles.update');
-    Route::delete('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'destroy'])->name('vehicles.destroy');
-    Route::get('/workshop/vehicles/{customer}/delete', [FrontDesk\VehicleController::class, 'deleteCustomer'])->name('vehicles.delete');
+    // Route::get('/workshop/vehicles', [FrontDesk\VehicleController::class, 'index'])->name('vehicles.index');
+    // Route::get('/workshop/vehicles/add', [FrontDesk\VehicleController::class, 'create'])->name('vehicles.add');
+    // Route::post('/workshop/vehicles', [FrontDesk\VehicleController::class,'store'])->name('vehicles.store');
+    // Route::get('/workshop/vehicles/{customer}/edit', [FrontDesk\VehicleController::class, 'edit'])->name('vehicles.edit');
+    // Route::put('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'update'])->name('vehicles.update');
+    // Route::delete('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'destroy'])->name('vehicles.destroy');
+    // Route::get('/workshop/vehicles/{customer}/delete', [FrontDesk\VehicleController::class, 'deleteCustomer'])->name('vehicles.delete');
 
-    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
+    // Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
 
 
-    Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
-    Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
-    Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
+    // Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
+    // Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
+    // Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
 
 
     Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
-    Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
+    // Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
     Route::get('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianAdmin'])->name('service_booking.technician.admin');
     Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
 
-    Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
-    Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
+    // Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
+    // Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
 
-    Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
+    // Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
 
 
-    Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
-    Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
-    Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
-    Route::get('/workshop/estimate/edit/{job_id}', [FrontDesk\ServiceBookingController::class, 'editEstimate'])->name('service_booking.estimate.edit');
-    Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
+    // Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
+    // Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
+    // Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
+    // Route::get('/workshop/estimate/edit/{job_id}', [FrontDesk\ServiceBookingController::class, 'editEstimate'])->name('service_booking.estimate.edit');
+    // Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
 
-    Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
+    // Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
 
-    Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
-    Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
-    Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
-    Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
-    Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
-    Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
+    // Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
+    // Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
+    // Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
+    // Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
+    // Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
+    // Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
 
 
 
@@ -140,8 +141,13 @@ Route::middleware(['auth', 'verified'])->middleware(Technician::class)->namespac
     Route::post('/tc/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobUser'])->name('service_booking.technician.user.updateJob');
 });
 
-Route::middleware(['auth','ServiceAdvisor', 'verified'])->namespace('ServiceAdvisor')->group(function(){
+Route::middleware(['auth', 'verified'])->middleware(ServiceAdvisor::class)->namespace('ServiceAdvisor')->group(function(){
     Route::get('/sa/home', 'HomeController@index');
+    Route::get('/sa/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisorUser'])->name('service_booking.service_advisor.user');
+    Route::post('/sa/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisorUser'])->name('service_booking.service_advisor.user.updateJob');
+
+    Route::get('/sa/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('sa.service_booking.jobcontroller');
+
 });
 
 Route::middleware(['auth','JobController','verified'])->namespace('JobController')->group(function(){
@@ -177,7 +183,56 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\Coporate
     Route::get('/product/trackers/delete/{tracker}', [CoporateUser\TrackerController::class, 'destroy'])->name('trackers.destroy');
 });
 
+//General Routes
 
+Route::middleware(['auth','verified'])->group(function(){
+    Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
+    Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
+
+    Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
+    Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
+    Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
+    Route::get('/workshop/estimate/edit/{job_id}', [FrontDesk\ServiceBookingController::class, 'editEstimate'])->name('service_booking.estimate.edit');
+    Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
+
+    Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
+
+    Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
+    Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
+    Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
+    Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
+    Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
+    Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
+
+    Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
+    Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
+    Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
+    Route::get('/workshop/customers/{customer}/edit', [FrontDesk\CustomersController::class, 'edit'])->name('customers.edit');
+    Route::put('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'update'])->name('customers.update');
+    Route::delete('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'destroy'])->name('customers.destroy');
+    Route::get('/workshop/customers/{customer}/delete', [FrontDesk\CustomersController::class, 'deleteCustomer'])->name('customers.delete');
+
+    Route::get('/workshop/vehicles', [FrontDesk\VehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/workshop/vehicles/add', [FrontDesk\VehicleController::class, 'create'])->name('vehicles.add');
+    Route::post('/workshop/vehicles', [FrontDesk\VehicleController::class,'store'])->name('vehicles.store');
+    Route::get('/workshop/vehicles/{customer}/edit', [FrontDesk\VehicleController::class, 'edit'])->name('vehicles.edit');
+    Route::put('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'update'])->name('vehicles.update');
+    Route::delete('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'destroy'])->name('vehicles.destroy');
+    Route::get('/workshop/vehicles/{customer}/delete', [FrontDesk\VehicleController::class, 'deleteCustomer'])->name('vehicles.delete');
+
+    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
+
+
+    Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
+    Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
+    Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
+
+    Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
+    Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
+
+    Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
+    
+});
 //frontdesk,
 //inspectionofficer
 //certificationofficer
