@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Middleware\CustomerService;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoporateUser;
 use App\Http\Controllers\MasterAdmin;
 use App\Http\Controllers\FrontDesk;
+use App\Http\Middleware\JobController;
 use App\Http\Middleware\MasterAdminMiddleware;
 use App\Http\Middleware\ServiceAdvisor;
 use App\Http\Middleware\SuperAdmin;
@@ -54,6 +56,8 @@ Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespac
     Route::delete('/ma/users/{user}', [MasterAdmin\UserController::class, 'destroy'])->name('user.destroy');
     Route::get('/ma/user/enable/{user}', [MasterAdmin\UserController::class, 'enableUser'])->name('user.enable');
     Route::get('/ma/user/disable/{user}', [MasterAdmin\UserController::class, 'disableUser'])->name('user.disable');
+
+    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
 });
 
 Route::middleware(['auth','AdminOne','verified'])->namespace('AdminOne')->group(function(){
@@ -98,10 +102,10 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
     // Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
 
 
-    Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
+    // Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
     // Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
-    Route::get('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianAdmin'])->name('service_booking.technician.admin');
-    Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
+    // Route::get('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianAdmin'])->name('service_booking.technician.admin');
+    // Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
 
     // Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
     // Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
@@ -126,10 +130,10 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 
 
 
-    Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
-    Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
-    Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
-    Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
+    // Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
+    // Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
+    // Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
+    // Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
 
 
 
@@ -146,7 +150,7 @@ Route::middleware(['auth', 'verified'])->middleware(ServiceAdvisor::class)->name
     Route::get('/sa/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisorUser'])->name('service_booking.service_advisor.user');
     Route::post('/sa/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisorUser'])->name('service_booking.service_advisor.user.updateJob');
 
-    Route::get('/sa/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('sa.service_booking.jobcontroller');
+    // Route::get('/sa/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('sa.service_booking.jobcontroller');
 
 });
 
@@ -186,24 +190,16 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\Coporate
 //General Routes
 
 Route::middleware(['auth','verified'])->group(function(){
-    Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
-    Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
+    Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
+    Route::get('/api/lgas/{state}', [FrontDesk\CustomersController::class, 'getLga'])->name('customers.getLga');
+    Route::get('/api/customers', [FrontDesk\CustomersController::class, 'searchCustomers'])->name('customers.search');
+    Route::post('/api/vehicles', [FrontDesk\VehicleController::class, 'addVehicle'])->name('vehicles.addOrder');
+    Route::get('/api/vehicles', [FrontDesk\VehicleController::class, 'getVehiclesByCustomer'])->name('vehicles.byCustomer');
+});
 
-    Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
-    Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
-    Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
-    Route::get('/workshop/estimate/edit/{job_id}', [FrontDesk\ServiceBookingController::class, 'editEstimate'])->name('service_booking.estimate.edit');
-    Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
 
-    Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
-
-    Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
-    Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
-    Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
-    Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
-    Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
-    Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
-
+Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmin, Technician, CustomerService, JobController'])->group(function(){
+    //CUSTOMERS
     Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
     Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
     Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
@@ -212,6 +208,7 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('/workshop/customers/{customer}', [FrontDesk\CustomersController::class, 'destroy'])->name('customers.destroy');
     Route::get('/workshop/customers/{customer}/delete', [FrontDesk\CustomersController::class, 'deleteCustomer'])->name('customers.delete');
 
+    //VEHICLES
     Route::get('/workshop/vehicles', [FrontDesk\VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/workshop/vehicles/add', [FrontDesk\VehicleController::class, 'create'])->name('vehicles.add');
     Route::post('/workshop/vehicles', [FrontDesk\VehicleController::class,'store'])->name('vehicles.store');
@@ -220,21 +217,49 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::delete('/workshop/vehicles/{customer}', [FrontDesk\VehicleController::class, 'destroy'])->name('vehicles.destroy');
     Route::get('/workshop/vehicles/{customer}/delete', [FrontDesk\VehicleController::class, 'deleteCustomer'])->name('vehicles.delete');
 
-    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
-
-
+    //SERVICE ORDER
     Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
     Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
-    Route::get('/api/jobs/count', [FrontDesk\ServiceBookingController::class, 'generateOrderNumber'])->name('service_booking.genOrderNo');
 
+});
+
+Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmin, CustomerService'])->group(function(){
+    //BOOKINGS
+    Route::get('/workshop/bookings', [FrontDesk\ServiceBookingController::class, 'returnBookings'])->name('service_booking.bookings');
+    Route::get('/workshop/estimate/generate/{job_id}', [FrontDesk\ServiceBookingController::class, 'showEstimationPage'])->name('service_booking.estimate.generate');
+    Route::post('/workshop/estimate/save', [FrontDesk\ServiceBookingController::class, 'storeEstimation'])->name('service_booking.estimate.save');
+    Route::get('/workshop/estimate/edit/{job_id}', [FrontDesk\ServiceBookingController::class, 'editEstimate'])->name('service_booking.estimate.edit');
+    Route::post('/workshop/estimate/update', [FrontDesk\ServiceBookingController::class, 'updateEstimate'])->name('service_booking.estimate.update');
+    Route::get('/workshop/estimate/invoice/{job_id}', [FrontDesk\ServiceBookingController::class, 'returnInvoice'])->name('service_booking.estimate.invoice');
+
+
+    //JOB SERVICES
+    Route::get('/workshop/services', [FrontDesk\JobServicesController::class, 'returnServices'])->name('job.services');
+    Route::get('/workshop/services/add', [FrontDesk\JobServicesController::class, 'addService'])->name('job.services.add');
+    Route::post('/workshop/services', [FrontDesk\JobServicesController::class, 'storeService'])->name('job.services.store');
+    Route::get('/workshop/services/{service}/edit', [FrontDesk\JobServicesController::class, 'editService'])->name('job.services.edit');
+    Route::put('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'updateService'])->name('job.services.update');
+    Route::delete('/workshop/services/{service}', [FrontDesk\JobServicesController::class, 'destroyService'])->name('job.services.destroy');
+
+    //JOB BANK
+    Route::get('/workshop/job-bank', [FrontDesk\ServiceBookingController::class, 'returnJobBank'])->name('service_booking.job_bank.admin');
+
+});
+
+Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmin, JobController'])->group(function(){
+    //JOB CONTROLLER
+    Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
+    Route::post('/workshop/assign-technician', [FrontDesk\ServiceBookingController::class, 'assignTechnician'])->name('service_booking.assign_technician');
+
+    //TECHNICIAN
+    Route::get('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianAdmin'])->name('service_booking.technician.admin');
+    Route::post('/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobAdmin'])->name('service_booking.technician.admin.updateJob');
+
+});
+
+
+Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmin, ServiceAdvisor'])->group(function(){
+    //SERVICE ADVISOR
     Route::get('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisor'])->name('service_booking.service_advisor.admin');
     Route::post('/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisor'])->name('service_booking.service_advisor.admin.updateJob');
-
-    Route::get('/workshop/job-controller', [FrontDesk\ServiceBookingController::class, 'returnJobController'])->name('service_booking.jobcontroller');
-    
 });
-//frontdesk,
-//inspectionofficer
-//certificationofficer
-//globaladmin
-//admin_view_only
