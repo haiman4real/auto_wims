@@ -72,14 +72,14 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin']))
+                                            {{-- @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin'])) --}}
 
                                                 @if($job->status !== 'completed' && $job->status !== 'deleted')
                                                     <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs assign-btn" data-id="{{ $job->id }}" data-customer="{{ $job->customer->cust_name }}" data-vehicle="{{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }} - {{ $job->vehicle->vec_plate }}" data-job_description="{{ $job->description }}" data-toggle="modal" data-target="#assignTechnicianModal">
                                                             <i class="fa fa-user" style="color: blue; font-size:14px;" aria-hidden="true"></i> Assign Technician
                                                     </a>
                                                 @endif
-                                            @endif
+                                            {{-- @endif --}}
                                         </td>
                                     </tr>
                                 @empty
