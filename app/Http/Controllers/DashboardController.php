@@ -11,8 +11,32 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
+        $filter = $request->get('filter', 'day'); // Default to 'day' if no filter is selected
+
+        switch ($filter) {
+            case 'week':
+            $startDate = Carbon::now()->startOfWeek();
+            $endDate = Carbon::now()->endOfWeek();
+            break;
+            case 'month':
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+            break;
+            case 'year':
+            $startDate = Carbon::now()->startOfYear();
+            $endDate = Carbon::now()->endOfYear();
+            break;
+            case 'day':
+            default:
+            $startDate = Carbon::now()->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+            break;
+        }
+
+        // $endDate = Carbon::now()->toDateTimeString();
+
         if(Auth::user()->user_role === 'CoporateUser'){
             $agentId = Auth::id();
 
@@ -48,22 +72,22 @@ class DashboardController extends Controller
             // Get current week's counts
             $customerCount = DB::connection('mysql_non_laravel')
             ->table('customers')
-            ->whereBetween('cust_reg_time', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->whereBetween('cust_reg_time', [$startDate, $endDate])
             ->get()->count();
 
             $vehicleCount = DB::connection('mysql_non_laravel')
                 ->table('vehicles')
-                ->whereBetween('vec_reg_time', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->whereBetween('vec_reg_time', [$startDate, $endDate])
                 ->get()->count();
 
             $jobCount = DB::connection('mysql_non_laravel')
                 ->table('jobs')
-                ->whereBetween('job_reg_time', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->whereBetween('job_reg_time', [$startDate, $endDate])
                 ->get()->count();
 
             $invoiceCount = DB::connection('mysql_non_laravel')
                 ->table('invoices')
-                ->whereBetween('inv_time', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->whereBetween('inv_time', [$startDate, $endDate])
                 ->get()->count();
 
             $bookingJobs = $this->getBookingsJobsDetails();
@@ -71,25 +95,46 @@ class DashboardController extends Controller
             // Get previous week's counts
             $previousWeekStart = Carbon::now()->subWeek()->startOfWeek();
             $previousWeekEnd = Carbon::now()->subWeek()->endOfWeek();
+            // Get previous period's counts for growth calculation
+            switch ($filter) {
+                case 'week':
+                    $previousPeriodStart = Carbon::now()->subWeek()->startOfWeek();
+                    $previousPeriodEnd = Carbon::now()->subWeek()->endOfWeek();
+                    break;
+                case 'month':
+                    $previousPeriodStart = Carbon::now()->subMonth()->startOfMonth();
+                    $previousPeriodEnd = Carbon::now()->subMonth()->endOfMonth();
+                    break;
+                case 'year':
+                    $previousPeriodStart = Carbon::now()->subYear()->startOfYear();
+                    $previousPeriodEnd = Carbon::now()->subYear()->endOfYear();
+                    break;
+                case 'day':
+                default:
+                    $previousPeriodStart = Carbon::now()->subDay()->startOfDay();
+                    $previousPeriodEnd = Carbon::now()->subDay()->endOfDay();
+                    break;
+            }
+            // $previousPeriodEnd = $startDate;
 
             $previousCustomerCount = DB::connection('mysql_non_laravel')
                 ->table('customers')
-                ->whereBetween('cust_reg_time', [$previousWeekStart, $previousWeekEnd])
+                ->whereBetween('cust_reg_time', [$previousPeriodStart, $previousPeriodEnd])
                 ->get()->count();
 
             $previousVehicleCount = DB::connection('mysql_non_laravel')
                 ->table('vehicles')
-                ->whereBetween('vec_reg_time', [$previousWeekStart, $previousWeekEnd])
+                ->whereBetween('vec_reg_time', [$previousPeriodStart, $previousPeriodEnd])
                 ->get()->count();
 
             $previousJobCount = DB::connection('mysql_non_laravel')
                 ->table('jobs')
-                ->whereBetween('job_reg_time', [$previousWeekStart, $previousWeekEnd])
+                ->whereBetween('job_reg_time', [$previousPeriodStart, $previousPeriodEnd])
                 ->get()->count();
 
             $previousInvoiceCount = DB::connection('mysql_non_laravel')
                 ->table('invoices')
-                ->whereBetween('inv_time', [$previousWeekStart, $previousWeekEnd])
+                ->whereBetween('inv_time', [$previousPeriodStart, $previousPeriodEnd])
                 ->get()->count();
 
             // Get total counts for each category
