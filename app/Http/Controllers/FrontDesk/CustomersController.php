@@ -66,7 +66,7 @@ class CustomersController extends Controller
             Customer::create([
                 'cust_name' => $validatedData['full_name'],
                 'cust_mobile' => $validatedData['phone_number'],
-                'cust_email' => $request->has('email_not_available') ? null : $validatedData['email'],
+                'cust_email' => $request->has('email_not_available') ? null : ($validatedData['email'] ?? null),
                 'cust_address' => $validatedData['address'],
                 'cust_lga' => $validatedData['lga'].' - ' .$validatedData['state'],
                 'cust_mode' => $validatedData['mode_of_contact'],
@@ -76,7 +76,7 @@ class CustomersController extends Controller
                 'cust_view' => 'visible',
             ]);
 
-            Log::info('Customer data added successfully', ['email' => $validatedData['email']]);
+            Log::info('Customer data added successfully', ['email' => $validatedData['email'] ?? 'N/A']);
 
             return redirect()->back()->with('success', 'Customer added successfully!');
         } catch (ValidationException $e) {
