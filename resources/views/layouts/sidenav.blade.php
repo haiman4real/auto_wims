@@ -42,6 +42,22 @@
           {{-- Role: {{ Auth::user()->user_role }} --}}
 
           <li class="nav-item">
+            <a class="nav-link " href="{{ route('customers.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Customers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('vehicles.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-car text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Vehicles</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa fa-cart-arrow-down text-yellow text-primary text-sm opacity-10"></i>
@@ -74,14 +90,6 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.job_bank.admin') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-bag-17 text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Job Bank</span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.bookings') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="ni ni-books text-yellow text-primary text-sm opacity-10"></i>
@@ -90,19 +98,11 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="{{ route('customers.index') }}">
+            <a class="nav-link " href="{{ route('service_booking.job_bank.admin') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
+                <i class="ni ni-bag-17 text-yellow text-primary text-sm opacity-10"></i>
               </div>
-              <span class="nav-link-text ms-1">Customers</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('vehicles.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa fa-car text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Vehicles</span>
+              <span class="nav-link-text ms-1">Job Bank</span>
             </a>
           </li>
           <li class="nav-item">
@@ -138,30 +138,6 @@
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['customerservice']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa fa-cart-arrow-down text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Service Order</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.job_bank.admin') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-bag-17 text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Job Bank</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.bookings') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-books text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Bookings</span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link " href="{{ route('customers.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
@@ -177,6 +153,32 @@
               <span class="nav-link-text ms-1">Vehicles</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('service_booking.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-cart-arrow-down text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Service Order</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('service_booking.bookings') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="ni ni-books text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('service_booking.job_bank.admin') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="ni ni-bag-17 text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Job Bank</span>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link " href="{{ route('job.services') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -194,14 +196,6 @@
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['technician']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
           <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa fa-cart-arrow-down text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Service Order</span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link " href="{{ route('customers.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
@@ -218,6 +212,15 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link " href="{{ route('service_booking.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-cart-arrow-down text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Service Order</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.technician.user') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa fa-cogs text-yellow text-primary text-sm opacity-10"></i>
@@ -229,14 +232,7 @@
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['serviceadvisor']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('service_booking.service_advisor.admin') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-single-02 text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Service Advisor</span>
-            </a>
-          </li>
+
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.jobcontroller') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -245,10 +241,34 @@
               <span class="nav-link-text ms-1">Job Control</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('service_booking.service_advisor.admin') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="ni ni-single-02 text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Service Advisor</span>
+            </a>
+          </li>
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['jobcontroller']))
           {{-- Role: {{ Auth::user()->user_role }} --}}
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('customers.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Customers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ route('vehicles.index') }}">
+              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa fa-car text-primary text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Vehicles</span>
+            </a>
+          </li>
           <li class="nav-item">
             <a class="nav-link " href="{{ route('service_booking.index') }}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -273,22 +293,7 @@
               <span class="nav-link-text ms-1">Technician</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('customers.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa fa-users text-yellow text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Customers</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="{{ route('vehicles.index') }}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa fa-car text-primary text-sm opacity-10"></i>
-              </div>
-              <span class="nav-link-text ms-1">Vehicles</span>
-            </a>
-          </li>
+
         @endif
 
         @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['accountsadmin']))
