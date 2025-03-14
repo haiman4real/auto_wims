@@ -3,6 +3,23 @@
         Index
     </x-slot>
     <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <form method="GET" action="{{ route('dashboard') }}">
+                    <div class="form-group">
+                        <label style="color: white" for="filter">Filter by:</label>
+                        <select name="filter" id="filter" class="form-select" onchange="this.form.submit()">
+                            <option value="day" {{ request('filter') == 'day' ? 'selected' : '' }}>Day</option>
+                            <option value="week" {{ request('filter') == 'week' ? 'selected' : '' }}>Week</option>
+                            <option value="month" {{ request('filter') == 'month' ? 'selected' : '' }}>Month</option>
+                            <option value="year" {{ request('filter') == 'year' ? 'selected' : '' }}>Year</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
@@ -17,17 +34,17 @@
                     @if($customerGrowth > 0)
                         <p class="mb-0">
                             <span class="text-success text-sm font-weight-bolder">+{{ $customerGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @elseif($customerGrowth <= 0)
                         <p class="mb-0">
                             <span class="text-danger text-sm font-weight-bolder">{{ $customerGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @else
                         <p class="mb-0">
                             <span class="text-muted text-sm font-weight-bolder">No change</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @endif
                   </div>
@@ -54,17 +71,17 @@
                     @if($vehicleGrowth > 0)
                         <p class="mb-0">
                             <span class="text-success text-sm font-weight-bolder">+{{ $vehicleGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @elseif($vehicleGrowth <= 0)
                         <p class="mb-0">
                             <span class="text-danger text-sm font-weight-bolder">{{ $vehicleGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @else
                         <p class="mb-0">
                             <span class="text-muted text-sm font-weight-bolder">No change</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @endif
                   </div>
@@ -91,17 +108,17 @@
                     @if($jobGrowth > 0)
                         <p class="mb-0">
                             <span class="text-success text-sm font-weight-bolder">+{{ $jobGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @elseif($jobGrowth <= 0)
                         <p class="mb-0">
                             <span class="text-danger text-sm font-weight-bolder">{{ $jobGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @else
                         <p class="mb-0">
                             <span class="text-muted text-sm font-weight-bolder">No change</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @endif
                   </div>
@@ -128,17 +145,17 @@
                     @if($invoiceGrowth > 0)
                         <p class="mb-0">
                             <span class="text-success text-sm font-weight-bolder">+{{ $invoiceGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @elseif($invoiceGrowth <= 0)
                         <p class="mb-0">
                             <span class="text-danger text-sm font-weight-bolder">{{ $invoiceGrowth }}%</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @else
                         <p class="mb-0">
                             <span class="text-muted text-sm font-weight-bolder">No change</span>
-                            since last week
+                            since last {{ request('filter') }}
                         </p>
                     @endif
                   </div>
@@ -152,6 +169,80 @@
             </div>
           </div>
         </div>
+        {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Customers</p>
+                                <h5 class="font-weight-bolder">
+                                    {{ $totalCustomerCount ?? "0" }}
+                                </h5>
+                                @if($customerGrowth > 0)
+                                    <p class="mb-0">
+                                        <span class="text-success text-sm font-weight-bolder">+{{ $customerGrowth }}%</span>
+                                        since last {{ request('filter') }}
+                                    </p>
+                                @elseif($customerGrowth <= 0)
+                                    <p class="mb-0">
+                                        <span class="text-danger text-sm font-weight-bolder">{{ $customerGrowth }}%</span>
+                                        since last {{ request('filter') }}
+                                    </p>
+                                @else
+                                    <p class="mb-0">
+                                        <span class="text-muted text-sm font-weight-bolder">No change</span>
+                                        since last {{ request('filter') }}
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Vehicles</p>
+                                <h5 class="font-weight-bolder">
+                                    {{ $totalVehicleCount ?? "0" }}
+                                </h5>
+                                @if($vehicleGrowth > 0)
+                                    <p class="mb-0">
+                                        <span class="text-success text-sm font-weight-bolder">+{{ $vehicleGrowth }}%</span>
+                                        since last {{ request('filter') }}
+                                    </p>
+                                @elseif($vehicleGrowth <= 0)
+                                    <p class="mb-0">
+                                        <span class="text-danger text-sm font-weight-bolder">{{ $vehicleGrowth }}%</span>
+                                        since last {{ request('filter') }}
+                                    </p>
+                                @else
+                                    <p class="mb-0">
+                                        <span class="text-muted text-sm font-weight-bolder">No change</span>
+                                        since last {{ request('filter') }}
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
       </div>
       <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">

@@ -19,7 +19,7 @@ class CustomersController extends Controller
         $statesAndLgas = $this->returnStateAndLga();
 
         // Retrieve all visible customers
-        $customers = Customer::where('cust_view', '!=', 'hidden')->get();
+        $customers = Customer::where('cust_view', '!=', 'hidden')->orderBy('cust_reg_time', 'desc')->get();
         $states = array_keys($statesAndLgas);
 
         return view('Customers.index', compact('customers', 'states', 'statesAndLgas'));
