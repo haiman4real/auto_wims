@@ -7,7 +7,7 @@
     <body>
         <div id="invoice">
             <div class="container">
-                        <div class="row p-5">
+                        <div class="row pt-5 p-2 pb-4">
                             <div class="col-md-6">
                                 <img src="{{ asset('img/clients/auto-main.png') }}" alt="logo">
                                 <h3>AUTOPOINTE QUICK FIT</h3>
@@ -41,16 +41,16 @@
                             </div>
                         </div>
 
-                        <div class="row pb-5 p-5">
+                        <div class="row pb-2 p-2">
                             <div class="col-md-6">
-                                <p class="font-weight-bold mb-4">Customer Information</p>
+                                <p class="font-weight-bold mb-2">Customer Information</p>
                                 <p class="mb-1">{{ $job->customer->cust_name ?? 'N/A' }}</p>
                                 <p class="mb-1">{{ $job->customer->cust_address ?? 'N/A' }}, {{ $job->customer->cust_lga ?? 'N/A' }}</p>
                                 <p class="mb-1">{{ $job->customer->cust_mobile ?? 'N/A' }}</p>
                             </div>
 
                             <div class="col-md-6 text-right d-flex flex-column align-items-end">
-                                <p class="font-weight-bold mb-4">Vehicle Details</p>
+                                <p class="font-weight-bold mb-2">Vehicle Details</p>
                                 <p class="mb-1"><span class="text-muted">Reg No: </span> {{ $job->vehicle->vec_plate ?? 'N/A' }}</p>
                                 <p class="mb-1"><span class="text-muted">VIN/Chasis No: </span> {{ $job->vehicle->vec_vin ?? 'N/A' }}</p>
                                 <p class="mb-1"><span class="text-muted">Vehicle Make/Model: </span> {{ $job->vehicle->vec_make ?? 'N/A' }} {{ $job->vehicle->vec_model ?? 'N/A' }}</p>
@@ -157,14 +157,14 @@
                             @endif
                         </div>
 
-                        <div class="col" style="padding: 20px;">
+                        <div class="col pt-2" >
                             <table class="table">
                                  <thead>
                                      <tr style="text-align-center">
                                      <p><strong>TERMS AND CONDITIONS</strong><br></p>
                                      </tr>
                                      <tr>
-                                         <i><p>
+                                         <i><p style="font-size: 8px;">
                                              1. The company shall not be responsible for any defect discovered in the customer/s vehicle at anytime where such defect(s) are not traceable to aspects of the work done on the vehicle as per the job card.<br>
                                              2. The company shall not be responsible for damage(s) done to customers vehicle in the cause of unauthorized repairs carried out by any staff of the company under PRIVATE ARRANGEMENT with the customer.<br>
                                              3. Customers are advised not to circumvent the normal company procedure for getting their vehicles repaired as the company disclaims any liability for the consequence of such action.<br>
@@ -184,26 +184,26 @@
                              <!-- <button id="printInvoice" class="btn btn-success"><i class="fa fa-print"></i> Print</button> -->
                         </div>
 
-                        <div class="row pb-5 p-5">
-                            <div class="col-md-6 text-center">
+                        <div class="row pb-2 p-5">
+                            <div class="col-md-4 text-center">
                                 <p>__________________________________</p>
                                 <p>Technical Assistant/Date</p>
                             </div>
 
-                            <div class="col-md-6 text-center">
+                            <div class="col-md-4 text-center">
                                 <p>__________________________________</p>
                                 <p>Account/Date</p>
                             </div>
-                        </div>
 
-                        @if($job->status !== "completed")
-                            <div class="row pb-5 p-5">
-                                <div class="col text-center">
+                            @if($job->status !== "completed")
+                                <div class="col-md-4 text-center">
                                     <p>__________________________________</p>
                                     <p>Customer Signature/Date</p>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
+
+
 
             </div>
         </div>
