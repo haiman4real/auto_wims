@@ -129,8 +129,8 @@
                                             @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin', 'serviceadvisor', 'customerservice']))
 
                                                 @if($job->status == 'estimate generated' || $job->status == 'completed')
-                                                    <a href="{{ route('service_booking.estimate.invoice', ['job_id' => $job->id]) }}" class="text-secondary font-weight-bold text-xs assign-btn" data-id="{{ $job->id }}" data-customer="{{ $job->customer->cust_name }}" data-customer-phone="{{ $job->customer->cust_mobile }}" data-customer-email="{{ $job->customer->cust_email }}" data-customer-address="{{ $job->customer->cust_address }} {{ $job->customer->cust_lga }}" data-customer-type="{{ $job->customer->cust_type }}" data-vehicle-make-model="{{ $job->vehicle->vec_make }} {{ $job->vehicle->vec_model }}" data-vehicle-plate="{{ $job->vehicle->vec_plate }}" data-vehicle-vin="{{ $job->vehicle->vec_vin }}" data-vehicle-year="{{ $job->vehicle->vec_year }}" data-job_description="{{ $job->description }}" data-booking_ref="{{ $job->order_number}}" data-booking_date="{{ date('M j, Y h:i A', strtotime($job->created_at ))}}" data-toggle="modal" data-target="#awaitingTechnicalReviewModal">
-                                                            <i class="fa fa-send" style="color: green; font-size:14px;" aria-hidden="true"></i>&nbsp;Print Job Card
+                                                    <a href="{{ route('service_booking.estimate.invoice', ['job_id' => $job->id]) }}" class="text-primary font-weight-bold text-xs assign-btn btn btn-sm btn-info" target="_blank">
+                                                            <i class="fa fa-send" aria-hidden="true"></i>&nbsp;Print Job Card
                                                     </a>
                                                 @endif
                                             @endif
@@ -143,80 +143,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Assign Technical Review Modal -->
-    <div class="modal fade" id="awaitingTechnicalReviewModal" tabindex="-1" role="dialog" aria-labelledby="awaitingTechnicalReviewLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="h5">Update Job Booking</span>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="awaitingTechnicalReviewForm">
-                    @csrf
-                    <div class="modal-body">
-                        <input type="hidden" id="job_id" name="job_id">
-
-                        <div class="row pb-3">
-                            <div class="col-md-6">
-                                <p class="font-weight-bold mb-2">Customer Information</p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Name: </span> <span id="customer"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Phone: </span> <span id="customer_phone"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Email: </span> <span id="customer_email"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Address: </span> <span id="customer_address"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Customer Type: </span> <span id="customer_type"></span></p>
-                            </div>
-                            <div class="col-md-6 text-left">
-                                <p class="font-weight-bold mb-2">Vehicle Details</p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Reg No: </span> <span id="vehicle_plate"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">VIN/Chassis No: </span> <span id="vehicle_vin"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Make/Model: </span> <span id="vehicle_make_model"></span></p>
-                                <p class="mb-0 text-dark"><span class="text-muted">Year: </span> <span id="vehicle_year"></span></p>
-                            </div>
-                        </div>
-
-                        <div class="row pb-2">
-                            <div class="col-md-6">
-                                <p class="h6"><label>Booking Ref:</label> <span id="booking_ref"></span></p>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="h6"><label>Booking Date:</label> <span id="booking_date"></span></p>
-                            </div>
-                        </div>
-
-                        <div class="row pb-2">
-                            <div class="col">
-                                <label class="h6">Bookings Description</label>
-                                <textarea rows="3" class="form-control" id="job_description" readonly></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row pb-1">
-                            <div class="col">
-                                <label class="h6">Workshop Findings</label>
-                                <textarea rows="5" class="form-control" id="workshop_findings" name="workshop_findings" required></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row pb-1">
-                            <div class="col">
-                                <label class="h6">Required Spare Parts</label>
-                                <textarea rows="5" class="form-control" id="required_spare_parts" name="required_spare_parts" required></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
