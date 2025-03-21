@@ -10,6 +10,7 @@
                     <div class="form-group">
                         <label style="color: white" for="filter">Filter by:</label>
                         <select name="filter" id="filter" class="form-select" onchange="this.form.submit()">
+                            <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>All</option>
                             <option value="day" {{ request('filter') == 'day' ? 'selected' : '' }}>Day</option>
                             <option value="week" {{ request('filter') == 'week' ? 'selected' : '' }}>Week</option>
                             <option value="month" {{ request('filter') == 'month' ? 'selected' : '' }}>Month</option>
@@ -29,7 +30,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Customers</p>
                     <h5 class="font-weight-bolder">
-                      {{ $totalCustomerCount ?? "0" }}
+                      {{ $customerCount ?? "0" }}
                     </h5>
                     @if($customerGrowth > 0)
                         <p class="mb-0">
@@ -66,7 +67,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Vehicles</p>
                     <h5 class="font-weight-bolder">
-                      {{ $totalVehicleCount ?? "0" }}
+                      {{ $vehicleCount ?? "0" }}
                     </h5>
                     @if($vehicleGrowth > 0)
                         <p class="mb-0">
@@ -103,7 +104,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Jobs</p>
                     <h5 class="font-weight-bolder">
-                        {{ $totalJobCount ?? "0" }}
+                        {{ $jobCount ?? "0" }}
                     </h5>
                     @if($jobGrowth > 0)
                         <p class="mb-0">
@@ -140,7 +141,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Invoices</p>
                     <h5 class="font-weight-bolder">
-                        {{ $totalInvoiceCount ?? "0" }}
+                        {{ $invoiceCount ?? "0" }}
                     </h5>
                     @if($invoiceGrowth > 0)
                         <p class="mb-0">
