@@ -68,6 +68,11 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
     <style>
+        /* Set the body to be full width */
+        html, body {
+            min-width: 1024px;
+        }
+
         /* Notification styling */
         .notification {
             position: fixed;
