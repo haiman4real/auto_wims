@@ -235,6 +235,8 @@
                 margin: 0 !important;
                 padding: 0 !important;
                 width: 100%;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             /* Hide buttons and other non-print elements as needed */
             .btn {

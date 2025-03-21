@@ -129,7 +129,7 @@
                                             @if (Auth::check() && in_array(strtolower(trim(Auth::user()->user_role)), ['superadmin', 'masteradmin', 'serviceadvisor', 'customerservice']))
 
                                                 @if($job->status == 'estimate generated' || $job->status == 'completed')
-                                                    <a href="{{ route('service_booking.estimate.invoice', ['job_id' => $job->id]) }}" class="text-secondary font-weight-bold text-xs assign-btn btn btn-sm btn-success" target="_blank">
+                                                    <a href="{{ route('service_booking.estimate.invoice', ['job_id' => $job->id]) }}" class="text-primary font-weight-bold text-xs assign-btn btn btn-sm btn-info" target="_blank">
                                                             <i class="fa fa-send" aria-hidden="true"></i>&nbsp;Print Job Card
                                                     </a>
                                                 @endif
