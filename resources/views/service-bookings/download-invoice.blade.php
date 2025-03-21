@@ -27,7 +27,7 @@
                                 <p class="font-weight-light">
                                     <span class="text-muted text-right">
                                         Head Office: Plot 102, Ogunnusi Road, Ojodu, Lagos, Nigeria.<br>
-                                        Telephone: +234 913 064 7033<br>
+                                        Telephone: +234 913 064 7033, +234 913 189 5872<br>
                                         Email: info@autopointe.com.ng<br>
                                         www.autopointe.com.ng
                                     </span>
