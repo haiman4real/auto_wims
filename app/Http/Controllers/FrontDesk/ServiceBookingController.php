@@ -557,7 +557,7 @@ class ServiceBookingController extends Controller
         // return "Return Estimation Page";
         $job = ServiceJobs::findOrFail($jobId);
         // return $jobs;
-        return view('service-bookings.invoice', compact('job'));
+        return view('service-bookings.download-invoice', compact('job'));
     }
 
 
@@ -713,7 +713,7 @@ class ServiceBookingController extends Controller
     public function returnServiceAdvisorUser(){
         // return "Return Service Advisor Page";
         $loggedInUserId = auth()->id(); // Get the logged-in user ID
-        
+
         $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'awaiting_job_advise']])->whereJsonDoesntContain('workflow', [['job_type' => 'service_advisor_comments']])->where(function ($query) use ($loggedInUserId) {
             $query->whereJsonContains('workflow', [['job_type' => 'technician_assignment', 'performer' => $loggedInUserId]]);
         })
