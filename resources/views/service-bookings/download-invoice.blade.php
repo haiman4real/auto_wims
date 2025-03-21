@@ -27,8 +27,7 @@
                                 <p class="font-weight-light">
                                     <span class="text-muted text-right">
                                         Head Office: Plot 102, Ogunnusi Road, Ojodu, Lagos, Nigeria.<br>
-                                        Egbeda Office: 97, Idimu Road, Egbeda, Lagos, Nigeria.<br>
-                                        Telephone: +2348188204111, 09065000041<br>
+                                        Telephone: +234 913 064 7033<br>
                                         Email: info@autopointe.com.ng<br>
                                         www.autopointe.com.ng
                                     </span>
