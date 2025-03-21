@@ -7,6 +7,7 @@ use App\Models\Menu;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ServiceJobs;
 
 class DashboardController extends Controller
 {
@@ -336,10 +337,12 @@ class DashboardController extends Controller
             $totalJobCount = DB::connection('mysql_non_laravel')->table('jobs')->count();
             $totalInvoiceCount = DB::connection('mysql_non_laravel')->table('invoices')->count();
 
+            $jobs = ServiceJobs::all();
+
             return view('dashboard', compact(
                 'customerCount', 'vehicleCount', 'jobCount', 'invoiceCount',
                 'totalCustomerCount', 'totalVehicleCount', 'totalJobCount', 'totalInvoiceCount',
-                'bookingJobs', 'customerGrowth', 'vehicleGrowth', 'jobGrowth', 'invoiceGrowth'
+                'bookingJobs', 'customerGrowth', 'vehicleGrowth', 'jobGrowth', 'invoiceGrowth', 'jobs'
             ));
         }
     }
