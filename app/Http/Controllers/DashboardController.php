@@ -374,11 +374,12 @@ class DashboardController extends Controller
     public function getTransactionData()
     {
         // Get the total number of transactions per month
-        $transactions = DB::connection('mysql_non_laravel')->table('invoices')
-                                ->select(DB::raw('MONTH(FROM_UNIXTIME(inv_time)) as month'), DB::raw('COUNT(*) as total'))
-                                ->where(DB::raw('YEAR(FROM_UNIXTIME(inv_time))'), date('Y')) // Filter by current year
-                                ->groupBy(DB::raw('MONTH(FROM_UNIXTIME(inv_time))'))
+        $transactions = DB::connection('mysql_non_laravel')->table('service_jobs')
+                                ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as total'))
+                                ->whereYear('created_at', date('Y')) // Filter by current year
+                                ->groupBy(DB::raw('MONTH(created_at)'))
                                 ->get();
+
 
         // Prepare the data for the chart (initialize all months with 0)
         $monthlyData = array_fill(1, 12, 0);
