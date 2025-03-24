@@ -66,7 +66,7 @@ class ServiceBookingController extends Controller
 
     public function returnJobBank(){
         // return "Return Job Bank Page";
-        $jobs = ServiceJobs::all();
+        $jobs = ServiceJobs::orderBy('created_at', 'desc')->get();
         // return $jobs;
         return view('service-bookings.job_bank', compact('jobs'));
     }

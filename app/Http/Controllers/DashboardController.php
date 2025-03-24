@@ -337,7 +337,7 @@ class DashboardController extends Controller
             $totalJobCount = DB::connection('mysql_non_laravel')->table('jobs')->count();
             $totalInvoiceCount = DB::connection('mysql_non_laravel')->table('invoices')->count();
 
-            $jobs = ServiceJobs::all();
+            $jobs = ServiceJobs::orderBy('created_at', 'desc')->get();
 
             return view('dashboard', compact(
                 'customerCount', 'vehicleCount', 'jobCount', 'invoiceCount',
