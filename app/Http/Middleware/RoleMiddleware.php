@@ -23,11 +23,16 @@ class RoleMiddleware
         // Log for debugging
         Log::info('Route: ' . $request->url());
         Log::info('User: ' . (Auth::check() ? Auth::user()->email : 'Guest'));
-        Log::info('User Role: ' . Auth::user()->user_role);
+        Log::info('User Role: ' . (Auth::check() ? Auth::user()->user_role : 'None'));
         Log::info('Roles Allowed: ' . implode(', ', $roles));
 
-        // Check if the user is authenticated and has the specified role(s)
-        if (Auth::check() && in_array(Auth::user()->user_role, $roles, true)) {
+        // Check if the user is authenticated
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        // Check if the authenticated user has the specified role(s)
+        if (in_array(Auth::user()->user_role, $roles, true)) {
             return $next($request);
         }
 
