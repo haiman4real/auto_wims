@@ -68,6 +68,11 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
     <style>
+        /* Set the body to be full width */
+        html, body {
+            min-width: 1024px;
+        }
+
         /* Notification styling */
         .notification {
             position: fixed;
@@ -241,6 +246,14 @@
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+
+    window.addEventListener('load', function() {
+        if (window.innerWidth < 1024) {
+            // Display a modal or overlay message
+            alert("For the best experience, please use a device with a screen width of at least 1024 pixels.");
+            // Alternatively, you can show a styled modal instead of an alert.
+        }
+    });
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

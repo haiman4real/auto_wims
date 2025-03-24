@@ -7,164 +7,342 @@ use App\Models\Menu;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ServiceJobs;
 
 class DashboardController extends Controller
 {
     //
+    // public function index(Request $request)
+    // {
+    //     $filter = $request->get('filter', 'day'); // Default to 'day' if no filter is selected
+
+    //     // switch ($filter) {
+    //     //     case 'week':
+    //     //     $startDate = Carbon::now()->startOfWeek();
+    //     //     $endDate = Carbon::now()->endOfWeek();
+    //     //     break;
+    //     //     case 'month':
+    //     //     $startDate = Carbon::now()->startOfMonth();
+    //     //     $endDate = Carbon::now()->endOfMonth();
+    //     //     break;
+    //     //     case 'year':
+    //     //     $startDate = Carbon::now()->startOfYear();
+    //     //     $endDate = Carbon::now()->endOfYear();
+    //     //     break;
+    //     //     case 'day':
+    //     //     default:
+    //     //     $startDate = Carbon::now()->startOfDay();
+    //     //     $endDate = Carbon::now()->endOfDay();
+    //     //     break;
+    //     // }
+    //     switch ($filter) {
+    //         case 'week':
+    //             $startDate = Carbon::now()->startOfWeek()->timestamp;
+    //             $endDate = Carbon::now()->endOfWeek()->timestamp;
+    //             break;
+    //         case 'month':
+    //             $startDate = Carbon::now()->startOfMonth()->timestamp;
+    //             $endDate = Carbon::now()->endOfMonth()->timestamp;
+    //             break;
+    //         case 'year':
+    //             $startDate = Carbon::now()->startOfYear()->timestamp;
+    //             $endDate = Carbon::now()->endOfYear()->timestamp;
+    //             break;
+    //         case 'day':
+    //         default:
+    //             $startDate = Carbon::now()->startOfDay()->timestamp;
+    //             $endDate = Carbon::now()->endOfDay()->timestamp;
+    //             break;
+    //     }
+
+    //     // $endDate = Carbon::now()->toDateTimeString();
+
+    //     if(Auth::user()->user_role === 'CoporateUser'){
+    //         $agentId = Auth::id();
+
+    //         $trackerAppt = DB::connection('mysql_non_laravel')
+    //                             ->table('tracker_bookings')
+    //                             ->where('agent_id', Auth::id())
+    //                             ->get()->count();
+    //         $vehicles = DB::connection('mysql_non_laravel')
+    //                         ->table('customers_vehicles')
+    //                         ->join('customers', 'customers_vehicles.cust_id', '=', 'customers.cust_id') // Assuming you have a customers table
+    //                         ->join('vehicles', 'customers_vehicles.vec_id', '=', 'vehicles.vec_id') // Assuming you have a vehicles table
+    //                         ->where(function ($query) {
+    //                             $query->where('customers.cust_email', Auth::user()->email);
+    //                         })
+    //                         ->get(['vehicles.*']); // Select all vehicle columns
+
+
+    //         $vehicleCount = $vehicles->count(); // Get the count of vehicles
+    //         $repairJobs = 0;
+    //         $awaitingApproval = 0;
+
+    //         $recentActivities = DB::connection('mysql_non_laravel')->table('tracker_bookings')
+    //                                 ->select('created_at', 'appointment_date', 'appointment_time', 'fullname') // Replace 'tracking_info' with the actual column name
+    //                                 ->where('agent_id', Auth::id())
+    //                                 ->orderBy('created_at', 'desc')
+    //                                 ->limit(6) // Limit to the latest 6 activities
+    //                                 ->get();
+
+    //         // return $recentActivities;
+
+    //         return view('dashboards.coporateDashboard', compact('trackerAppt', 'vehicleCount', 'repairJobs', 'awaitingApproval', 'recentActivities'));
+    //     }else{
+    //         // Get current week's counts
+    //         $customerCount = DB::connection('mysql_non_laravel')
+    //         ->table('customers')
+    //         ->whereBetween('cust_reg_time', [$startDate, $endDate])
+    //         ->get()->count();
+    //         // return $customerCount;
+
+    //         // dd($startDate, $endDate, $customerCount);
+    //         $vehicleCount = DB::connection('mysql_non_laravel')
+    //             ->table('vehicles')
+    //             ->whereBetween('vec_reg_time', [$startDate, $endDate])
+    //             ->get()->count();
+
+    //         $jobCount = DB::connection('mysql_non_laravel')
+    //             ->table('jobs')
+    //             ->whereBetween('job_reg_time', [$startDate, $endDate])
+    //             ->get()->count();
+
+    //         $invoiceCount = DB::connection('mysql_non_laravel')
+    //             ->table('invoices')
+    //             ->whereBetween('inv_time', [$startDate, $endDate])
+    //             ->get()->count();
+
+    //         $bookingJobs = $this->getBookingsJobsDetails();
+
+    //         // Get previous week's counts
+    //         $previousWeekStart = Carbon::now()->subWeek()->startOfWeek();
+    //         $previousWeekEnd = Carbon::now()->subWeek()->endOfWeek();
+    //         // Get previous period's counts for growth calculation
+    //         switch ($filter) {
+    //             case 'week':
+    //                 $previousPeriodStart = Carbon::now()->subWeek()->startOfWeek();
+    //                 $previousPeriodEnd = Carbon::now()->subWeek()->endOfWeek();
+    //                 break;
+    //             case 'month':
+    //                 $previousPeriodStart = Carbon::now()->subMonth()->startOfMonth();
+    //                 $previousPeriodEnd = Carbon::now()->subMonth()->endOfMonth();
+    //                 break;
+    //             case 'year':
+    //                 $previousPeriodStart = Carbon::now()->subYear()->startOfYear();
+    //                 $previousPeriodEnd = Carbon::now()->subYear()->endOfYear();
+    //                 break;
+    //             case 'day':
+    //             default:
+    //                 $previousPeriodStart = Carbon::now()->subDay()->startOfDay();
+    //                 $previousPeriodEnd = Carbon::now()->subDay()->endOfDay();
+    //                 break;
+    //         }
+    //         // $previousPeriodEnd = $startDate;
+
+    //         $previousCustomerCount = DB::connection('mysql_non_laravel')
+    //             ->table('customers')
+    //             ->whereBetween('cust_reg_time', [$previousPeriodStart, $previousPeriodEnd])
+    //             ->get()->count();
+
+    //         $previousVehicleCount = DB::connection('mysql_non_laravel')
+    //             ->table('vehicles')
+    //             ->whereBetween('vec_reg_time', [$previousPeriodStart, $previousPeriodEnd])
+    //             ->get()->count();
+
+    //         $previousJobCount = DB::connection('mysql_non_laravel')
+    //             ->table('jobs')
+    //             ->whereBetween('job_reg_time', [$previousPeriodStart, $previousPeriodEnd])
+    //             ->get()->count();
+
+    //         $previousInvoiceCount = DB::connection('mysql_non_laravel')
+    //             ->table('invoices')
+    //             ->whereBetween('inv_time', [$previousPeriodStart, $previousPeriodEnd])
+    //             ->get()->count();
+
+    //         // Get total counts for each category
+    //         $totalCustomerCount = DB::connection('mysql_non_laravel')
+    //             ->table('customers')
+    //             ->get()->count();
+
+    //         $totalVehicleCount = DB::connection('mysql_non_laravel')
+    //             ->table('vehicles')
+    //             ->get()->count();
+
+    //         $totalJobCount = DB::connection('mysql_non_laravel')
+    //             ->table('jobs')
+    //             ->get()->count();
+
+    //         $totalInvoiceCount = DB::connection('mysql_non_laravel')
+    //             ->table('invoices')
+    //             ->get()->count();
+
+    //         // Calculate percentage growth
+    //         $customerGrowth = $this->calculateGrowth($previousCustomerCount, $customerCount);
+    //         $vehicleGrowth = $this->calculateGrowth($previousVehicleCount, $vehicleCount);
+    //         $jobGrowth = $this->calculateGrowth($previousJobCount, $jobCount);
+    //         $invoiceGrowth = $this->calculateGrowth($previousInvoiceCount, $invoiceCount);
+
+    //         // Return view with counts, total counts, and growth percentages
+    //         return view('dashboard', compact(
+    //             'customerCount', 'vehicleCount', 'jobCount', 'invoiceCount',
+    //             'totalCustomerCount', 'totalVehicleCount', 'totalJobCount', 'totalInvoiceCount',
+    //             'bookingJobs', 'customerGrowth', 'vehicleGrowth', 'jobGrowth', 'invoiceGrowth'
+    //         ));
+    //     }
+    // }
+
     public function index(Request $request)
     {
-        $filter = $request->get('filter', 'day'); // Default to 'day' if no filter is selected
+        // Default to 'all' so that by default no date filtering is applied
+        $filter = $request->get('filter', 'all');
 
-        switch ($filter) {
-            case 'week':
-            $startDate = Carbon::now()->startOfWeek();
-            $endDate = Carbon::now()->endOfWeek();
-            break;
-            case 'month':
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
-            break;
-            case 'year':
-            $startDate = Carbon::now()->startOfYear();
-            $endDate = Carbon::now()->endOfYear();
-            break;
-            case 'day':
-            default:
-            $startDate = Carbon::now()->startOfDay();
-            $endDate = Carbon::now()->endOfDay();
-            break;
-        }
-
-        // $endDate = Carbon::now()->toDateTimeString();
-
-        if(Auth::user()->user_role === 'CoporateUser'){
-            $agentId = Auth::id();
-
-            $trackerAppt = DB::connection('mysql_non_laravel')
-                                ->table('tracker_bookings')
-                                ->where('agent_id', Auth::id())
-                                ->get()->count();
-            $vehicles = DB::connection('mysql_non_laravel')
-                            ->table('customers_vehicles')
-                            ->join('customers', 'customers_vehicles.cust_id', '=', 'customers.cust_id') // Assuming you have a customers table
-                            ->join('vehicles', 'customers_vehicles.vec_id', '=', 'vehicles.vec_id') // Assuming you have a vehicles table
-                            ->where(function ($query) {
-                                $query->where('customers.cust_email', Auth::user()->email);
-                            })
-                            ->get(['vehicles.*']); // Select all vehicle columns
-
-
-            $vehicleCount = $vehicles->count(); // Get the count of vehicles
-            $repairJobs = 0;
-            $awaitingApproval = 0;
-
-            $recentActivities = DB::connection('mysql_non_laravel')->table('tracker_bookings')
-                                    ->select('created_at', 'appointment_date', 'appointment_time', 'fullname') // Replace 'tracking_info' with the actual column name
-                                    ->where('agent_id', Auth::id())
-                                    ->orderBy('created_at', 'desc')
-                                    ->limit(6) // Limit to the latest 6 activities
-                                    ->get();
-
-            // return $recentActivities;
-
-            return view('dashboards.coporateDashboard', compact('trackerAppt', 'vehicleCount', 'repairJobs', 'awaitingApproval', 'recentActivities'));
-        }else{
-            // Get current week's counts
-            $customerCount = DB::connection('mysql_non_laravel')
-            ->table('customers')
-            ->whereBetween('cust_reg_time', [$startDate, $endDate])
-            ->get()->count();
-
-            $vehicleCount = DB::connection('mysql_non_laravel')
-                ->table('vehicles')
-                ->whereBetween('vec_reg_time', [$startDate, $endDate])
-                ->get()->count();
-
-            $jobCount = DB::connection('mysql_non_laravel')
-                ->table('jobs')
-                ->whereBetween('job_reg_time', [$startDate, $endDate])
-                ->get()->count();
-
-            $invoiceCount = DB::connection('mysql_non_laravel')
-                ->table('invoices')
-                ->whereBetween('inv_time', [$startDate, $endDate])
-                ->get()->count();
-
-            $bookingJobs = $this->getBookingsJobsDetails();
-
-            // Get previous week's counts
-            $previousWeekStart = Carbon::now()->subWeek()->startOfWeek();
-            $previousWeekEnd = Carbon::now()->subWeek()->endOfWeek();
-            // Get previous period's counts for growth calculation
+        // Only calculate start and end dates if a specific filter is applied
+        if ($filter !== 'all') {
             switch ($filter) {
                 case 'week':
-                    $previousPeriodStart = Carbon::now()->subWeek()->startOfWeek();
-                    $previousPeriodEnd = Carbon::now()->subWeek()->endOfWeek();
+                    $startDate = Carbon::now()->startOfWeek()->timestamp;
+                    $endDate   = Carbon::now()->endOfWeek()->timestamp;
                     break;
                 case 'month':
-                    $previousPeriodStart = Carbon::now()->subMonth()->startOfMonth();
-                    $previousPeriodEnd = Carbon::now()->subMonth()->endOfMonth();
+                    $startDate = Carbon::now()->startOfMonth()->timestamp;
+                    $endDate   = Carbon::now()->endOfMonth()->timestamp;
                     break;
                 case 'year':
-                    $previousPeriodStart = Carbon::now()->subYear()->startOfYear();
-                    $previousPeriodEnd = Carbon::now()->subYear()->endOfYear();
+                    $startDate = Carbon::now()->startOfYear()->timestamp;
+                    $endDate   = Carbon::now()->endOfYear()->timestamp;
                     break;
                 case 'day':
                 default:
-                    $previousPeriodStart = Carbon::now()->subDay()->startOfDay();
-                    $previousPeriodEnd = Carbon::now()->subDay()->endOfDay();
+                    $startDate = Carbon::now()->startOfDay()->timestamp;
+                    $endDate   = Carbon::now()->endOfDay()->timestamp;
                     break;
             }
-            // $previousPeriodEnd = $startDate;
+        }
 
-            $previousCustomerCount = DB::connection('mysql_non_laravel')
-                ->table('customers')
-                ->whereBetween('cust_reg_time', [$previousPeriodStart, $previousPeriodEnd])
-                ->get()->count();
+        if(Auth::user()->user_role === 'CoporateUser'){
+            // Corporate branch (adjust here if you want filtering for corporate users as well)
+            $agentId = Auth::id();
 
-            $previousVehicleCount = DB::connection('mysql_non_laravel')
-                ->table('vehicles')
-                ->whereBetween('vec_reg_time', [$previousPeriodStart, $previousPeriodEnd])
-                ->get()->count();
+            $trackerApptQuery = DB::connection('mysql_non_laravel')
+                                ->table('tracker_bookings')
+                                ->where('agent_id', Auth::id());
+            // Apply date filtering if a filter is set
+            if ($filter !== 'all') {
+                $trackerApptQuery->whereBetween('created_at', [$startDate, $endDate]);
+            }
+            $trackerAppt = $trackerApptQuery->count();
 
-            $previousJobCount = DB::connection('mysql_non_laravel')
-                ->table('jobs')
-                ->whereBetween('job_reg_time', [$previousPeriodStart, $previousPeriodEnd])
-                ->get()->count();
+            $vehicles = DB::connection('mysql_non_laravel')
+                            ->table('customers_vehicles')
+                            ->join('customers', 'customers_vehicles.cust_id', '=', 'customers.cust_id')
+                            ->join('vehicles', 'customers_vehicles.vec_id', '=', 'vehicles.vec_id')
+                            ->where('customers.cust_email', Auth::user()->email)
+                            ->get(['vehicles.*']);
+            $vehicleCount = $vehicles->count();
 
-            $previousInvoiceCount = DB::connection('mysql_non_laravel')
-                ->table('invoices')
-                ->whereBetween('inv_time', [$previousPeriodStart, $previousPeriodEnd])
-                ->get()->count();
+            $repairJobs = 0;
+            $awaitingApproval = 0;
 
-            // Get total counts for each category
-            $totalCustomerCount = DB::connection('mysql_non_laravel')
-                ->table('customers')
-                ->get()->count();
+            $recentActivities = DB::connection('mysql_non_laravel')
+                                ->table('tracker_bookings')
+                                ->select('created_at', 'appointment_date', 'appointment_time', 'fullname')
+                                ->where('agent_id', Auth::id())
+                                ->orderBy('created_at', 'desc')
+                                ->limit(6)
+                                ->get();
 
-            $totalVehicleCount = DB::connection('mysql_non_laravel')
-                ->table('vehicles')
-                ->get()->count();
+            return view('dashboards.coporateDashboard', compact(
+                'trackerAppt', 'vehicleCount', 'repairJobs', 'awaitingApproval', 'recentActivities'
+            ));
+        } else {
+            // Non-corporate users: build query with conditional filtering
+            $customerQuery = DB::connection('mysql_non_laravel')
+                ->table('customers');
+            $vehicleQuery = DB::connection('mysql_non_laravel')
+                ->table('vehicles');
+            $jobQuery = DB::connection('mysql_non_laravel')
+                ->table('jobs');
+            $invoiceQuery = DB::connection('mysql_non_laravel')
+                ->table('invoices');
 
-            $totalJobCount = DB::connection('mysql_non_laravel')
-                ->table('jobs')
-                ->get()->count();
+            if ($filter !== 'all') {
+                $customerQuery->whereBetween('cust_reg_time', [$startDate, $endDate]);
+                $vehicleQuery->whereBetween('vec_reg_time', [$startDate, $endDate]);
+                $jobQuery->whereBetween('job_reg_time', [$startDate, $endDate]);
+                $invoiceQuery->whereBetween('inv_time', [$startDate, $endDate]);
+            }
 
-            $totalInvoiceCount = DB::connection('mysql_non_laravel')
-                ->table('invoices')
-                ->get()->count();
+            $customerCount = $customerQuery->count();
+            $vehicleCount = $vehicleQuery->count();
+            $jobCount = $jobQuery->count();
+            $invoiceCount = $invoiceQuery->count();
 
-            // Calculate percentage growth
-            $customerGrowth = $this->calculateGrowth($previousCustomerCount, $customerCount);
-            $vehicleGrowth = $this->calculateGrowth($previousVehicleCount, $vehicleCount);
-            $jobGrowth = $this->calculateGrowth($previousJobCount, $jobCount);
-            $invoiceGrowth = $this->calculateGrowth($previousInvoiceCount, $invoiceCount);
+            $bookingJobs = $this->getBookingsJobsDetails();
 
-            // Return view with counts, total counts, and growth percentages
+            // Previous period calculation only if filter is applied
+            if ($filter !== 'all') {
+                switch ($filter) {
+                    case 'week':
+                        $previousPeriodStart = Carbon::now()->subWeek()->startOfWeek()->timestamp;
+                        $previousPeriodEnd   = Carbon::now()->subWeek()->endOfWeek()->timestamp;
+                        break;
+                    case 'month':
+                        $previousPeriodStart = Carbon::now()->subMonth()->startOfMonth()->timestamp;
+                        $previousPeriodEnd   = Carbon::now()->subMonth()->endOfMonth()->timestamp;
+                        break;
+                    case 'year':
+                        $previousPeriodStart = Carbon::now()->subYear()->startOfYear()->timestamp;
+                        $previousPeriodEnd   = Carbon::now()->subYear()->endOfYear()->timestamp;
+                        break;
+                    case 'day':
+                    default:
+                        $previousPeriodStart = Carbon::now()->subDay()->startOfDay()->timestamp;
+                        $previousPeriodEnd   = Carbon::now()->subDay()->endOfDay()->timestamp;
+                        break;
+                }
+
+                $previousCustomerCount = DB::connection('mysql_non_laravel')
+                    ->table('customers')
+                    ->whereBetween('cust_reg_time', [$previousPeriodStart, $previousPeriodEnd])
+                    ->count();
+
+                $previousVehicleCount = DB::connection('mysql_non_laravel')
+                    ->table('vehicles')
+                    ->whereBetween('vec_reg_time', [$previousPeriodStart, $previousPeriodEnd])
+                    ->count();
+
+                $previousJobCount = DB::connection('mysql_non_laravel')
+                    ->table('jobs')
+                    ->whereBetween('job_reg_time', [$previousPeriodStart, $previousPeriodEnd])
+                    ->count();
+
+                $previousInvoiceCount = DB::connection('mysql_non_laravel')
+                    ->table('invoices')
+                    ->whereBetween('inv_time', [$previousPeriodStart, $previousPeriodEnd])
+                    ->count();
+
+                // Calculate percentage growth
+                $customerGrowth = $this->calculateGrowth($previousCustomerCount, $customerCount);
+                $vehicleGrowth = $this->calculateGrowth($previousVehicleCount, currentCount: $vehicleCount);
+                $jobGrowth = $this->calculateGrowth($previousJobCount, $jobCount);
+                $invoiceGrowth = $this->calculateGrowth($previousInvoiceCount, $invoiceCount);
+            } else {
+                // If no filter is set, you may choose to show overall totals without growth calculation.
+                $customerGrowth = $vehicleGrowth = $jobGrowth = $invoiceGrowth = null;
+            }
+
+            // Get total counts (not affected by filtering)
+            $totalCustomerCount = DB::connection('mysql_non_laravel')->table('customers')->count();
+            $totalVehicleCount = DB::connection('mysql_non_laravel')->table('vehicles')->count();
+            $totalJobCount = DB::connection('mysql_non_laravel')->table('jobs')->count();
+            $totalInvoiceCount = DB::connection('mysql_non_laravel')->table('invoices')->count();
+
+            $jobs = ServiceJobs::orderBy('created_at', 'desc')->get();
+
             return view('dashboard', compact(
                 'customerCount', 'vehicleCount', 'jobCount', 'invoiceCount',
                 'totalCustomerCount', 'totalVehicleCount', 'totalJobCount', 'totalInvoiceCount',
-                'bookingJobs', 'customerGrowth', 'vehicleGrowth', 'jobGrowth', 'invoiceGrowth'
+                'bookingJobs', 'customerGrowth', 'vehicleGrowth', 'jobGrowth', 'invoiceGrowth', 'jobs'
             ));
         }
     }
@@ -196,11 +374,12 @@ class DashboardController extends Controller
     public function getTransactionData()
     {
         // Get the total number of transactions per month
-        $transactions = DB::connection('mysql_non_laravel')->table('invoices')
-                                ->select(DB::raw('MONTH(FROM_UNIXTIME(inv_time)) as month'), DB::raw('COUNT(*) as total'))
-                                ->where(DB::raw('YEAR(FROM_UNIXTIME(inv_time))'), date('Y')) // Filter by current year
-                                ->groupBy(DB::raw('MONTH(FROM_UNIXTIME(inv_time))'))
+        $transactions = DB::connection('mysql_non_laravel')->table('service_jobs')
+                                ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as total'))
+                                ->whereYear('created_at', date('Y')) // Filter by current year
+                                ->groupBy(DB::raw('MONTH(created_at)'))
                                 ->get();
+
 
         // Prepare the data for the chart (initialize all months with 0)
         $monthlyData = array_fill(1, 12, 0);
