@@ -1,7 +1,8 @@
 <div>
     @php
         // Decode the booking response to check for service proof details.
-        $decodedResponse = $booking->response ? json_decode(json_decode($booking->response, true), true) : null;
+        // $decodedResponse = $booking->response ? json_decode(json_decode($booking->response, true), true) : null;
+        $decodedResponse = is_array($booking->response) ? $booking->response : ($booking->response ? json_decode($booking->response, true) : null);
     @endphp
 
     <!-- Basic Booking Information -->
@@ -30,7 +31,9 @@
 
     <!-- Service Location -->
     @php
-        $location = $booking->service_location ? json_decode($booking->service_location, true) : null;
+        // $location = $booking->service_location ? json_decode($booking->service_location, true) : null;
+        $location = is_array($booking->service_location) ? $booking->service_location : json_decode($booking->service_location, true);
+
     @endphp
     <p>
         <strong>Service Location:</strong>
