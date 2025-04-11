@@ -3,6 +3,110 @@
         Invoice - {{ $job->order_number }}
     </x-slot>
 
+    <style type="text/css">
+        /* Regular styling */
+        .table td, .table th {
+            padding: 10px !important;
+        }
+
+        /* Print styling */
+        @media print {
+            /* Reset body and general print settings */
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                margin: 0;
+                padding: 0;
+                font-size: 10pt;
+            }
+
+            /* Container sizing - allow natural flow rather than fixed dimensions */
+            #invoice {
+                width: 100%;
+                height: auto;
+                padding: 0.5in;
+                margin: 0;
+                background: white;
+            }
+
+            /* Reduce padding on all invoice sections */
+            #invoice .p-5 {
+                padding: 1rem !important;
+            }
+
+            #invoice .p-3, #invoice .p-4 {
+                padding: 0.75rem !important;
+            }
+
+            #invoice .py-1, #invoice .py-3 {
+                padding-top: 0.25rem !important;
+                padding-bottom: 0.25rem !important;
+            }
+
+            #invoice .px-5 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            /* Heading sizes */
+            h1 {
+                font-size: 18pt;
+            }
+
+            h2 {
+                font-size: 16pt;
+            }
+
+            h3 {
+                font-size: 14pt;
+            }
+
+            /* Table styling */
+            .table {
+                border-collapse: collapse !important;
+                width: 100%;
+                font-size: 10pt;
+            }
+
+            .table td, .table th {
+                border: 1px solid black !important;
+                padding: 6px !important;
+            }
+
+            /* Control page breaks */
+            .card-body {
+                page-break-before: avoid;
+            }
+
+            /* Force page breaks at logical sections */
+            .terms-section {
+                page-break-before: always;
+            }
+
+            /* Prevent page breaks inside these elements */
+            tr, .row {
+                page-break-inside: avoid;
+            }
+
+            /* Signatures section */
+            .signatures-section {
+                page-break-before: auto;
+                page-break-inside: avoid;
+            }
+
+            /* Hide buttons and navigation */
+            .btn, nav, .modal {
+                display: none !important;
+            }
+
+            /* Ensure background colors print */
+            .bg-success {
+                background-color: #28a745 !important;
+                color: #000 !important;
+            }
+        }
+    </style>
+
     <div id="invoice" class="container" style="padding: 20px;">
         <div class="row">
             <div class="col-12">
@@ -156,7 +260,7 @@
                             @endif
                         </div>
 
-                        <div class="col" style="padding: 20px;">
+                        <div class="col terms-section" style="padding: 20px;">
                             <table class="table">
                                  <thead>
                                      <tr style="text-align-center">
@@ -175,7 +279,7 @@
                                              9. Vehicles not removed from the premises after six (6) months shall be auctioned without further notice.<br>
                                              10. Old vehicle parts not collected by customers after one (1) week of vehicle delivery shall be disposed of by the company.
                                              11. This Estimate/Proforma invoice is valid for the price(s) herein is/are subject to change without notice in view of the changes is Forex, therefore price(s) at the time of confirmed order will be charged.
-                                             12. This Proforma invoice/estimate may be subject to any further additional job which couldn’t be physically noticed during inspection. Where such occurs, a new job instruction/order duly authorized and signed by the customer shall be required to carry it out.
+                                             12. This Proforma invoice/estimate may be subject to any further additional job which couldn't be physically noticed during inspection. Where such occurs, a new job instruction/order duly authorized and signed by the customer shall be required to carry it out.
                                          </p></i>
                                      </tr>
                                  </thead>
@@ -183,7 +287,7 @@
                              <!-- <button id="printInvoice" class="btn btn-success"><i class="fa fa-print"></i> Print</button> -->
                         </div>
 
-                        <div class="row pb-5 p-5">
+                        <div class="row pb-5 p-5 signatures-section">
                             <div class="col-md-6 text-center">
                                 <p>__________________________________</p>
                                 <p>Technical Assistant/Date</p>
@@ -196,20 +300,12 @@
                         </div>
 
                         @if($job->status !== "completed")
-                            <div class="row pb-5 p-5">
+                            <div class="row pb-5 p-5 signatures-section">
                                 <div class="col text-center">
                                     <p>__________________________________</p>
                                     <p>Customer Signature/Date</p>
                                 </div>
                             </div>
-
-                            {{-- <div class="row pb-5 p-5">
-                                <div class="col text-right">
-                                    <button class="btn btn-success" data-toggle="modal" data-target="#makePayment" onclick="makePayment('{{ $job->order_number }}')">
-                                        <i class="fa fa-file-pdf-o"></i> MAKE PAYMENT
-                                    </button>
-                                </div>
-                            </div> --}}
 
                             <div class="text-center my-4">
                                 <button class="btn btn-primary" onclick="printInvoice()">
@@ -239,13 +335,6 @@
         </div>
     </div>
 
-    <style type="text/css">
-        .table td, .table th {
-            padding: 10px !important;
-        }
-    </style>
-
-
     <script>
         function printInvoice() {
             var invoice = document.getElementById('invoice').innerHTML;
@@ -256,35 +345,4 @@
             document.body.innerHTML = originalContents;
         }
     </script>
-
-    {{-- Print CSS for Letter-Sized Page--}}
-    <style>
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            #invoice {
-                width: 8.5in; /* Letter Size Width */
-                height: 11in; /* Letter Size Height */
-                padding: 1in;
-                margin: auto;
-                background: white;
-            }
-
-            .table {
-                border-collapse: collapse !important;
-            }
-
-            .table td, .table th {
-                border: 1px solid black !important;
-                padding: 10px;
-            }
-
-            .btn {
-                display: none; /* Hide Buttons in Print */
-            }
-        }
-    </style>
 </x-app-layout>
