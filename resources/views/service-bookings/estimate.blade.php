@@ -315,7 +315,7 @@
 
 
     <!-- JavaScript -->
-    <script>
+    {{-- <script>
         $(document).ready(function () {
             let services = @json($services);
             let spareParts = @json($spareParts);
@@ -514,6 +514,223 @@
             });
 
             loadItems($(".estimate-row")); // Load default row items
+        });
+    </script> --}}
+
+    <script>
+        $(document).ready(function () {
+            let services = @json($services);
+            let spareParts = @json($spareParts);
+            let custType = "{{ strtolower($job->customer->cust_type) }}"; // "individual" or "corporate"
+
+            // Spare Part Markup Rules
+            let markupRules = [
+                { min: 0, max: 59999, individual: 35, corporate: 25 },
+                { min: 60000, max: 90999, individual: 30, corporate: 25 },
+                { min: 91000, max: 209999, individual: 25, corporate: 25 },
+                { min: 210000, max: 999999, individual: 20, corporate: 20 },
+                { min: 1000000, max: 1509999, individual: 15, corporate: 15 },
+                { min: 1510000, max: 200000000, individual: 10, corporate: 15 }
+            ];
+
+            function getMarkup(price) {
+                let markup = 0;
+                markupRules.forEach(rule => {
+                    if (price >= rule.min && price <= rule.max) {
+                        markup = custType === "corporate" ? rule.corporate : rule.individual;
+                    }
+                });
+                return markup;
+            }
+
+            function updatePrice(row) {
+                // Retrieve unit price from the selected option's data attribute.
+                let unitPrice = parseFloat(row.find(".item-desc option:selected").data("price")) || 0;
+                let quantity = parseInt(row.find(".quantity").val()) || 1;
+                let itemType = row.find(".item-type").val();
+
+                // Apply markup only for spare parts.
+                if (itemType === "spare_parts") {
+                    let markup = getMarkup(unitPrice);
+                    unitPrice = unitPrice + (unitPrice * (markup / 100));
+                }
+
+                // Calculate row total without discount.
+                let totalPrice = unitPrice * quantity;
+                row.find(".unit-price").val(unitPrice.toFixed(2));
+                row.find(".total-price").val(totalPrice.toFixed(2));
+
+                updateGrandTotal();
+            }
+
+            function updateGrandTotal() {
+                let overallTotal = 0;
+                let serviceTotal = 0;
+                $(".estimate-row").each(function () {
+                    let rowTotal = parseFloat($(this).find(".total-price").val()) || 0;
+                    overallTotal += rowTotal;
+                    let itemType = $(this).find(".item-type").val();
+                    if (itemType === "service") {
+                        serviceTotal += rowTotal;
+                    }
+                });
+                // Global discount percentage from discount input.
+                let discountValue = parseFloat($("#discount").val()) || 0;
+                // Discount applies only on the service subtotal.
+                let discountAmount = serviceTotal * (discountValue / 100);
+                let finalTotal = overallTotal - discountAmount;
+                $("#sumTotal").val(finalTotal.toFixed(2));
+            }
+
+            function loadItems(row) {
+                let type = row.find(".item-type").val();
+                let descSelect = row.find(".item-desc");
+
+                descSelect.empty();
+                descSelect.append('<option disabled selected>--- Select Item ---</option>');
+
+                // Load items based on type.
+                let items = type === "service" ? services : spareParts;
+                items.forEach(item => {
+                    let id = type === "service" ? item.serv_id : item.ID;
+                    let price = type === "service" ? item.serv_amount : item.price;
+                    let title = type === "service" ? item.serv_name : item.post_title;
+                    descSelect.append(`<option value="${title}" data-id="${id}" data-price="${price}">${title}</option>`);
+                });
+
+                updatePrice(row);
+            }
+
+            function addNewRow() {
+                let newRow = `
+                    <tr class="estimate-row">
+                        <td>
+                            <select class="form-select item-type">
+                                <option value="service">SERVICE</option>
+                                <option value="spare_parts">SPARE PARTS</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select item-desc select2">
+                                <option disabled selected>Select Item</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control unit-price" readonly>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control quantity" min="1" value="1">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control total-price" readonly>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-danger remove-row">-</button>
+                        </td>
+                    </tr>
+                `;
+                $("#estimateTable").append(newRow);
+                loadItems($("#estimateTable tr:last"));
+            }
+
+            // Event handlers.
+            $(document).on("change", ".item-type", function () {
+                loadItems($(this).closest("tr"));
+            });
+
+            $(document).on("change", ".item-desc, .quantity", function () {
+                updatePrice($(this).closest("tr"));
+            });
+
+            $(document).on("click", ".add-row", function () {
+                addNewRow();
+            });
+
+            $(document).on("click", ".remove-row", function () {
+                $(this).closest("tr").remove();
+                updateGrandTotal();
+            });
+
+            $("#estimateForm").submit(function (e) {
+                e.preventDefault();
+
+                let jobId = $("#job_id").val();
+                if (!jobId) {
+                    alert("Error: Job ID is missing. Please refresh the page.");
+                    return;
+                }
+
+                let items = [];
+                let overallTotal = 0;
+                let serviceTotal = 0;
+                let discountValue = parseFloat($("#discount").val()) || 0;
+
+                $(".estimate-row").each(function () {
+                    let type = $(this).find(".item-type").val();
+                    let selectedOption = $(this).find(".item-desc option:selected");
+                    let id = selectedOption.data("id");
+                    let name = selectedOption.text();
+                    let price = parseFloat($(this).find(".unit-price").val()) || 0;
+                    let quantity = parseInt($(this).find(".quantity").val());
+                    if (!id || !name || isNaN(price) || isNaN(quantity) || quantity <= 0) {
+                        return; // Skip invalid row.
+                    }
+                    let totalPrice = price * quantity;
+                    overallTotal += totalPrice;
+                    if (type === "service") {
+                        serviceTotal += totalPrice;
+                    }
+                    items.push({
+                        id: id,
+                        name: name,
+                        type: type,
+                        price: price,
+                        quantity: quantity,
+                        discount: 0, // Discount is managed globally.
+                        total_price: totalPrice
+                    });
+                });
+
+                if (items.length === 0) {
+                    alert("Please add at least one service or spare part.");
+                    return;
+                }
+
+                // Calculate discount amount based solely on service items.
+                let discountAmount = serviceTotal * (discountValue / 100);
+                let finalTotal = overallTotal - discountAmount;
+
+                $.ajax({
+                    url: "{{ route('service_booking.estimate.save') }}",
+                    type: "POST",
+                    contentType: "application/json",
+                    processData: false,
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    data: JSON.stringify({
+                        job_id: jobId,
+                        items: items,
+                        grand_total: finalTotal,
+                        discount: discountValue,
+                        discount_amount: discountAmount
+                    }),
+                    success: function (response) {
+                        console.log(response);
+                        alert(response.message + "\nGrand Total: ₦" + finalTotal.toFixed(2));
+                        window.location.href = "{{ route('service_booking.job_bank.admin') }}";
+                    },
+                    error: function (xhr) {
+                        console.log("AJAX Error:", xhr.responseJSON);
+                        alert("Error: " + (xhr.responseJSON?.message || "An unknown error occurred."));
+                    }
+                });
+            });
+
+            // Load items for any default existing rows.
+            $(".estimate-row").each(function () {
+                loadItems($(this));
+            });
         });
     </script>
 </x-app-layout>

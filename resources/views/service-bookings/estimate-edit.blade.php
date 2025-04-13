@@ -215,7 +215,7 @@
                                     <td colspan="4" class="text-right"><strong>Discount (%)</strong></td>
                                     <td>
                                         <input type="number" class="form-control" id="discount"
-                                               value="{{ isset($estimatedJobs['discount']) ? $estimatedJobs['discount'] : 0 }}"
+                                               value="{{ isset($estimatedJobs['discount_percentage']) ? $estimatedJobs['discount_percentage'] : 0 }}"
                                                min="0" max="100">
                                     </td>
                                 </tr>
@@ -223,7 +223,7 @@
                                     <td colspan="4" class="text-right"><strong>Discount Amount</strong></td>
                                     <td>
                                         <input type="text" class="form-control" id="discountAmount"
-                                               value="{{ isset($estimatedJobs['discount_amount']) ? number_format($estimatedJobs['discount_amount'], 2) : 0 }}"
+                                               value="{{ isset($estimatedJobs['total_discount_amount']) ? number_format($estimatedJobs['total_discount_amount'], 2) : 0 }}"
                                                readonly>
                                     </td>
                                 </tr>
@@ -353,19 +353,30 @@
             let services = @json($services);
             let spareParts = @json($spareParts);
 
+            // Update grand total calculation so that discount only applies on service items.
             function updateGrandTotal() {
-                let sumTotal = 0;
-                $(".total-price").each(function () {
-                    sumTotal += parseFloat($(this).val()) || 0;
+                let grandTotal = 0;
+                let serviceTotal = 0;
+                // Iterate through each estimate row.
+                $(".estimate-row").each(function () {
+                    let total = parseFloat($(this).find(".total-price").val()) || 0;
+                    grandTotal += total;
+                    // Get the item type and compare case-insensitively.
+                    let type = $(this).find(".item-type").val();
+                    if (type.toLowerCase() === "service") {
+                        serviceTotal += total;
+                    }
                 });
-
+                // Global discount percentage from the discount input.
                 let discountValue = parseFloat($("#discount").val()) || 0;
-                let discountAmount = sumTotal * (discountValue / 100);
-                let discountedTotal = sumTotal - discountAmount;
+                // Calculate discount amount only on the service subtotal.
+                let discountAmount = serviceTotal * (discountValue / 100);
+                // The final total subtracts the discount amount from the grand total (both services & spare parts).
+                let totalAfterDiscount = grandTotal - discountAmount;
 
-                $("#sumTotal").val(sumTotal.toFixed(2));
+                // Update the discount and grand total fields.
                 $("#discountAmount").val(discountAmount.toFixed(2));
-                $("#grandTotal").val(discountedTotal.toFixed(2));
+                $("#grandTotal").val(totalAfterDiscount.toFixed(2));
             }
 
             function updatePrice(row) {
@@ -374,21 +385,20 @@
                 let descField = row.find(".item-desc");
                 let itemType = row.find(".item-type").val();
 
-
                 if (descField.is("select")) {
                     unitPrice = parseFloat(descField.find("option:selected").data("price")) || 0;
                 } else {
                     unitPrice = parseFloat(row.find(".unit-price").val()) || 0;
                 }
 
-                // Apply markup only for spare parts
-                if (itemType === "spare_parts") {
+                // For spare parts, apply the markup rules.
+                if (itemType.toLowerCase() === "spare_parts") {
                     let markup = getMarkup(unitPrice);
                     unitPrice = unitPrice + (unitPrice * (markup / 100));
                 }
 
+                // Calculate the row total (gross amount).
                 let totalPrice = unitPrice * quantity;
-
                 row.find(".unit-price").val(unitPrice.toFixed(2));
                 row.find(".total-price").val(totalPrice.toFixed(2));
 
@@ -402,11 +412,12 @@
                 descSelect.empty();
                 descSelect.append('<option disabled selected>--- Select Item ---</option>');
 
-                let items = type === "service" ? services : spareParts;
+                // Load items based on type (use case-insensitive check).
+                let items = type.toLowerCase() === "service" ? services : spareParts;
                 items.forEach(item => {
-                    let id = type === "service" ? item.serv_id : item.ID;
-                    let price = type === "service" ? item.serv_amount : item.price;
-                    let title = type === "service" ? item.serv_name : item.post_title;
+                    let id = type.toLowerCase() === "service" ? item.serv_id : item.ID;
+                    let price = type.toLowerCase() === "service" ? item.serv_amount : item.price;
+                    let title = type.toLowerCase() === "service" ? item.serv_name : item.post_title;
 
                     descSelect.append(`<option value="${title}" data-id="${id}" data-price="${price}">${title}</option>`);
                 });
@@ -414,6 +425,7 @@
                 updatePrice(row);
             }
 
+            // Update totals when discount percentage is changed.
             $(document).on("input", "#discount", function () {
                 updateGrandTotal();
             });
@@ -431,6 +443,7 @@
                 updateGrandTotal();
             });
 
+            // Add a new row for items.
             $(".add-row").click(function () {
                 let newRow = `
                     <tr class="estimate-row">
@@ -463,12 +476,15 @@
                 loadItems($("#estimateTable tr:last"));
             });
 
+            // When the form is submitted, calculate totals ensuring discount applies only to services.
             $("#editEstimateForm").submit(function (e) {
                 e.preventDefault();
 
                 let jobId = $("#job_id").val();
                 let items = [];
                 let grandTotal = 0;
+                let serviceTotal = 0;
+                // Global discount percentage from the discount input.
                 let discountValue = parseFloat($("#discount").val()) || 0;
 
                 $(".estimate-row").each(function () {
@@ -478,18 +494,26 @@
 
                     let id = nameField.is("select") ? nameField.find("option:selected").data("id") : nameField.data("id");
                     let name = nameField.is("select") ? nameField.find("option:selected").text() : nameField.val();
-                    let type = typeField.is("select") ? typeField.val() : typeField.val().toLowerCase(); // ✅ Fix: Ensure correct type
+                    let type = typeField.is("select") ? typeField.val() : typeField.val().toLowerCase();
                     let price = parseFloat(row.find(".unit-price").val()) || 0;
                     let quantity = parseInt(row.find(".quantity").val()) || 1;
                     let total = parseFloat(row.find(".total-price").val()) || 0;
 
+                    // Apply discount only if the item is a service.
+                    let discount = (type.toLowerCase() === "service") ? discountValue : 0;
+
+                    if (type.toLowerCase() === "service") {
+                        serviceTotal += total;
+                    }
+                    grandTotal += total;
+
                     if (name && !isNaN(price) && !isNaN(quantity)) {
-                        items.push({ id, name, type, price, quantity, total_price: total });
-                        grandTotal += total;
+                        items.push({ id, name, type, price, quantity, discount, total_price: total });
                     }
                 });
 
-                let discountAmount = grandTotal * (discountValue / 100);
+                // Calculate discount amount based only on the services subtotal.
+                let discountAmount = serviceTotal * (discountValue / 100);
                 let totalAfterDiscount = grandTotal - discountAmount;
 
                 $.ajax({
@@ -516,11 +540,7 @@
                 });
             });
 
-
-            // let services = @json($services);
-            // let spareParts = @json($spareParts);
-
-            // Spare Part Markup Rules
+            // Spare Part Markup Rules remain unchanged.
             let markupRules = [
                 { min: 0, max: 59999, individual: 35, corporate: 25 },
                 { min: 60000, max: 90999, individual: 30, corporate: 25 },
@@ -542,8 +562,6 @@
 
                 return markup;
             }
-
-
         });
     </script>
 </x-app-layout>
