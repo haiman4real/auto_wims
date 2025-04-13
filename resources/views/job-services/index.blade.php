@@ -98,6 +98,15 @@
                                                 data-bs-target="#editServiceModal">
                                                 <i class="fa fa-edit"></i>
                                             </button>
+                                            <!-- Delete Button -->
+                                            {{-- //make the delete button ask a modal question, do you really want to delete this service --}}
+                                            <form action="{{ route('job.services.destroy', $service['serv_id']) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this service?');">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
