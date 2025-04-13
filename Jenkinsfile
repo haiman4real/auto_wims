@@ -20,7 +20,7 @@ pipeline {
         stage('Checkout and Deploy') {
     when {
         expression {
-            return env.BRANCH_NAME == 'uat' ||
+            return env.BRANCH_NAME == 'uat' || env.BRANCH_NAME.startsWith('GB-') ||
                    env.BRANCH_NAME == 'main'
         }
     }
