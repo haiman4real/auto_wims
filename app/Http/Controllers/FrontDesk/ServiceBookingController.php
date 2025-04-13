@@ -310,7 +310,7 @@ class ServiceBookingController extends Controller
     }
 
     public function showEstimationPage($jobId){
-        $services = JobServices::all();
+        $services = JobServices::where('serv_status', 'visible')->get();
         $spareParts = JobSpareParts::getSparePartsWithPrices();
         // return $spareParts;
         // return $services;
@@ -438,7 +438,7 @@ class ServiceBookingController extends Controller
     {
         $job = ServiceJobs::with('customer', 'vehicle')->findOrFail($id);
         $estimatedJobs = json_decode($job->estimated_jobs, true);
-        $services = JobServices::all();
+        $services = JobServices::where('serv_status', 'visible')->get();
         $spareParts = JobSpareParts::getSparePartsWithPrices();
 
         // return $spareParts;
