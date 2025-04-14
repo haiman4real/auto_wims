@@ -57,9 +57,9 @@ Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespac
     Route::get('/ma/user/enable/{user}', [MasterAdmin\UserController::class, 'enableUser'])->name('user.enable');
     Route::get('/ma/user/disable/{user}', [MasterAdmin\UserController::class, 'disableUser'])->name('user.disable');
 
-    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
-    Route::post('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'store'])->name('self-service.store');
-    Route::get('/self-service/appointments/{appointment}', [FrontDesk\SelfServiceController::class, 'showBooking'])->name('self-service.show');
+    // Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
+    // Route::post('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'store'])->name('self-service.store');
+    // Route::get('/self-service/appointments/{appointment}', [FrontDesk\SelfServiceController::class, 'showBooking'])->name('self-service.show');
 });
 
 Route::middleware(['auth','AdminOne','verified'])->namespace('AdminOne')->group(function(){
@@ -222,6 +222,11 @@ Route::middleware(['auth','verified'])->middleware(['role:MasterAdmin, SuperAdmi
     //SERVICE ORDER
     Route::get('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'index'])->name('service_booking.index');
     Route::post('/workshop/service-order', [FrontDesk\ServiceBookingController::class, 'createJob'])->name('service_booking.create');
+
+    //MOBILE BOOKINGS
+    Route::get('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'index'])->name('self-service.index');
+    Route::post('/self-service/appointments', [FrontDesk\SelfServiceController::class, 'store'])->name('self-service.store');
+    Route::get('/self-service/appointments/{appointment}', [FrontDesk\SelfServiceController::class, 'showBooking'])->name('self-service.show');
 
 });
 
