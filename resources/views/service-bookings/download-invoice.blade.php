@@ -3,6 +3,110 @@
         <title>Invoice - {{ $job->order_number }}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <style type="text/css">
+            /* Regular styling */
+            .table td, .table th {
+                padding: 10px !important;
+            }
+
+            /* Print styling */
+            @media print {
+                /* Reset body and general print settings */
+                body {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                    margin: 0;
+                    padding: 0;
+                    font-size: 10pt;
+                }
+
+                /* Container sizing - allow natural flow rather than fixed dimensions */
+                #invoice {
+                    width: 100%;
+                    height: auto;
+                    padding: 0.5in;
+                    margin: 0;
+                    background: white;
+                }
+
+                /* Reduce padding on all invoice sections */
+                #invoice .p-5 {
+                    padding: 1rem !important;
+                }
+
+                #invoice .p-3, #invoice .p-4 {
+                    padding: 0.75rem !important;
+                }
+
+                #invoice .py-1, #invoice .py-3 {
+                    padding-top: 0.25rem !important;
+                    padding-bottom: 0.25rem !important;
+                }
+
+                #invoice .px-5 {
+                    padding-left: 1rem !important;
+                    padding-right: 1rem !important;
+                }
+
+                /* Heading sizes */
+                h1 {
+                    font-size: 18pt;
+                }
+
+                h2 {
+                    font-size: 16pt;
+                }
+
+                h3 {
+                    font-size: 14pt;
+                }
+
+                /* Table styling */
+                .table {
+                    border-collapse: collapse !important;
+                    width: 100%;
+                    font-size: 10pt;
+                }
+
+                .table td, .table th {
+
+                    padding: 6px !important;
+                }
+
+                /* Control page breaks */
+                .card-body {
+                    page-break-before: avoid;
+                }
+
+                /* Force page breaks at logical sections */
+                .terms-section {
+                    page-break-before: always;
+                }
+
+                /* Prevent page breaks inside these elements */
+                tr, .row {
+                    page-break-inside: avoid;
+                }
+
+                /* Signatures section */
+                .signatures-section {
+                    page-break-before: auto;
+                    page-break-inside: avoid;
+                }
+
+                /* Hide buttons and navigation */
+                .btn, nav, .modal {
+                    display: none !important;
+                }
+
+                /* Ensure background colors print */
+                .bg-success {
+                    background-color: #28a745 !important;
+                    color: #000 !important;
+                }
+            }
+        </style>
     </head>
     <body>
         <div id="invoice">
@@ -62,9 +166,8 @@
                             $serviceTotal = collect($estimatedJobs['services'])->sum('total_price');
                             $sparePartsTotal = collect($estimatedJobs['spare_parts'])->sum('total_price');
                             $grandTotal = $estimatedJobs['grand_total'];
-                            $discountApplied = ($serviceTotal + $sparePartsTotal) > $grandTotal
-                                ? ($serviceTotal + $sparePartsTotal) - $grandTotal
-                                : 0;
+                            $discountApplied = $estimatedJobs['discount_percentage'] ?? 0;
+                            $discountAmount = $estimatedJobs['total_discount_amount'] ?? 0;
                             $vatRate = $estimatedJobs['vat'];
                             $vatAmount = $estimatedJobs['vat_amount'];
                             $grandTotalWithVat = $estimatedJobs['total_cost'];
@@ -79,9 +182,9 @@
                                                 <th class="border-0 text-uppercase small font-weight-bold">S/N</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">Type</th>
                                                 <th class="border-0 text-uppercase small font-weight-bold">Description</th>
-                                                <th class="border-0 text-uppercase small font-weight-bold">Quantity</th>
-                                                <th class="border-0 text-uppercase small font-weight-bold">Unit Cost (₦)</th>
-                                                <th class="border-0 text-uppercase small font-weight-bold">Total (₦)</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold text-center">Quantity</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold text-right">Unit Cost (₦)</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold text-right">Total (₦)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -95,9 +198,9 @@
                                                     <td>{{ $index++ }}</td>
                                                     <td>Service</td>
                                                     <td>{{ $service['name'] }}</td>
-                                                    <td>{{ $service['quantity'] }}</td>
-                                                    <td>₦{{ number_format($service['price'], 2) }}</td>
-                                                    <td>₦{{ number_format($service['total_price'], 2) }}</td>
+                                                    <td class="text-center">{{ $service['quantity'] }}</td>
+                                                    <td class="text-right">₦{{ number_format($service['price'], 2) }}</td>
+                                                    <td class="text-right">₦{{ number_format($service['total_price'], 2) }}</td>
                                                 </tr>
                                             @endforeach
 
@@ -106,9 +209,9 @@
                                                     <td>{{ $index++ }}</td>
                                                     <td>Spare Part</td>
                                                     <td>{{ $part['name'] }}</td>
-                                                    <td>{{ $part['quantity'] }}</td>
-                                                    <td>₦{{ number_format($part['price'], 2) }}</td>
-                                                    <td>₦{{ number_format($part['total_price'], 2) }}</td>
+                                                    <td class="text-center">{{ $part['quantity'] }}</td>
+                                                    <td class="text-right">₦{{ number_format($part['price'], 2) }}</td>
+                                                    <td class="text-right">₦{{ number_format($part['total_price'], 2) }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -130,29 +233,33 @@
 
 
                         <div class="d-flex flex-row-reverse bg-success text-black p-4">
-                            <div class="py-3 px-5 text-right">
+                            <div class="py-3 px-4 text-right">
                                 <div class="mb-2">Grand Total</div>
                                 <div class="h2 font-weight-bold">₦{{ number_format($grandTotalWithVat, 2) }}</div>
                             </div>
-                            <div class="py-3 px-5 text-right">
+                            <div class="py-3 px-4 text-right">
                                 <div class="mb-2">VAT Amount</div>
                                 <div class="h2 font-weight-bold">₦{{ number_format($vatAmount, 2) }}</div>
                             </div>
-                            <div class="py-3 px-5 text-right">
+                            <div class="py-3 px-4 text-right">
                                 <div class="mb-2">VAT</div>
                                 <div class="h2 font-weight-bold">{{ number_format($vatRate, 1) }}%</div>
                             </div>
-                            <div class="py-3 px-5 text-right">
+                            <div class="py-3 px-4 text-right">
                                 <div class="mb-2">Sub Total</div>
                                 <div class="h2 font-weight-bold">₦{{ number_format($grandTotal, 2) }}</div>
                             </div>
 
 
                             @if($discountApplied > 0)
-                            <div class="py-3 px-5 text-right">
-                                <div class="mb-2">Discount Applied</div>
-                                <div class="h2 font-weight-light">₦{{ number_format($discountApplied, 2) }}</div>
-                            </div>
+                                <div class="py-3 px-4 text-right">
+                                    <div class="mb-2">Discount Amount</div>
+                                    <div class="h2 font-weight-bold">₦{{ number_format($discountAmount, 2) }}</div>
+                                </div>
+                                <div class="py-3 px-4 text-right">
+                                    <div class="mb-2">Discount Applied</div>
+                                    <div class="h2 font-weight-bold">{{ number_format($discountApplied) }}%</div>
+                                </div>
                             @endif
                         </div>
 

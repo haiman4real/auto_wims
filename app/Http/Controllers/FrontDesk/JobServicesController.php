@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JobServices;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class JobServicesController extends Controller
 {
     public function returnServices(){
-        $jobServices = JobServices::all();
+        $jobServices = JobServices::where('serv_status', 'visible')->get();
 
         // return $jobServices;
         return view('job-services.index', compact('jobServices'));
@@ -83,7 +84,15 @@ class JobServicesController extends Controller
     }
 
     public function destroyService($id){
-        //
+        //set the serv_status to hidden
+        $service = JobServices::findOrFail($id);
+        $service->update([
+            'serv_status' => 'hidden',
+        ]);
+        Log::info('Service hidden successfully', ['id' => $id, 'agent' => Auth::user()->name]);
+        // return response()->json(['message' => 'Service deleted successfully'], 200);
+        return redirect()->back()->with('success', 'Service deleted successfully!');
+
     }
 
 }

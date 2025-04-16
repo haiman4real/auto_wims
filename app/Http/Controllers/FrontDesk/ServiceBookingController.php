@@ -240,7 +240,7 @@ class ServiceBookingController extends Controller
             ]);
 
             // Log the update
-            Log::info("Job ID {$request->job_id} updated by user ID " . auth()->id(), [
+            Log::info("Job ID {$request->job_id} updated by user ID " . Auth::id(), [
                 'technician_id' => Auth::id(),
                 'workshop_findings' => $request->workshop_findings,
                 'required_spare_parts' => $request->required_spare_parts,
@@ -290,7 +290,7 @@ class ServiceBookingController extends Controller
 
 
             // Log the update
-            Log::info("Job ID {$request->job_id} updated by user ID " . auth()->id(), [
+            Log::info("Job ID {$request->job_id} updated by user ID " . Auth::id(), [
                 'service_advise' => $request->service_advise,
                 'comments' => $request->comments,
                 'status' => 'in progress',
@@ -310,7 +310,7 @@ class ServiceBookingController extends Controller
     }
 
     public function showEstimationPage($jobId){
-        $services = JobServices::all();
+        $services = JobServices::where('serv_status', 'visible')->get();
         $spareParts = JobSpareParts::getSparePartsWithPrices();
         // return $spareParts;
         // return $services;
@@ -320,169 +320,16 @@ class ServiceBookingController extends Controller
 
     }
 
-    // public function storeEstimation(Request $request){
-
-    //     // $request->validate([
-    //     //     'job_id' => 'required',
-    //     //     'items' => 'required|array', // Ensure items is an array
-    //     //     'items.*.id' => 'required|integer',
-    //     //     'items.*.name' => 'required|string',
-    //     //     'items.*.type' => 'required|in:service,spare_parts',
-    //     //     'items.*.price' => 'required|numeric|min:0',
-    //     //     'items.*.quantity' => 'required|integer|min:1',
-    //     //     'items.*.discount' => 'nullable|numeric|min:0|max:100',
-    //     //     'grand_total' => 'required|numeric|min:0'
-    //     // ]);
-
-    //     // // Ensure items is an actual array
-    //     // $items = is_string($request->items) ? json_decode($request->items, true) : $request->items;
-
-    //     // if (!is_array($items)) {
-    //     //     return response()->json(['message' => 'Invalid items format.'], 400);
-    //     // }
-
-    //     // Ensure the request is JSON and decode it properly
-    //     // $data = $request->isJson() ? $request->json()->all() : $request->all();
-    //     // // return $data;
-
-    //     // // Validate the request
-    //     // $validated = Validator::make($data, [
-    //     //     'job_id' => 'required',
-    //     //     'items' => 'required|array', // Ensure items is an array
-    //     //     'items.*.id' => 'required|integer',
-    //     //     'items.*.name' => 'required|string',
-    //     //     'items.*.type' => 'required|in:service,spare_parts',
-    //     //     'items.*.price' => 'required|numeric|min:0',
-    //     //     'items.*.quantity' => 'required|integer|min:1',
-    //     //     'items.*.discount' => 'nullable|numeric|min:0|max:100',
-    //     //     'grand_total' => 'required|numeric|min:0'
-    //     // ]);
-
-    //     // if ($validated->fails()) {
-    //     //     return response()->json(['message' => 'Validation failed', 'errors' => $validated->errors()], 400);
-    //     // }
-
-    //     // Debugging: Log raw request data
-    //     Log::info('Raw Request Data:', ['request' => $request->all()]);
-
-    //     // Ensure the request is JSON and retrieve the request data properly
-    //     $data = $request->json()->all(); // Use json() to ensure correct structure
-
-    //     // Debugging: Log parsed JSON data
-    //     Log::info('Parsed JSON Data:', ['data' => $data]);
-
-    //     // Validate request data
-    //     // $validator = Validator::make($data, [
-    //     //     'job_id' => 'required',
-    //     //     'items' => 'required|array|min:1',
-    //     //     'items.*.id' => 'required|integer',
-    //     //     'items.*.name' => 'required|string',
-    //     //     'items.*.type' => 'required|in:service,spare_parts',
-    //     //     'items.*.price' => 'required|numeric|min:0',
-    //     //     'items.*.quantity' => 'required|integer|min:1',
-    //     //     'items.*.discount' => 'nullable|numeric|min:0|max:100',
-    //     //     'grand_total' => 'required|numeric|min:0'
-    //     // ]);
-
-    //     // // Debugging: Log validation errors if any
-    //     // if ($validator->fails()) {
-    //     //     Log::error('Validation Failed:', ['errors' => $validator->errors()]);
-
-    //     //     return response()->json([
-    //     //         'message' => 'Validation failed',
-    //     //         'errors' => $validator->errors()
-    //     //     ], 422); // 422 Unprocessable Entity
-    //     // }
-
-    //     // // Extract the validated data
-    //     // $jobId = $data['job_id'];
-    //     // $items = $data['items'];
-    //     // $grandTotal = $data['grand_total'];
-
-    //     // return $validator;
-
-    //     try {
-    //         $job = ServiceJobs::findOrFail($request->job_id);
-
-    //         $services = [];
-    //         $spareParts = [];
-    //         $grandTotal = 0;
-
-    //         foreach ($request->items as $item) {
-    //             $quantity = $item['quantity'];
-    //             $price = $item['price'];
-    //             $discount = $item['discount'] ?? 0; // Default discount is 0%
-
-    //             // Calculate total price after applying discount
-    //             $discountAmount = ($price * $quantity) * ($discount / 100);
-    //             $totalPrice = ($price * $quantity) - $discountAmount;
-
-    //             $data = [
-    //                 'id' => $item['id'],
-    //                 'name' => $item['name'],
-    //                 'price' => $price,
-    //                 'quantity' => $quantity,
-    //                 'discount' => $discount,
-    //                 'total_price' => $totalPrice, // Price after discount
-    //             ];
-
-    //             if ($item['type'] === 'service') {
-    //                 $services[] = $data;
-    //             } else {
-    //                 $spareParts[] = $data;
-    //             }
-
-    //             // Add to grand total
-    //             $grandTotal += $totalPrice;
-    //         }
-
-    //         // Store in the database
-    //         $job->estimated_jobs = json_encode([
-    //             'services' => $services,
-    //             'spare_parts' => $spareParts,
-    //             'grand_total' => $grandTotal
-    //         ]);
-    //         $job->status = 'estimate generated';
-    //         $job->total_cost = $grandTotal;
-    //         $job->save();
-
-    //         $this->updateWorkNote($request->job_id, [
-    //             'job_type' => 'estimation_notes',
-    //             'details' => [
-    //                 'estimation' => $request->estimation,
-    //             ],
-    //         ]);
-    //         // Log the update
-    //         Log::info("Job ID {$request->job_id} updated by user ID " . auth()->id(), [
-    //             'estimation' => $request->estimation,
-    //             'status' => 'completed',
-    //         ]);
-    //         // return response()->json(['message' => 'Estimation saved successfully!'], 200);
-    //         return response()->json([
-    //             'message' => 'Estimate saved successfully!',
-    //             'services' => $services,
-    //             'spare_parts' => $spareParts,
-    //             'grand_total' => $grandTotal
-    //         ], 200);
-
-    //     } catch (\Exception $e) {
-    //         Log::error('Error updating job: ' . $e->getMessage());
-    //         return response()->json(['message' => 'Error updating job. Please try again.'], 500);
-    //     }
-
-    // }
-
-
     public function storeEstimation(Request $request)
     {
         try {
-            // Log the raw request data to debug
+            // Log the raw request data for debugging.
             Log::info('Raw Request Data:', ['request' => $request->all()]);
 
-            // Ensure items are properly decoded
+            // Ensure items are properly decoded.
             $items = is_string($request->items) ? json_decode($request->items, true) : $request->items;
 
-            // Ensure items is an actual array
+            // Ensure items is an actual array.
             if (!is_array($items)) {
                 Log::error('Invalid items format:', ['items' => $request->items]);
                 return response()->json(['message' => 'Invalid items format.'], 400);
@@ -495,56 +342,82 @@ class ServiceBookingController extends Controller
             $grandTotal = 0;
             $vatRate = 7.5; // VAT rate is 7.5%
 
+            // Get the overall discount percentage from the request; default to 0 if not provided.
+            $overallDiscountPercentage = $request->discount ?? 0;
+
+            // Variable for accumulating the total value of service items (before discount).
+            $totalServiceOriginal = 0;
+
             foreach ($items as $item) {
                 $quantity = $item['quantity'];
                 $price = $item['price'];
-                $discount = $item['discount'] ?? 0; // Default discount is 0%
 
-                // Calculate total price after applying discount
-                $discountAmount = ($price * $quantity) * ($discount / 100);
-                $totalPrice = ($price * $quantity) - $discountAmount;
+                // Calculate the line total without any discount.
+                $lineTotal = $price * $quantity;
 
+                if ($item['type'] === 'service') {
+                    // For service items, accumulate the original total for discount calculations.
+                    $totalServiceOriginal += $lineTotal;
+                    $discount = 0; // No discount is applied at the line level.
+                } else {
+                    // Spare parts do not have any discount.
+                    $discount = 0;
+                }
+
+                // Store the full line total without a discount deduction.
                 $data = [
-                    'id' => $item['id'],
-                    'name' => $item['name'],
-                    'price' => $price,
-                    'quantity' => $quantity,
-                    'discount' => $discount,
-                    'total_price' => $totalPrice, // Price after discount
+                    'id'          => $item['id'],
+                    'name'        => $item['name'],
+                    'price'       => $price,
+                    'quantity'    => $quantity,
+                    'discount'    => 0,         // Per-line discount is always 0.
+                    'total_price' => $lineTotal, // Full total without discount.
                 ];
 
+                // Organize items into services or spare parts.
                 if ($item['type'] === 'service') {
                     $services[] = $data;
                 } else {
                     $spareParts[] = $data;
                 }
 
-                // Add to grand total
-                $grandTotal += $totalPrice;
+                // Add the line total to the overall grand total.
+                $grandTotal += $lineTotal;
             }
 
-            // Calculate VAT amount
-            $vatAmount = ($grandTotal * $vatRate) / 100;
-            $grandTotalWithVat = $grandTotal + $vatAmount;
+            // Calculate the overall discount amount based solely on the service total.
+            $totalDiscountAmount = $totalServiceOriginal * ($overallDiscountPercentage / 100);
 
-            // Store in the database
+            // Deduct the discount amount from the overall grand total.
+            $subTotalAfterDiscount = $grandTotal - $totalDiscountAmount;
+
+            // Calculate VAT on the subtotal after discount.
+            $vatAmount = ($subTotalAfterDiscount * $vatRate) / 100;
+            $grandTotalWithVat = $subTotalAfterDiscount + $vatAmount;
+
+            // Prepare the estimated jobs data including all calculated discount details.
             $job->estimated_jobs = json_encode([
-                'services' => $services,
-                'spare_parts' => $spareParts,
-                'vat' => $vatRate,
-                'vat_amount' => $vatAmount,
-                'grand_total' => $grandTotal,
-                'total_cost' => $grandTotalWithVat
+                'services'              => $services,
+                'spare_parts'           => $spareParts,
+                'vat'                   => $vatRate,
+                'vat_amount'            => $vatAmount,
+                'grand_total'           => $grandTotal,            // Original total before discount.
+                'total_cost'            => $grandTotalWithVat,     // Final total after applying discount and VAT.
+                'total_discount_amount' => $totalDiscountAmount,   // Overall discount amount applied to services.
+                'discount_percentage'   => $overallDiscountPercentage // Global discount percentage (for service items).
             ]);
+
             $job->status = 'estimate generated';
             $job->total_cost = $grandTotalWithVat;
             $job->save();
 
             return response()->json([
-                'message' => 'Estimate saved successfully!',
-                'services' => $services,
-                'spare_parts' => $spareParts,
-                'grand_total' => $grandTotal
+                'message'                => 'Estimate saved successfully!',
+                'services'               => $services,
+                'spare_parts'            => $spareParts,
+                'grand_total'            => $grandTotal,
+                'total_discount_amount'  => $totalDiscountAmount,
+                'discount_percentage'    => $overallDiscountPercentage
             ], 200);
 
         } catch (\Exception $e) {
@@ -556,7 +429,7 @@ class ServiceBookingController extends Controller
     public function returnInvoice($jobId){
         // return "Return Estimation Page";
         $job = ServiceJobs::findOrFail($jobId);
-        // return $jobs;
+        // return $job;
         return view('service-bookings.download-invoice', compact('job'));
     }
 
@@ -565,7 +438,7 @@ class ServiceBookingController extends Controller
     {
         $job = ServiceJobs::with('customer', 'vehicle')->findOrFail($id);
         $estimatedJobs = json_decode($job->estimated_jobs, true);
-        $services = JobServices::all();
+        $services = JobServices::where('serv_status', 'visible')->get();
         $spareParts = JobSpareParts::getSparePartsWithPrices();
 
         // return $spareParts;
@@ -573,12 +446,17 @@ class ServiceBookingController extends Controller
         return view('service-bookings.estimate-edit', compact('job', 'estimatedJobs', 'services', 'spareParts'));
     }
 
+    /**
+     * Update the estimate for a service job.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
     public function updateEstimate(Request $request)
     {
-
         try {
             $job = ServiceJobs::findOrFail($request->job_id);
-
 
             Log::info('Job request received for update: ', $request->all());
 
@@ -587,49 +465,74 @@ class ServiceBookingController extends Controller
             $grandTotal = 0;
             $vatRate = 7.5; // VAT rate is 7.5%
 
+            // Retrieve the overall discount percentage from the request;
+            // this discount applies only to service items.
+            $overallDiscountPercentage = $request->discount ?? 0;
+
+            // This variable will store the total of service items (before discount).
+            $totalServiceOriginal = 0;
+
+            // Loop through each item without applying discount at the line level.
             foreach ($request->items as $item) {
                 $quantity = $item['quantity'];
                 $price = $item['price'];
-                $discount = $item['discount'] ?? 0; // Default discount is 0%
 
-                // Calculate total price after applying discount
-                $discountAmount = ($price * $quantity) * ($discount / 100);
-                $totalPrice = ($price * $quantity) - $discountAmount;
+                // For service items, accumulate the total service value.
+                if ($item['type'] === 'service') {
+                    $totalServiceOriginal += ($price * $quantity);
+                    $discount = 0; // Discount is not applied per line.
+                } else {
+                    // Spare parts (or non-service items) remain unchanged.
+                    $discount = 0;
+                }
+
+                // Calculate the line total without discount.
+                $totalPrice = $price * $quantity;
 
                 $data = [
-                    'id' => $item['id'] ?? null, // If a new item, ID might be null
-                    'name' => $item['name'],
-                    'price' => $price,
-                    'quantity' => $quantity,
-                    'discount' => $discount,
-                    'total_price' => $totalPrice, // Price after discount
+                    'id'          => $item['id'] ?? null, // If a new item, the ID might be null.
+                    'name'        => $item['name'],
+                    'price'       => $price,
+                    'quantity'    => $quantity,
+                    'discount'    => 0,            // Always zero at the line level.
+                    'total_price' => $totalPrice,  // Full total, without discount deduction.
                 ];
 
+                // Organize items by their type.
                 if ($item['type'] === 'service') {
                     $services[] = $data;
                 } else {
                     $spareParts[] = $data;
                 }
 
-                // Add to grand total
+                // Add the line total to the overall total.
                 $grandTotal += $totalPrice;
             }
 
-            // Calculate VAT amount
-            $vatAmount = ($grandTotal * $vatRate) / 100;
-            $grandTotalWithVat = $grandTotal + $vatAmount;
+            // Calculate the discount amount based solely on the service total.
+            $totalDiscountAmount = $totalServiceOriginal * ($overallDiscountPercentage / 100);
 
-            // Store in the database with proper formatting
+            // Deduct the service discount from the overall grand total.
+            $subTotalAfterDiscount = $grandTotal - $totalDiscountAmount;
+
+            // Calculate VAT on the discounted subtotal.
+            $vatAmount = ($subTotalAfterDiscount * $vatRate) / 100;
+
+            // Final total cost including VAT.
+            $grandTotalWithVat = $subTotalAfterDiscount + $vatAmount;
+
+            // Store all details including discount values into the estimated_jobs column.
             $job->estimated_jobs = json_encode([
-                'services' => $services,
-                'spare_parts' => $spareParts,
-                'vat' => $vatRate,
-                'vat_amount' => $vatAmount,
-                'grand_total' => $grandTotal,
-                'total_cost' => $grandTotalWithVat
+                'services'              => $services,
+                'spare_parts'           => $spareParts,
+                'vat'                   => $vatRate,
+                'vat_amount'            => $vatAmount,
+                'grand_total'           => $grandTotal,            // Original total without discount.
+                'total_cost'            => $grandTotalWithVat,     // Total after discount and VAT.
+                'total_discount_amount' => $totalDiscountAmount,   // Discount amount on service items.
+                'discount_percentage'   => $overallDiscountPercentage // Overall discount percentage.
             ]);
 
-            // Update job status and total cost
             $job->status = 'estimate generated';
             $job->total_cost = $grandTotalWithVat;
             $job->save();
@@ -637,6 +540,7 @@ class ServiceBookingController extends Controller
             Log::info('Estimate updated successfully for job ID: ' . $request->job_id);
             return response()->json(['message' => 'Estimate updated successfully'], 200);
         } catch (\Exception $e) {
+            Log::error('Error updating estimate for job ID: ' . $request->job_id . ' - ' . $e->getMessage());
             return response()->json(['message' => 'Error updating estimate: ' . $e->getMessage()], 500);
         }
     }
@@ -647,7 +551,7 @@ class ServiceBookingController extends Controller
     public function returnTechnicianUser(){
         // return "Return Technician Page";
         // $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'technician_assignment']])->whereJsonDoesntContain('workflow', [['job_type' => 'awaiting_job_advise']])->get();
-        $loggedInUserId = auth()->id(); // Get the logged-in user ID
+        $loggedInUserId = Auth::id(); // Get the logged-in user ID
 
         $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'technician_assignment']])
             ->whereJsonDoesntContain('workflow', [['job_type' => 'awaiting_job_advise']])
@@ -697,7 +601,7 @@ class ServiceBookingController extends Controller
             ]);
 
             // Log the update
-            Log::info("Job ID {$request->job_id} updated by user ID " . auth()->id(), [
+            Log::info("Job ID {$request->job_id} updated by user ID " . Auth::id(), [
                 'technician_id' => Auth::id(),
                 'workshop_findings' => $request->workshop_findings,
                 'required_spare_parts' => $request->required_spare_parts,
@@ -712,7 +616,7 @@ class ServiceBookingController extends Controller
 
     public function returnServiceAdvisorUser(){
         // return "Return Service Advisor Page";
-        $loggedInUserId = auth()->id(); // Get the logged-in user ID
+        $loggedInUserId = Auth::id(); // Get the logged-in user ID
 
         $jobs = ServiceJobs::whereJsonContains('workflow', [['job_type' => 'awaiting_job_advise']])->whereJsonDoesntContain('workflow', [['job_type' => 'service_advisor_comments']])->where(function ($query) use ($loggedInUserId) {
             $query->whereJsonContains('workflow', [['job_type' => 'technician_assignment', 'performer' => $loggedInUserId]]);
