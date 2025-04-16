@@ -7,7 +7,7 @@ pipeline {
         // Deployment directory for release branch
         RELEASE_DEPLOY_DIR = "/home/autowims-v2/htdocs/v2.autowims.com.ng"
         // Deployment directory for master branch
-        MASTER_DEPLOY_DIR = "/home/gopodlab-erp/htdocs/erp.gopodlab.com"
+        MASTER_DEPLOY_DIR = "/home/autowims-v2/htdocs/v2.autowims.com.ng"
     }
 
     stages {
