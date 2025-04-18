@@ -202,7 +202,7 @@ class AuthController extends Controller
         // Return a success response
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully.',
+            'message' => 'Token successfully revoked.',
             'status' => 200,
         ], 200);
     }

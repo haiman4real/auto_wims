@@ -6,42 +6,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class CheckApiToken
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the Authorization header contains a Bearer token
-        $bearerToken = $request->bearerToken();
-        if (!$bearerToken) {
-            return response()->json([
-                'message' => 'Bearer token not provided.'
-            ], 401);
+        // Must have a Bearer token
+        if (! $request->bearerToken()) {
+            abort(Response::HTTP_UNAUTHORIZED, 'Bearer token not provided.');
         }
 
-        // Attempt to authenticate the user using the api guard
-        $user = Auth::guard('api')->user();
-        if (!$user) {
-            return response()->json([
-                'message' => 'Token is invalid or expired.'
-            ], 401);
-        }
-
-        // If using Passport, check explicitly if the token is expired.
-        // This assumes that the authenticated user has a `token()` method.
-        if (method_exists($user, 'token')) {
-            $token = $user->token();
-            if ($token && $token->expires_at && Carbon::parse($token->expires_at)->isPast()) {
-                return response()->json([
-                    'message' => 'Token has expired.'
-                ], 401);
-            }
+        // Guard('api') is Passport: it will throw 401 if token is invalid or expired
+        if (! Auth::guard('api')->check()) {
+            abort(Response::HTTP_UNAUTHORIZED, 'Token is invalid or expired.');
         }
 
         return $next($request);

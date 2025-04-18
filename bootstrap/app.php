@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckApiToken;
+use App\Http\Middleware\RestrictIpMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         $middleware->append(MasterAdminMiddleware::class);
-        $middleware->alias(['role' => RoleMiddleware::class, 'cors' => Cors::class, 'forceJsonResponse' => ForceJsonResponse::class, 'check_api_token' => CheckApiToken::class]);
+        $middleware->alias(['role' => RoleMiddleware::class, 'cors' => Cors::class, 'forceJsonResponse' => ForceJsonResponse::class, 'check_api_token' => CheckApiToken::class, 'restrict.ip' => RestrictIpMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
