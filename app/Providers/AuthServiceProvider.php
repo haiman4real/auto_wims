@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Laravel\Passport\Passport;
+// use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         //
         // Set access token expiration (1 hour)
-        Passport::tokensExpireIn(now()->addMinutes(5));
-        Passport::refreshTokensExpireIn(now()->addMinutes(5));
+        // Passport::tokensExpireIn(now()->addMinutes(5));
+        // Passport::refreshTokensExpireIn(now()->addMinutes(5));
     }
 }
