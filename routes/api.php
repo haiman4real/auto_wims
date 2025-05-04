@@ -42,11 +42,11 @@ Route::prefix('v1')->middleware(['cors', 'forceJsonResponse', 'throttle:60,1', '
     });
 });
 
-Route::prefix('v2')->middleware(['cors', 'forceJsonResponse', 'restrict.ip', 'check_api_token', 'throttle:60,1'])->group(function () {
+Route::prefix('v2')->middleware(['cors', 'forceJsonResponse', 'restrict.ip', 'throttle:60,1'])->group(function () {
     Route::post('/token/authorize', [AuthController::class, 'login'])->name('api.login');
     Route::post('/token/refresh', [AuthController::class, 'refreshToken'])->name('api.refreshToken');
 
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware('auth:api')->middleware(['check_api_token'])->group(function () {
         Route::apiResource('/payment/invoice', PaymentController::class);
         Route::post('/payment/response', [PaymentController::class, 'handleResponse'])->name('api.payments.response');
         Route::post('/token/revoke', [AuthController::class, 'logout'])->name('api.logout');
