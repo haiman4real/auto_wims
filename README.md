@@ -8,15 +8,20 @@
 
 ## About AutoWIMS2
 
-AutoWIMS2 is a web-based application designed to streamline warehouse inventory management systems. It provides an intuitive interface and powerful tools to help businesses efficiently manage their inventory, track shipments, and generate insightful reports.
+AutoWIMS2 is a web-based application designed to streamline automobile workshop management systems. It provides an intuitive interface and powerful tools to help businesses efficiently manage their inventory, track shipments, and generate insightful reports.
 
 Key features include:
 
-- Simple and fast inventory tracking.
+- Simple and fast workshop operation system with job tracking.
 - Robust user management and role-based access control.
-- Real-time notifications for low stock and shipment updates.
+- Real-time notifications for low stock and shipment updates in workshop store.
 - Comprehensive reporting and analytics.
-- Integration with third-party logistics providers.
+- Robust self-service features for appointments and bookings
+- Brand-aligned and responsive UI/UX
+- Refined invoice and transaction handling
+- Enhanced DevOps pipeline with Jenkins
+- Improved dashboard and job visibility tools
+- Updated server deployment paths and infrastructure alignment
 
 AutoWIMS2 is built to be scalable, secure, and user-friendly, making it suitable for businesses of all sizes.
 
