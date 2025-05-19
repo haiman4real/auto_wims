@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/HaimanResourcesConsulting/autowims2.0/blob/uat/public/img/autowims_logo.png" target="_blank"><img src="https://via.placeholder.com/400x150.png?text=AutoWIMS2+Logo" width="400" alt="AutoWIMS2 Logo"></a></p>
+<p align="center"><a href="https://github.com/HaimanResourcesConsulting/autowims2.0/blob/uat/public/img/autowims_logo.png" target="_blank"><img src="https://github.com/HaimanResourcesConsulting/autowims2.0/blob/uat/public/img/autowims_logo.png" width="400" alt="AutoWIMS2 Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/hrc-1/autowims2/actions"><img src="https://github.com/hrc-1/autowims2/workflows/tests/badge.svg" alt="Build Status"></a>
