@@ -17,7 +17,7 @@ Key features include:
 - Improved dashboard and job visibility tools
 - Updated server deployment paths and infrastructure alignment
 
-AutoWIMS2 is built to be scalable, secure, and user-friendly, making it suitable for businesses of all sizes.
+AutoWIMS is built to be scalable, secure, and user-friendly, making it suitable for businesses of all sizes.
 
 ## Getting Started
 
