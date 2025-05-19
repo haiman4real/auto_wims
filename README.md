@@ -8,7 +8,7 @@
 
 ## About AutoWIMS2
 
-AutoWIMS2 is a web-based application designed to streamline automobile workshop management systems. It provides an intuitive interface and powerful tools to help businesses efficiently manage their inventory, track shipments, and generate insightful reports.
+AutoWIMS is a web-based application designed to streamline automobile workshop management systems. It provides an intuitive interface and powerful tools to help businesses efficiently manage their inventory, track shipments, and generate insightful reports.
 
 Key features include:
 
@@ -27,11 +27,11 @@ AutoWIMS2 is built to be scalable, secure, and user-friendly, making it suitable
 
 ## Getting Started
 
-To get started with AutoWIMS2, please refer to the [documentation](https://github.com/hrc-1/autowims2/wiki). The documentation includes setup instructions, feature guides, and troubleshooting tips.
+To get started with AutoWIMS, please refer to the [documentation](https://github.com/hrc-1/autowims2/wiki). The documentation includes setup instructions, feature guides, and troubleshooting tips.
 
 ## Contributing
 
-We welcome contributions to AutoWIMS2! If you would like to contribute, please check out our [contribution guidelines](https://github.com/hrc-1/autowims2/blob/main/CONTRIBUTING.md).
+We welcome contributions to AutoWIMS! If you would like to contribute, please check out our [contribution guidelines](https://github.com/hrc-1/autowims2/blob/main/CONTRIBUTING.md).
 
 ## Code of Conduct
 
@@ -39,8 +39,8 @@ To ensure a welcoming and inclusive community, please review and adhere to our [
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability in AutoWIMS2, please report it by emailing [security@autowims2.com](mailto:security@autowims2.com). We take security issues seriously and will address them promptly.
+If you discover a security vulnerability in AutoWIMS, please report it by emailing [security@autowims2.com](mailto:security@autowims2.com). We take security issues seriously and will address them promptly.
 
 ## License
 
-AutoWIMS2 is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+AutoWIMS is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
