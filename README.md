@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/HaimanResourcesConsulting/autowims2.0/blob/uat/public/img/autowims_logo.png" target="_blank"><img src="https://github.com/HaimanResourcesConsulting/autowims2.0/blob/uat/public/img/autowims_logo.png" width="400" alt="AutoWIMS2 Logo"></a></p>
 
-## About AutoWIMS2
+## About AutoWIMS
 
 AutoWIMS is a web-based application designed to streamline automobile workshop management systems. It provides an intuitive interface and powerful tools to help businesses efficiently manage their inventory, track shipments, and generate insightful reports.
 
