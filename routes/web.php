@@ -40,14 +40,12 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class)->namespace('MasterAdmin')->group(function(){
-    Route::get('/ma/home', 'HomeController@index');
-
-
-});
+// Route::middleware(['auth', 'verified'])->middleware(MasterAdminMiddleware::class)->namespace('MasterAdmin')->group(function(){
+//     Route::get('/ma/home', 'HomeController@index');
+// });
 
 Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespace('SuperAdmin')->group(function(){
-    Route::get('/sa/home', 'HomeController@index');
+    // Route::get('/sa/home', 'HomeController@index');
     Route::get('/ma/users', [MasterAdmin\UserController::class, 'index'])->name('users.index');
     Route::get('/ma/users/add', [MasterAdmin\UserController::class, 'create'])->name('users.add');
     Route::post('/ma/users', [MasterAdmin\UserController::class, 'store'])->name('user.store');
@@ -63,23 +61,23 @@ Route::middleware(['auth', 'verified'])->middleware(SuperAdmin::class)->namespac
 });
 
 Route::middleware(['auth','AdminOne','verified'])->namespace('AdminOne')->group(function(){
-    Route::get('/ao/home', 'HomeController@index');
+    // Route::get('/ao/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','AdminTwo','verified'])->namespace('AdminTwo')->group(function(){
-    Route::get('/aw/home', 'HomeController@index');
+    // Route::get('/aw/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','AdminThree', 'verified'])->namespace('AdminThree')->group(function(){
-    Route::get('/ah/home', 'HomeController@index');
+    // Route::get('/ah/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','CustomerService','verified'])->namespace('CustomerService')->group(function(){
-    Route::get('/cs/home', 'HomeController@index');
+    // Route::get('/cs/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDesk::class)->namespace('FrontDesk')->group(function(){
-    Route::get('/fd/home', 'HomeController@index');
+    // Route::get('/fd/home', 'HomeController@index');
     // Route::get('/workshop/customers', [FrontDesk\CustomersController::class, 'index'])->name('customers.index');
     // Route::get('/workshop/customers/add', [FrontDesk\CustomersController::class, 'create'])->name('customers.add');
     // Route::post('/workshop/customers', [FrontDesk\CustomersController::class,'store'])->name('customers.store');
@@ -142,13 +140,13 @@ Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\FrontDes
 });
 
 Route::middleware(['auth', 'verified'])->middleware(Technician::class)->namespace('Technician')->group(function(){
-    Route::get('/tc/home', 'HomeController@index');
+    // Route::get('/tc/home', 'HomeController@index');
     Route::get('/tc/workshop/technician', [FrontDesk\ServiceBookingController::class, 'returnTechnicianUser'])->name('service_booking.technician.user');
     Route::post('/tc/workshop/technician', [FrontDesk\ServiceBookingController::class, 'updateTechnicianJobUser'])->name('service_booking.technician.user.updateJob');
 });
 
 Route::middleware(['auth', 'verified'])->middleware(ServiceAdvisor::class)->namespace('ServiceAdvisor')->group(function(){
-    Route::get('/sa/home', 'HomeController@index');
+    // Route::get('/sa/home', 'HomeController@index');
     Route::get('/sa/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'returnServiceAdvisorUser'])->name('service_booking.service_advisor.user');
     Route::post('/sa/workshop/service-advisor', [FrontDesk\ServiceBookingController::class, 'updateServiceAdvisorUser'])->name('service_booking.service_advisor.user.updateJob');
 
@@ -157,23 +155,23 @@ Route::middleware(['auth', 'verified'])->middleware(ServiceAdvisor::class)->name
 });
 
 Route::middleware(['auth','JobController','verified'])->namespace('JobController')->group(function(){
-    Route::get('/jc/home', 'HomeController@index');
+    // Route::get('/jc/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','AccountsAdmin','verified'])->namespace('AccountsAdmin')->group(function(){
-    Route::get('/aa/home', 'HomeController@index');
+    // Route::get('/aa/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','BusinessView', 'verified'])->namespace('BusinessView')->group(function(){
-    Route::get('/bv/home', 'HomeController@index');
+    // Route::get('/bv/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','GuestUser','verified'])->namespace('GuestUser')->group(function(){
-    Route::get('/gu/home', 'HomeController@index');
+    // Route::get('/gu/home', 'HomeController@index');
 });
 
 Route::middleware(['auth','verified'])->middleware(\App\Http\Middleware\CoporateUser::class)->namespace('CoporateUser')->group(function(){
-    Route::get('/cu/home', 'HomeController@index');
+    // Route::get('/cu/home', 'HomeController@index');
     Route::get('/cu/test', [CoporateUser\HomeController::class, 'testNonLaravelDb'])->name('testdb');
 
 

@@ -30,6 +30,7 @@ class ServiceJobs extends Model
         'other_details' => 'array',
         'workflow' => 'array',
         'work_notes' => 'array',
+        'comments' => 'array',
     ];
 
     // Customer::on('mysql_non_laravel')->where('cust_id', $customerId)->exists();

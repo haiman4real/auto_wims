@@ -17,7 +17,7 @@ use PhpParser\Node\Expr\FuncCall;
 
 class ServiceBookingController extends Controller
 {
-    private function updateWorkflow($jobId, $newAction)
+    public function updateWorkflow($jobId, $newAction)
     {
         try {
             $job = ServiceJobs::findOrFail($jobId); // Retrieve the job or throw an error
