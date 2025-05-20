@@ -687,5 +687,5 @@
         });
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsqBiViDWyNOV48P0aMZpWOIF1m9Ocp9s"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{config('api.key'}}"></script>
 </x-app-layout>
